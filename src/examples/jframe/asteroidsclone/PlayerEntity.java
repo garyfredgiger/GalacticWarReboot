@@ -10,6 +10,7 @@ public class PlayerEntity extends EntityImage
 {
   private int health;
   private int shield;
+  private int firePower;
   private Position2D homePosition;
 //  private double homePositionX;
 //  private double homePositionY;
@@ -34,8 +35,9 @@ public class PlayerEntity extends EntityImage
   @Override
   public void reset()
   {
-    health = Constants.PLAYER_STARTING_HEALTH;       
-    shield = Constants.PLAYER_STARTING_SHIELD;
+    firePower = Constants.SHIP_STARTING_FIREPOWER;
+    health = Constants.SHIP_STARTING_HEALTH;       
+    shield = Constants.SHIP_STARTING_SHIELD;
     moveToHomePosition();
     super.reset();
   }
@@ -45,9 +47,17 @@ public class PlayerEntity extends EntityImage
     position.set(homePosition);
   }
 
+  /*
+   * Methods regarding player's health
+   */
   public void incrementHealthAmount(int newIncrement)
   {
     health += newIncrement;
+    
+    if (health > Constants.SHIP_STARTING_HEALTH)
+    {
+      health = Constants.SHIP_STARTING_HEALTH;
+    }
   }
 
   public int getHealthAmount()
@@ -60,9 +70,17 @@ public class PlayerEntity extends EntityImage
     return (health > 0 ? true : false);
   }
 
+  /*
+   * Methods regarding player's shields
+   */
   public void incrementShieldAmount(int newIncrement)
   {
     shield += newIncrement;
+    
+    if (shield > Constants.SHIP_STARTING_SHIELD)
+    {
+      shield = Constants.SHIP_STARTING_SHIELD;
+    }
   }
 
   public void decrementShieldAmount()
@@ -78,6 +96,34 @@ public class PlayerEntity extends EntityImage
   public boolean hasShieldRemaining()
   {
     return (shield > 0 ? true : false);
+  }
+  
+  /*
+   * Methods regarding player's firepower
+   */
+  public int getCurrentFirepower()
+  {
+    return firePower;
+  }
+  
+  public void reduceFirepower()
+  {
+    firePower--;
+    
+    if (firePower < Constants.SHIP_MIN_FIREPOWER)
+    {
+      firePower = Constants.SHIP_MIN_FIREPOWER;
+    }
+  }
+  
+  public void increaseFirepower()
+  {
+    firePower++;
+    
+    if (firePower > Constants.SHIP_MAX_FIREPOWER)
+    {
+      firePower = Constants.SHIP_MAX_FIREPOWER;
+    }
   }
   
   @Override
