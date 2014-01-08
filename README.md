@@ -18,7 +18,7 @@ This folder contains source code only. Before running the game you will need to 
 
 *[Image files for GalacticWar Reboot located in my Dropbox account](https://www.dropbox.com/sh/z3xzd2oqxmmk2nb/kBFzpMPkYg/GalacticWarReboot)*
 
-Simply download the folder named 'images' from this link above and place the entire images folder under the directory named **src** in this GitHub project folder after you clone it. Make sure you refresh this project in Eclipse so the folder shows up in the Eclispe IDE along with all of the images.
+Simply download the folder named **images** from this link above and place the entire folder under the directory named **src** in this GitHub project folder after you clone it. Make sure you refresh this project in Eclipse so the folder shows up in the Eclispe IDE along with all of the images.
 
 Also note that you may need to add the following line to the .classpath file in order for the project to recognize the 'images' folder as a source folder. Otherwise, the images may not load properly when you run the project.
 
