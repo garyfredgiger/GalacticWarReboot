@@ -4,6 +4,8 @@ import java.awt.Font;
 
 public class Constants
 {
+  public static final String GAME_NAME                       = "Galactic War Reboot";
+
   // Fonts used in the Introduction screen
   public static final Font   FONT_INTRO_SCREEN_MAIN_TITLE    = new Font("Verdana", Font.BOLD, 36);
   public static final Font   FONT_INTRO_SCREEN_MAIN_CONTROLS = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 20);
@@ -39,6 +41,7 @@ public class Constants
 
   // String Constants used while the game is being Played
   public static final String MSG_GAME_PLAYING_HEALTH         = "Health: ";
+  public static final String MSG_GAME_PLAYING_SHIELD         = "Shield: ";
 
   // String constants used when the player is killed
   public static final String MSG_PLAYER_DEAD                 = "Your Ship Was Destroyed!!!";
@@ -64,4 +67,15 @@ public class Constants
   // Player entity constants
   public static final int    INVULNERABILITY_INTERVAL        = 3000;
   public static final int    PLAYER_STARTING_HEALTH          = 40;
+  public static final int    PLAYER_STARTING_SHIELD          = 40;
+  public static final double SHIP_ACCELERATION               = 1;                                                       // Was originally 0.05
+  public static final double MAX_VELOCITY                    = 200;                                                     // Was originally 5
+  public static final double MIN_VELOCITY                    = -MAX_VELOCITY;
+
+  // Debug constants
+  public static final Font   FONT_DEBUG                      = new Font("Dialog", Font.PLAIN, 14);
+  public static final String DEBUG_MSG_THRUST                = "Thrust: ";
+  public static final String DEBUG_MSG_FIRE                  = "Fire: ";
+  public static final String DEBUG_MSG_SHIELD                = "Shield: ";
+  public static final String DEBUG_MSG_PREV_SHIELD           = "Prev Shield: ";
 }

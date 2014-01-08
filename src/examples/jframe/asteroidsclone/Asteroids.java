@@ -1,15 +1,11 @@
 package examples.jframe.asteroidsclone;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
 
-import javax.swing.SwingUtilities;
-
-import game.deprecated.GameJFrame;
 import game.framework.GameEngine;
 import game.framework.entities.Entity;
 import game.framework.entities.EntityImage;
@@ -49,9 +45,9 @@ public class Asteroids extends GameEngine
   // TODO: Given different difficulty levels, it may be a good idea to have
   // separate velocity scales
   private static final int[]  BIG_ASTEROID_VELOCITY_SCALE      = new int[] { 10, 15, 25, 35, 50 };
-  private static final int[]  MEDIUM_ASTEROID_VELOCITY_SCALE   = new int[] { 10, 25, 50, 60, 75, 100 };
-  private static final int[]  SMALL_ASTEROID_VELOCITY_SCALE    = new int[] { 50, 75, 100, 110, 120, 130 };
-  private static final int[]  TINY_ASTEROID_VELOCITY_SCALE     = new int[] { 10, 25, 100, 125, 200 };
+  private static final int[]  MEDIUM_ASTEROID_VELOCITY_SCALE   = new int[] { 10, 25, 50, 60, 75, 90 };
+  private static final int[]  SMALL_ASTEROID_VELOCITY_SCALE    = new int[] { 50, 75, 100, 110, 115, 125 };
+  private static final int[]  TINY_ASTEROID_VELOCITY_SCALE     = new int[] { 50, 75, 125, 150, 175, 200 };
 
   // Game variables
   //private static final int    STARTING_NUMBER_OF_ASTEROIDS     = 10;
@@ -60,10 +56,13 @@ public class Asteroids extends GameEngine
    * Class instance variables
    */
 
-  // Variables used for player
+  // Variables used to control player entity
   EntityImage                 bulletImage;
   private GameInputMovement   playerMovement;
   private boolean             fireShot;
+  private boolean             keyShield;
+  private boolean             thrust;
+  private boolean previousShieldState;
 
   ImageObserver               imageObserver;
 
@@ -74,6 +73,7 @@ public class Asteroids extends GameEngine
   EntityImage[]               tinyAsteroids;
   EntityImage[]               barImage                         = new EntityImage[2];
   EntityImage                 barFrame;
+  EntityImage[] shipImage              = new EntityImage[3];
 
   // Variables used for game
   private int                 currentLevel;
@@ -88,7 +88,7 @@ public class Asteroids extends GameEngine
 
   // Variables used to keep track of game event state transitions
   //private boolean                      invokePlayerDeadState;
-
+  
   // Timers used to control when state transitions are to occur 
   private long                timerPlayerDeadState             = 0;
   private long                timerGameStart                   = 0;
@@ -98,7 +98,7 @@ public class Asteroids extends GameEngine
   /*
    * Timers used to manage player entity states
    */
-  private long                timerCollision                   = 0;
+  //private long                timerCollision                   = 0;
 
   /*
    * Bounding boxes used for messages displayed to the screen
@@ -188,11 +188,19 @@ public class Asteroids extends GameEngine
     bulletImage = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.UNDEFINED);
     bulletImage.load("./plasmashot.png");
 
+    // Create the ship sprite--first in the sprite list
+    shipImage[0] = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.UNDEFINED);
+    shipImage[0].load("./spaceship.png");
+    shipImage[1] = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.UNDEFINED);
+    shipImage[1].load("./ship_thrust.png");
+    shipImage[2] = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.UNDEFINED);
+    shipImage[2].load("./ship_shield.png");
+    
     fireShot = false;
 
     // Add the player entity
     PlayerEntity ship = new PlayerEntity(this.imageObserver, GameEngineConstants.EntityTypes.PLAYER);
-    ship.load("./spaceship.png");
+    ship.setImage(shipImage[0].getImage());
     ship.setRotationRate(0.0);
     ship.setFaceAngle(0);
     ship.setMoveAngle(ship.getFaceAngle() - 90);
@@ -315,36 +323,20 @@ public class Asteroids extends GameEngine
     {
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
-//        if (entity1.getEntityState() == GameEngineConstants.EntityState.NORMAL)
-//        {
-          //System.out.println("userHandleEntityCollision - Player is NOT Invulnerable.");
-          // Check if the player has the shields engaged, if so then do not reduce health of the player
-          // TODO: Add logic to handle the shields
-
-          timerCollision = System.currentTimeMillis();
-          entity1.setVelocity(0, 0);
-
-          // TODO: Add explosions when animation frames are added to GameFramework
-          //            double x = spr1.position().X() - 10;
-          //            double y = spr1.position().Y() - 10;
-          //            startBigExplosion(new Point2D(x, y));
-
-//          entity1.setEntityState(GameEngineConstants.EntityState.EXPLODING);
+        if (keyShield && ((PlayerEntity) entity1).hasShieldRemaining())
+        {
+          ((PlayerEntity)entity1).decrementShieldAmount();
+          System.out.println("SHIELD ENABLED - Player Health: " + ((PlayerEntity) entity1).getHealthAmount());
+        }
+        else
+        {
           entity1.kill();
-          entity2.kill();
-          breakAsteroid((EntityImage) entity2);
-          System.out.println("Player Health: " + ((PlayerEntity) entity1).getHealthAmount());
-          //System.out.println(entity1.toString());
-//        }
-//        // Make ship temporarily invulnerable
-//        else if (entity1.getEntityState() == GameEngineConstants.EntityState.EXPLODING)
-//        {
-//          //System.out.println("userHandleEntityCollision - Player is Invulnerable.");
-//          if (System.currentTimeMillis() > (timerCollision + Constants.INVULNERABILITY_INTERVAL))
-//          {
-//            entity1.setEntityState(GameEngineConstants.EntityState.NORMAL);
-//          }
-//        }
+          entity1.setVelocity(0, 0);
+          System.out.println("HIT - Player Health: " + ((PlayerEntity) entity1).getHealthAmount());
+        }
+
+        entity2.kill();
+        breakAsteroid((EntityImage) entity2);
       }
     }
 
@@ -381,6 +373,30 @@ public class Asteroids extends GameEngine
       addPlayerShot(stockBullet());
       fireShot = false;
     }
+    
+//    // Not sure if this is needed Check the shield state. If it is completely depleted then clear the keyShield flag
+//    if (!((PlayerEntity)getPlayer()).hasShieldRemaining())
+//    {
+//      keyShield = false;
+//    }
+    
+    // Given the current user input (thrust, shields ot nothing) display the proper image for the player entity
+    if (thrust)
+    {
+      ((PlayerEntity)getPlayer()).setImage(shipImage[1].getImage());
+      applyThrust();
+    }
+    else if ((keyShield) && ((PlayerEntity)getPlayer()).hasShieldRemaining()) 
+    {
+      ((PlayerEntity)getPlayer()).setImage(shipImage[2].getImage());
+    }
+    else
+    {
+      // Set ship image to normal non-thrust image
+      ((PlayerEntity)getPlayer()).setImage(shipImage[0].getImage());
+    }
+    
+    
   }
 
   @Override
@@ -412,6 +428,9 @@ public class Asteroids extends GameEngine
   @Override
   public void userGamePostDraw(Graphics2D g)
   {
+    // For debugging purposes
+    int line = 300;
+    
     switch (this.state)
     {
       case INTRODUCTION:
@@ -437,6 +456,36 @@ public class Asteroids extends GameEngine
         boundsGamePlayingHealthMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_HEALTH, g);
         g.setColor(Color.WHITE);
         g.drawString(Constants.MSG_GAME_PLAYING_HEALTH, (int) (screenWidth - barFrame.getWidth() - 20 - boundsGamePlayingHealthMsg.getWidth()), 30);
+        
+        // Draw player shield bar
+        g.drawImage(barFrame.getImage(), screenWidth - barFrame.getWidth() - 20, 33, this.imageObserver);
+        for (int n = 0; n < ((PlayerEntity) getPlayer()).getShieldAmount(); n++)
+        {
+          int dx = (screenWidth - barFrame.getWidth() - 18) + n * 5;
+          g.drawImage(barImage[1].getImage(), dx, 35, this.imageObserver);
+        }
+
+        // Draw the label for the shield bar
+        g.setFont(Constants.FONT_GAME_PLAYING_HEALTH);
+        boundsGamePlayingHealthMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_SHIELD, g);
+        g.setColor(Color.WHITE);
+        g.drawString(Constants.MSG_GAME_PLAYING_SHIELD, (int) (screenWidth - barFrame.getWidth() - 20 - boundsGamePlayingHealthMsg.getWidth()), 47);
+        
+        if (displayDebugInfo)
+        {
+          g.setFont(Constants.FONT_DEBUG);
+          g.setColor(Color.WHITE);
+
+          g.drawString(Constants.DEBUG_MSG_THRUST + thrust, 560, line);
+          line += 16;
+          
+          g.drawString(Constants.DEBUG_MSG_SHIELD + keyShield, 560, line);
+          line += 16;
+          
+          g.drawString(Constants.DEBUG_MSG_PREV_SHIELD + previousShieldState , 560, line);
+          line += 16;
+        }
+        
         break;
 
       case PLAYER_DEAD:
@@ -471,16 +520,42 @@ public class Asteroids extends GameEngine
     switch (this.state)
     {
       case INTRODUCTION:
-
         break;
 
       case GAME_START:
-
         break;
 
       case PLAYING:
 
         playerMovement.pressed(keyCode);
+
+        switch(keyCode)
+        {            
+          case KeyEvent.VK_UP:
+            thrust = true;
+
+            // NOTE: Shields cannot be applied when the thrust is engaged. Store the previous state of 
+            //       the shield control so it can be restored after the thrust is not applied anymore.
+            previousShieldState = keyShield;
+            keyShield = false;
+            break;
+
+          case KeyEvent.VK_SHIFT:
+            // If the thrust is engaged, shields will not work
+            if ((!thrust) && ((PlayerEntity)getPlayer()).hasShieldRemaining())
+            {
+              keyShield = true;
+              //previousShieldState = true;
+            }
+//            else
+//            {
+//              keyShield = false;
+//              previousShieldState = false;
+//            }
+            break;
+            
+          default:
+        }
 
         break;
 
@@ -509,10 +584,22 @@ public class Asteroids extends GameEngine
       case PLAYING:
 
         playerMovement.released(keyCode);
-
+        
         if (keyCode == KeyEvent.VK_CONTROL)
         {
           fireShot = true;
+        }
+        
+        if (keyCode == KeyEvent.VK_UP)
+        {
+          thrust = false;
+          keyShield = previousShieldState;
+        }    
+        
+        if (keyCode == KeyEvent.VK_SHIFT)
+        {
+          keyShield = false;
+          //previousShieldState = false;
         }
 
         break;
@@ -523,10 +610,7 @@ public class Asteroids extends GameEngine
 
   @Override
   public void gameKeyTyped(int keyCode)
-  {
-    // TODO Auto-generated method stub
-
-  }
+  {}
 
   /*
    * Create a random "big" asteroid
@@ -543,8 +627,8 @@ public class Asteroids extends GameEngine
 
     // Set to a random position on the screen and prevent asteroids from
     // starting on the players position
-    double x = GameUtility.random.nextInt(GameEngineConstants.DEFAULT_CANVAS_WIDTH - ASTEROID_DIMENSIONS);
-    double y = GameUtility.random.nextInt(GameEngineConstants.DEFAULT_CANVAS_HEIGHT - ASTEROID_DIMENSIONS);
+    double x = GameUtility.random.nextInt(screenWidth - ASTEROID_DIMENSIONS);
+    double y = GameUtility.random.nextInt(screenHeight - ASTEROID_DIMENSIONS);
     asteroid.setPosition(x, y);
     nudgeAsteroid(asteroid);
 
@@ -584,12 +668,12 @@ public class Asteroids extends GameEngine
     // the player entity when the player entity begins at its home position.
     double entityWidth = entity.getWidth();
     double entityHeight = entity.getHeight();
-    double horizontalCenter = GameEngineConstants.DEFAULT_CANVAS_WIDTH / 2;
-    double verticalCenter = GameEngineConstants.DEFAULT_CANVAS_HEIGHT / 2;
-    double lowerHorizontalBufferFactor = (horizontalCenter - entityWidth) / GameEngineConstants.DEFAULT_CANVAS_WIDTH;
-    double upperHorizontalBufferFactor = (horizontalCenter + entityWidth) / GameEngineConstants.DEFAULT_CANVAS_WIDTH;
-    double lowerVerticalBufferFactor = (verticalCenter - entityHeight) / GameEngineConstants.DEFAULT_CANVAS_HEIGHT;
-    double upperVerticalBufferFactor = (verticalCenter + entityHeight) / GameEngineConstants.DEFAULT_CANVAS_HEIGHT;
+    double horizontalCenter = screenWidth / 2;
+    double verticalCenter = screenHeight / 2;
+    double lowerHorizontalBufferFactor = (horizontalCenter - entityWidth) / screenWidth;
+    double upperHorizontalBufferFactor = (horizontalCenter + entityWidth) / screenWidth;
+    double lowerVerticalBufferFactor = (verticalCenter - entityHeight) / screenHeight;
+    double upperVerticalBufferFactor = (verticalCenter + entityHeight) / screenHeight;
 
     // System.out.println("lowerHorizontalBufferFactor: " +
     // lowerHorizontalBufferFactor);
@@ -602,20 +686,20 @@ public class Asteroids extends GameEngine
 
     // If the asteroid is near the center of the screen, nudge it away from
     // the players ship
-    if ((x >= GameEngineConstants.DEFAULT_CANVAS_WIDTH * lowerHorizontalBufferFactor) && (x <= GameEngineConstants.DEFAULT_CANVAS_WIDTH * 0.5))
+    if ((x >= screenWidth * lowerHorizontalBufferFactor) && (x <= screenWidth * 0.5))
     {
       x += -entityWidth;
     }
-    else if ((x <= GameEngineConstants.DEFAULT_CANVAS_WIDTH * upperHorizontalBufferFactor) && (x >= GameEngineConstants.DEFAULT_CANVAS_WIDTH * 0.5))
+    else if ((x <= screenWidth * upperHorizontalBufferFactor) && (x >= screenWidth * 0.5))
     {
       x += entityWidth;
     }
 
-    if ((y >= GameEngineConstants.DEFAULT_CANVAS_HEIGHT * lowerVerticalBufferFactor) && (y <= GameEngineConstants.DEFAULT_CANVAS_HEIGHT * 0.5))
+    if ((y >= screenHeight * lowerVerticalBufferFactor) && (y <= screenHeight * 0.5))
     {
       y += -entityHeight;
     }
-    else if ((y <= GameEngineConstants.DEFAULT_CANVAS_HEIGHT * upperVerticalBufferFactor) && (y >= GameEngineConstants.DEFAULT_CANVAS_HEIGHT * 0.5))
+    else if ((y <= screenHeight * upperVerticalBufferFactor) && (y >= screenHeight * 0.5))
     {
       y += entityHeight;
     }
@@ -634,8 +718,8 @@ public class Asteroids extends GameEngine
 
     // Set the bullet's velocity
     double angle = bullet.getMoveAngle();
-    double svx = calcAngleMoveX(angle) * PLAYER_BULLET_SPEED;
-    double svy = calcAngleMoveY(angle) * PLAYER_BULLET_SPEED;
+    double svx = calcAngleMoveX(angle) * PLAYER_BULLET_SPEED + getPlayer().getVelocityX();
+    double svy = calcAngleMoveY(angle) * PLAYER_BULLET_SPEED + getPlayer().getVelocityY();
 
     bullet.setVelocity(svx, svy);
 
@@ -769,6 +853,35 @@ public class Asteroids extends GameEngine
   }
 
   /*
+   * Ship movement methods
+   */
+
+  // Increase the thrust of the ship based on facing angle
+  public void applyThrust()
+  {
+    //the ship is always the first sprite in the linked list
+    PlayerEntity ship = (PlayerEntity)getPlayer();
+
+    //up arrow adds thrust to ship (1/10 normal speed)
+    ship.setMoveAngle(ship.getFaceAngle() - 90);
+
+    //calculate the X and Y velocity based on angle
+    double velx = ship.getVelocityX();
+    velx += calcAngleMoveX(ship.getMoveAngle()) * Constants.SHIP_ACCELERATION;
+    if (velx < Constants.MIN_VELOCITY)
+      velx = Constants.MIN_VELOCITY;
+    else if (velx > Constants.MAX_VELOCITY)
+      velx = Constants.MAX_VELOCITY;
+    double vely = ship.getVelocityY();
+    vely += calcAngleMoveY(ship.getMoveAngle()) * Constants.SHIP_ACCELERATION;
+    if (vely < Constants.MIN_VELOCITY)
+      vely = Constants.MIN_VELOCITY;
+    else if (vely > Constants.MAX_VELOCITY)
+      vely = Constants.MAX_VELOCITY;
+    ship.setVelocity(velx, vely);
+  }
+
+  /*
    * Game Reset and Next Level methods
    */
 
@@ -796,6 +909,7 @@ public class Asteroids extends GameEngine
     nextLevel();
   }
 
+  //
   public void nextLevel()
   {
     //shotFired = false;
@@ -806,10 +920,14 @@ public class Asteroids extends GameEngine
     clearPlayerShot();
 
     ((PlayerEntity)getPlayer()).moveToHomePosition();
+    getPlayer().setVelocity(0.0, 0.0);  // Possibly move this call into the method above.
     getPlayer().setVisible(true);
 
     // Clear the player input control flags
     playerMovement.reset();
+    keyShield = false;
+    previousShieldState = false;
+    thrust = false;
 
     initializeAsteroidsForCurrentLevel(currentLevel);
 

@@ -31,7 +31,7 @@ public class Main extends JFrame
    */
   private static final long serialVersionUID = 1L;
 
-  private Asteroids    squareInvaders;
+  private Asteroids         galacticWarReboot;
   private GameScreen        gameScreen;
 
   public Main()
@@ -43,13 +43,13 @@ public class Main extends JFrame
     this.setContentPane(gameScreen);
     this.pack();
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    this.setTitle("Square Invaders");
+    this.setTitle(Constants.GAME_NAME);
     this.setResizable(false);
     this.setVisible(true);
-    
-    squareInvaders = new Asteroids(gameScreen, this, GameEngineConstants.DEFAULT_CANVAS_WIDTH, GameEngineConstants.DEFAULT_CANVAS_HEIGHT);
-    squareInvaders.gameInit();
-    squareInvaders.gameStart();
+
+    galacticWarReboot = new Asteroids(gameScreen, this, GameEngineConstants.DEFAULT_CANVAS_WIDTH, GameEngineConstants.DEFAULT_CANVAS_HEIGHT);
+    galacticWarReboot.gameInit();
+    galacticWarReboot.gameStart();
   }
 
   public static void main(String[] args)
@@ -110,7 +110,7 @@ public class Main extends JFrame
       super.paintComponent(g);   // paint background
 
       // Draw the game objects
-      squareInvaders.gameDraw((Graphics2D) g);
+      galacticWarReboot.gameDraw((Graphics2D) g);
 
       Toolkit.getDefaultToolkit().sync();
     }
@@ -133,8 +133,8 @@ public class Main extends JFrame
     // KeyEvent handlers
     @Override
     public void keyPressed(KeyEvent e)
-    {
-      squareInvaders.gameKeyPressed(e.getKeyCode());
+    {       
+      galacticWarReboot.gameKeyPressed(e.getKeyCode());
     }
 
     @Override
@@ -143,9 +143,9 @@ public class Main extends JFrame
       // Process Debug key    
       if (e.getKeyCode() == KeyEvent.VK_BACK_QUOTE && e.getModifiersEx() == KeyEvent.SHIFT_DOWN_MASK)
       {
-        squareInvaders.displayDebugInfo = !squareInvaders.displayDebugInfo;
+        galacticWarReboot.displayDebugInfo = !galacticWarReboot.displayDebugInfo;
 
-        if (squareInvaders.displayDebugInfo)
+        if (galacticWarReboot.displayDebugInfo)
         {
           System.out.println("Debugging Enabled.");
         }
@@ -155,13 +155,13 @@ public class Main extends JFrame
         }
       }
 
-      squareInvaders.gameKeyReleased(e.getKeyCode());
+      galacticWarReboot.gameKeyReleased(e.getKeyCode());
     }
 
     @Override
     public void keyTyped(KeyEvent e)
     {
-      squareInvaders.gameKeyTyped(e.getKeyCode());
+      // Not Used
     }
 
     @Override

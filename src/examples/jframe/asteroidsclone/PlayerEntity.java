@@ -9,6 +9,7 @@ import game.framework.utilities.GameEngineConstants;
 public class PlayerEntity extends EntityImage
 {
   private int health;
+  private int shield;
   private Position2D homePosition;
 //  private double homePositionX;
 //  private double homePositionY;
@@ -33,7 +34,8 @@ public class PlayerEntity extends EntityImage
   @Override
   public void reset()
   {
-    health = Constants.PLAYER_STARTING_HEALTH;        
+    health = Constants.PLAYER_STARTING_HEALTH;       
+    shield = Constants.PLAYER_STARTING_SHIELD;
     moveToHomePosition();
     super.reset();
   }
@@ -58,6 +60,26 @@ public class PlayerEntity extends EntityImage
     return (health > 0 ? true : false);
   }
 
+  public void incrementShieldAmount(int newIncrement)
+  {
+    shield += newIncrement;
+  }
+
+  public void decrementShieldAmount()
+  {
+    shield--;
+  }
+  
+  public int getShieldAmount()
+  {
+    return shield;
+  }
+
+  public boolean hasShieldRemaining()
+  {
+    return (shield > 0 ? true : false);
+  }
+  
   @Override
   public void kill()
   {
