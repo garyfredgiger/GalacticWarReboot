@@ -67,6 +67,12 @@ To run the game from within Eclipse, right click on the project **GameFrameworkG
 </ul>
 </ul>
 
-### If you Encounter Problems?
+### If You Encounter Problems?
 
 If you do encounter a bug please email me at garyfredgiger@gmail.com and include in the subject line GLACTIC WAR REBOOT BUG. In the email please provide a detailed description of the bug and the steps that you followed to arrive at the bug. If I am unable to reproduce the problem then I will not be able to fix it.
+
+### Additional Notes
+
+I included the eclipse project files (.project and .classpath) in this project so you can simply import this project without having to create a new project from your cloned copy of the code. Some suggest it is not a good idea to include project specific files, but I thought I would be a rebel and do it anyway.
+
+This game was developed using Eclipse Kepler Release (Build id: 20130614-0229) with Java 1.6. 
