@@ -26,7 +26,7 @@ Also note that you may need to add the following line to the .classpath file in 
 <classpathentry kind="src" path="images"/>
 ```
 
-To run the game from within Eclipse, right click on the project GameFrameworkSquareInvaders (the name of this project when imported into Eclispe) and select the opton Run As -> Java Application.
+To run the game from within Eclipse, right click on the project **GameFrameworkGalacticWarReboot** (the name of this project when imported into Eclispe) and select the opton Run As -> Java Application.
 
 
 Note: I just started creating this game and it may contains bugs.
