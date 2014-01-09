@@ -9,6 +9,11 @@ public class Constants
     POWERUP_SHIELD, POWERUP_HEALTH, POWERUP_GUN, POWERUP_250, POWERUP_500, POWERUP_1000, UNDEFINED
   }
 
+  public static enum EnemyTypes
+  {
+    ASTEROID_BIG, ASTEROID_MEDIUM, ASTEROID_SMALL, ASTEROID_TINY, UFO
+  }
+
   public static final String GAME_NAME                       = "Galactic War Reboot";
 
   // Fonts used in the Introduction screen
@@ -20,7 +25,7 @@ public class Constants
   public static final Font   FONT_GAME_PLAYING_HUD_SMALL     = new Font("Verdana", Font.BOLD, 14);
   public static final Font   FONT_GAME_PLAYING_HUD_MEDIUM    = new Font("Verdana", Font.BOLD, 18);
   public static final Font   FONT_GAME_PLAYING_HUD_LARGE     = new Font("Verdana", Font.PLAIN, 32);
-  
+
   // Fonts used in the Game Start screen
   public static final Font   FONT_GAME_START_SCREEN          = new Font("Comic Sans MS", Font.BOLD, 48);
 
@@ -73,6 +78,8 @@ public class Constants
   public static final int    PLAYER_DEAD_INTERVAL            = 2000;
   public static final int    GAMEOVER_INTERVAL               = 2000;
   public static final int    NEXT_LEVEL_INTERVAL             = 3000;
+  public static final int    DEFAULT_DAMAGE_AMOUNT           = 1;
+  public static final int    UFO_DAMAGE_AMOUNT               = 4;
 
   // Constants used for player entity 
   public static final int    INVULNERABILITY_INTERVAL        = 3000;
@@ -83,7 +90,7 @@ public class Constants
   public static final double SHIP_MIN_VELOCITY               = -SHIP_MAX_VELOCITY;
   public static final int    PLAYER_ROTATION_RATE            = 200;
   public static final int    PLAYER_BULLET_SPEED             = 200;
-  public static final double PLAYER_BULLET_LIFE_SPAN_IN_SECS = 2.5;
+  public static final double PLAYER_BULLET_LIFE_SPAN_IN_SECS = 2;
 
   // Powerup constants
   public static final int    POWERUP_ROTAITON_RATE           = 50;
@@ -95,9 +102,19 @@ public class Constants
   public static final int    POWERUP_LIFE_SPAN_IN_SECS       = 15;
   public static final int    POWERUP_250_VALUE               = 250;
   public static final int    POWERUP_500_VALUE               = 5000;
-  public static final int    POWERUP_1000_VALUE               = 1000;
+  public static final int    POWERUP_1000_VALUE              = 1000;
 
-  public static final int    SHIP_STARTING_FIREPOWER         = 5;
+  // UFO Constants
+  public static final int    UFO_SPEED                       = 150;
+  public static final int    UFO_SHOT_INTERVAL               = 750;
+  public static final int    UFO_SHOT_SPEED                  = 175;
+  public static final double UFO_BULLET_LIFE_SPAN_IN_SECS    = 3;
+  public static final int    UFO_SPAWN_PROBABILITY           = 5;                                                       // This is a 5 in 100 chance or 1/20th chance.
+  public static final int    UFO_TOTAL_EVENTS_TO_SPAWN       = 10000;
+  public static final long   UFO_MIN_TIME_BETWEEN_LAUNCHES   = 15000;
+  public static final long   UFO_MIN_UFO_LAUNCH_LEVEL        = 1;
+  
+  public static final int    SHIP_STARTING_FIREPOWER         = 2;
   public static final int    SHIP_MAX_FIREPOWER              = 5;
   public static final int    SHIP_MIN_FIREPOWER              = 1;
 
@@ -113,4 +130,5 @@ public class Constants
   public static final String DEBUG_MSG_FIRE                  = "Fire: ";
   public static final String DEBUG_MSG_SHIELD                = "Shield: ";
   public static final String DEBUG_MSG_PREV_SHIELD           = "Prev Shield: ";
+  public static final String DEBUG_MSG_UFO_PROB              = "UFO Prob: ";
 }

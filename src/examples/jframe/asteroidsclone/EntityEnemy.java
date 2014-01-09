@@ -8,7 +8,7 @@ import game.framework.utilities.GameEngineConstants;
 public class EntityEnemy extends EntityImage
 {
   private int pointValue;
-  private int enemyType;
+  private Constants.EnemyTypes enemyType;
 
   public EntityEnemy(ImageObserver observer)
   {
@@ -28,12 +28,12 @@ public class EntityEnemy extends EntityImage
     return pointValue;
   }
 
-  public void setEnemyType(int type)
+  public void setEnemyType(Constants.EnemyTypes type)
   {
     enemyType = type;
   }
 
-  public int getEnemyType()
+  public Constants.EnemyTypes getEnemyType()
   {
     return enemyType;
   }

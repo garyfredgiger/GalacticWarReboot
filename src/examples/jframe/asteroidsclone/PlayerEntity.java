@@ -60,6 +60,21 @@ public class PlayerEntity extends EntityImage
     }
   }
 
+  public void decrementHealthAmount()
+  {
+    decrementHealthAmount(1);
+  }
+  
+  public void decrementHealthAmount(int amount)
+  {
+    if (amount < 0)
+    {
+      return;
+    }
+    
+    health -= amount;
+  }
+  
   public int getHealthAmount()
   {
     return health;
@@ -85,7 +100,17 @@ public class PlayerEntity extends EntityImage
 
   public void decrementShieldAmount()
   {
-    shield--;
+    decrementShieldAmount(1);
+  }
+  
+  public void decrementShieldAmount(int amount)
+  {
+    if (amount < 0)
+    {
+      return;
+    }
+    
+    shield -= amount;
   }
   
   public int getShieldAmount()
@@ -130,7 +155,7 @@ public class PlayerEntity extends EntityImage
   public void kill()
   {
     // Decrement the number of lives and update the additional lives flag 
-    health--;
+    //health--;
 
     // Don't quite kill the player yet if there is still health left
     if (health > 0)
