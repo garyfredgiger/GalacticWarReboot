@@ -32,24 +32,92 @@ To run the game from within Eclipse, right click on the project **GameFrameworkG
 
 ### Notes About the Game
 
+##### Known Problems/Bugs/Glitches
+
 <ul>
 
-<li>There are a few minor glitches that occur from time to time, but they are not "show stoppers". Some of the glitches include:
-
-  <ul>
-  
-  <li>When a new level begins, sometimes one of the large asteroids is already broken up into three smaller ones before the player even shoots it.</li>
-  <li>Sometime when you shoot a small asteroid, it completly disappaers without spawning three tiny asteroids.</li>
-  </ul>
+<li>
+There are currently no known major bugs in this game (i.e., bugs that impact the gameplay, game performance or cause the game to crash severly). That is not to say that there are no bugs at all in this game. I have tested it extensively and everything appears to be working as designed.
 </li>
 
-
-<li>There are currently no known major bugs in this game (i.e., bugs that impact the gameplay, game performance or cause the game to crash severly). That is not to say that there are no bugs at all in this game. I have tested it extensively and everything appears to be working as designed.</li>
-
-<li>The game was only tested on my laptop running Ubuntu vesion 12.10 within Eclipse running it as a Java application. As I get more time for development and testing, my goal is to obviously test it on all platforms using the major browsers Chrome, IE, Firefox and Safari</li>
-
-<li>For the most part this game is 90% or more completed. I still need to add a few more features in order to make it 100% completed. These features include:
+<li>
+There are a few minor glitches that occur from time to time, but they are not "show stoppers". Some of the glitches include:
   <ul>
+
+    <li>
+    When a new level begins, sometimes one of the large asteroids is already broken up into three smaller ones before the player even shoots it.
+    </li>
+
+    <li>
+    Sometime when you shoot a small asteroid, it completly disappaers without spawning three tiny asteroids.
+    </li>
+
+  </ul>
+  
+</li>
+</ul>
+
+##### Testing
+
+The game was only tested on my laptop running Ubuntu vesion 12.10 within Eclipse running it as a Java application. As I get more time for development and testing, my goal is to obviously test it on all platforms using the major browsers Chrome, IE, Firefox and Safari. Since this game is still in development, there is a debugging features that can be enabled. During game play press *SHIFT* + *~* (tilda) to display debugging information about the current game.
+
+##### Current Game Features
+
+The game has the current features during game play:
+
+<ul>
+
+  <li>
+    Players Ship
+    <ul>
+      <li><b>Thruster</b> - A single engine to propel your ship forward through space.</li>
+      <li><b>Phaser Cannon</b> - In its simplest form, it shoots a single blast straight ahead.</li>
+      <li><b>Shields</b> - Will take the damage instead of your ship's hull when engaged. However, shields cannot be used while the thruster is engaged.</li>
+    </ul>
+  </li>
+  
+  <li>
+    Power-Ups
+    <ul>
+      <li><b>250 Point Reward</b></li>
+      <li><b>500 Point Reward</b></li>
+      <li><b>1000 Point Reward</b></li>
+      <li>
+        <b>Phaser Cannon Upgrades</b>
+        <ul>
+          <li><b>Double Shot</b> - Shots two shots covering an 8 degree angle.</li>
+          <li><b>Triple Shot</b> - Shoots three shots covering an 8 degree angle. </li>
+          <li><b>Quad Shot</b> - Shoots 4 shots covering a 20 degree angle</li>
+          <li><b>Hex Barrage</b> - Shoots 6 shots covering a 120 degree angle spread.</li>
+        </ul>
+      </li>
+      <li><b>Shield Health</b> - Restores 5 health points to the ship's hull.</li>
+      <li><b>Ship Health</b> - Restores 5 health points to the ship's shields.</li>
+    </ul>
+  </li>
+
+  <li>
+    Enemies
+    <ul>
+      <li><b>Asteroids</b> - There are 4 different sizes</li>
+        <ul>
+          <li>Big - 50 Points</li>
+          <li>Medium - 30 Points</li>
+          <li>Small - 20 Points</li>
+          <li>Tiny - 10 Points</li>
+        </ul>
+      <li><b>UFO</b> - Makes random appearances throughout the game. A word of caution. The UFO will fire at your ship with deadly accuracy. Be sure to kill it quickly or have plenty of shield strength on reserve or you will receive a devistating blow.</li>
+
+    </ul>
+  </li>
+</ul>
+
+
+##### Future Additions
+
+For the most part this game is 90% or more completed. I still need to add a few more features in order to make it 100% completed. These features include:
+
+<ul>
   <li>Sounds. There are currently no sounds in this game.</li>
 
   <li>Adding controls to pause the game. Note that the game framework has the pause functionality built into the game loop. I have not added logic to the input handlers that map to the game framework's pause capability.</li>
@@ -58,13 +126,15 @@ To run the game from within Eclipse, right click on the project **GameFrameworkG
   
   <li>High Score leader board</li>
   
-  <li>Possibly adding difficulty levels. Although given the current game play, it get tough pretty quickly.</li>
-  </ul>
+  <li>Possibly adding difficulty levels. Although given the current game play, it get tough pretty quickly in later levels.</li>
 
-<li>Since this game is still in development, there is a debugging features that can be enabled.</li>
-<ul>
-<li>During game play press *SHIFT* + *~* (tilda) to display debugging information about the current game.</li>
-</ul>
+  <li>I plan on adding additional power-ups to the game as my time permits. These features will include:</li>
+  <ul>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
 </ul>
 
 ### If You Encounter Problems?
