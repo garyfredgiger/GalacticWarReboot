@@ -12,6 +12,11 @@ public class PlayerEntity extends EntityImage
   private int shield;
   private int firePower;
   private Position2D homePosition;
+  
+  // Other power-ups
+  private int superShield;  // The count of this indicates how many super shiled powerups the player current has
+  private int theBomb;
+  
 //  private double homePositionX;
 //  private double homePositionY;
 
@@ -19,6 +24,13 @@ public class PlayerEntity extends EntityImage
   {
     super(imageObserver, type);
     homePosition = new Position2D();
+    
+    // Be safe, initialize the variables
+    firePower = Constants.SHIP_STARTING_FIREPOWER;
+    health = Constants.SHIP_STARTING_HEALTH;       
+    shield = Constants.SHIP_STARTING_SHIELD;
+    superShield = Constants.SHIP_STARTING_SUPER_SHIELD;
+    theBomb = Constants.SHIP_STARTING_THE_BOMBS;
   }
 
   public void defineHomePosition(double homePositionX, double homePositionY)
@@ -38,6 +50,8 @@ public class PlayerEntity extends EntityImage
     firePower = Constants.SHIP_STARTING_FIREPOWER;
     health = Constants.SHIP_STARTING_HEALTH;       
     shield = Constants.SHIP_STARTING_SHIELD;
+    superShield = Constants.SHIP_STARTING_SUPER_SHIELD;
+    theBomb = Constants.SHIP_STARTING_THE_BOMBS;
     moveToHomePosition();
     super.reset();
   }
@@ -151,12 +165,57 @@ public class PlayerEntity extends EntityImage
     }
   }
   
+  /*
+   * Methods for the super shields
+   */
+  public int getCurrentSuperShieldCount()
+  {
+    return superShield;
+  }
+  
+  public void reduceSuperShield()
+  {
+    superShield--;
+    
+    if (superShield < 0)
+    {
+      superShield = Constants.SHIP_STARTING_SUPER_SHIELD;
+    }
+  }
+
+  // The player can have as many super shields as they keep collecting 
+  public void increaseSuperShield()
+  {
+    superShield++;
+  }
+
+  /*
+   * Power-ups for The Bomb
+   */
+  public int getCurrentTheBombCount()
+  {
+    return theBomb;
+  }
+  
+  public void reduceTheBomb()
+  {
+    theBomb--;
+    
+    if (theBomb < 0)
+    {
+      theBomb = Constants.SHIP_STARTING_THE_BOMBS;
+    }
+  }
+
+  // The player can have as many super shields as they keep collecting 
+  public void increaseTheBomb()
+  {
+    theBomb++;
+  }
+  
   @Override
   public void kill()
   {
-    // Decrement the number of lives and update the additional lives flag 
-    //health--;
-
     // Don't quite kill the player yet if there is still health left
     if (health > 0)
     {
