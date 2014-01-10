@@ -93,6 +93,8 @@ The game has the current features during game play:
       </li>
       <li><b>Shield Health</b> - Restores 5 health points to the ship's hull.</li>
       <li><b>Ship Health</b> - Restores 5 health points to the ship's shields.</li>
+      <li><b>Super Shield</b>  - When deployed, a wave of enegry will be released from your ship in a 360 degree ring protecting your from any nearby threats. Use it wisely since it only lasts for a brief period of time. Press <b>S</b> to use.</li>
+      <li><b>The Bomb</b>  - Sends out a destructive wave to reap havoc on all those who are the enemy. It's the Bomb! Press <b>D</b> to use.</li>
     </ul>
   </li>
 
@@ -131,8 +133,6 @@ For the most part this game is 90% or more completed. I still need to add a few 
   <li>I plan on adding additional power-ups to the game as my time permits. These features will include:</li>
   <ul>
     <li><b>Auto Shield</b>  - When equipped, it will automatically engage shields when obects coolide with your ship.</li>
-    <li><b>Super Shield</b>  - When deployed, a wave of enegry will be released from your ship in a 360 degree ring protecting your from any nearby threats. Use it wisely since it only lasts for a brief period of time.</li>
-    <li><b>The Bomb</b>  - Sends out a destructive wave to reap havoc on all those who are the enemy. It's the Bomb!</li>
     <li><b>Ufonator</b> (Pronounced YOOF - O - NATOR) - Having problems with those peski UFO's that come out of nowhere? With the ufonator your UFO problems will be no more. This is a fire and forget weapon. However, make sure you use it carefully since it does has a limited range.</li>
   </ul>
 </ul>
