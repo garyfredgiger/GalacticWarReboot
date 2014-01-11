@@ -72,7 +72,7 @@ The game has the current features during game play:
     <ul>
       <li><b>Thruster</b> - A single engine to propel your ship forward through space.</li>
       <li><b>Phaser Cannon</b> - In its simplest form, it shoots a single blast straight ahead.</li>
-      <li><b>Shields</b> - Will take the damage instead of your ship's hull when engaged. However, shields cannot be used while the thruster is engaged.</li>
+      <li><b>Shields</b> - Will take the damage instead of your ship's hull when engaged.</li>
     </ul>
   </li>
   
@@ -95,6 +95,8 @@ The game has the current features during game play:
       <li><b>Ship Health</b> - Restores 5 health points to the ship's shields.</li>
       <li><b>Super Shield</b>  - When deployed, a wave of enegry will be released from your ship in a 360 degree ring protecting your from any nearby threats. Use it wisely since it only lasts for a brief period of time. Press <b>S</b> to use.</li>
       <li><b>The Bomb</b>  - Sends out a destructive wave to reap havoc on all those who are the enemy. It's the Bomb! Press <b>D</b> to use.</li>
+      <li><b>Full Health</b> - Restores all health that was previously lost.</li>
+      <li><b>Full Shield</b> - Regenerates all depleted shields.</li>
     </ul>
   </li>
 
@@ -122,15 +124,17 @@ For the most part this game is 90% or more completed. I still need to add a few 
 <ul>
   <li>Sounds. There are currently no sounds in this game.</li>
 
-  <li>Adding controls to pause the game. Note that the game framework has the pause functionality built into the game loop. I have not added logic to the input handlers that map to the game framework's pause capability.</li>
+  <li>Explosion animations when entities are damaged/destroyed.</li>
   
-  <li>Additional Power-ups. Even though there are several powerups including health, improved weaponry and point bonuses, I plan on adding additional powerups to better enhance the game play. These include a mega bomb that, when deployed, will destroy most asteroids on the screen, improved shields and possibly some type of guided projectile.</li>
+  <li>Instructions screen a player can refer to that shows all of the game power-ups and controls.</li>
+
+  <li>Adding controls to pause the game. Note that the game framework has the pause functionality built into the game loop. I have not added logic to the input handlers that map to the game framework's pause capability.</li>
   
   <li>High Score leader board</li>
   
   <li>Possibly adding difficulty levels. Although given the current game play, it get tough pretty quickly in later levels.</li>
 
-  <li>I plan on adding additional power-ups to the game as my time permits. These features will include:</li>
+  <li>Additional Power-ups. Even though there are several powerups including health, improved weaponry and point bonuses, I plan on adding additional powerups to better enhance the game play as my time permits. These features will include:</li>
   <ul>
     <li><b>Auto Shield</b>  - When equipped, it will automatically engage shields when obects coolide with your ship.</li>
     <li><b>Ufonator</b> (Pronounced YOOF - O - NATOR) - Having problems with those peski UFO's that come out of nowhere? With the ufonator your UFO problems will be no more. This is a fire and forget weapon. However, make sure you use it carefully since it does has a limited range.</li>
