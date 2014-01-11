@@ -179,7 +179,8 @@ public class PlayerEntity extends EntityImage
     
     if (superShield < 0)
     {
-      superShield = Constants.SHIP_STARTING_SUPER_SHIELD;
+      superShield = 0;
+      //superShield = Constants.SHIP_STARTING_SUPER_SHIELD;
     }
   }
 
@@ -192,9 +193,9 @@ public class PlayerEntity extends EntityImage
   /*
    * Power-ups for The Bomb
    */
-  public int getCurrentTheBombCount()
+  public boolean hasTheBomb()
   {
-    return theBomb;
+    return ((theBomb > 0) ? true : false);
   }
   
   public void reduceTheBomb()
@@ -205,6 +206,11 @@ public class PlayerEntity extends EntityImage
     {
       theBomb = Constants.SHIP_STARTING_THE_BOMBS;
     }
+  }
+
+  public int getTheBombCount()
+  {
+    return theBomb;
   }
 
   // The player can have as many super shields as they keep collecting 
