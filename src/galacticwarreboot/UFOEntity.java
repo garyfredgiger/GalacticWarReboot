@@ -1,11 +1,11 @@
-package examples.jframe.asteroidsclone;
+package galacticwarreboot;
 
 import game.framework.utilities.GameUtility;
 
 import java.awt.Image;
 import java.awt.image.ImageObserver;
 
-public class EntityUFO extends EntityEnemy
+public class UFOEntity extends EnemyEntity
 {
   private int              endingXPosition;
   private int              upperHorizontalLimit;
@@ -18,7 +18,7 @@ public class EntityUFO extends EntityEnemy
   // TODO: Is this only needed in the constructor?
   private UFOEntityManager manager;
 
-  public EntityUFO(ImageObserver observer, Image ufoImage, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
+  public UFOEntity(ImageObserver observer, Image ufoImage, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   //public EntityUFO(ImageObserver observer, Image ufoImage, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
     super(observer);

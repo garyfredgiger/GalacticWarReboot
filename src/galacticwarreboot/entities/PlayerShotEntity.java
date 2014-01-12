@@ -1,20 +1,22 @@
-package examples.jframe.asteroidsclone;
+package galacticwarreboot.entities;
 
 import java.awt.image.ImageObserver;
 
+import galacticwarreboot.Constants;
+import galacticwarreboot.Constants.PlayerShotType;
 import game.framework.entities.EntityImage;
 import game.framework.utilities.GameEngineConstants;
 
-public class PlayerShot extends EntityImage
+public class PlayerShotEntity extends EntityImage
 {
   protected Constants.PlayerShotType shotType; 
   
-  public PlayerShot(ImageObserver imageObserver)
+  public PlayerShotEntity(ImageObserver imageObserver)
   {
     this(imageObserver, Constants.PlayerShotType.UNDEFINED);
   }
   
-  public PlayerShot(ImageObserver imageObserver, Constants.PlayerShotType shotType)
+  public PlayerShotEntity(ImageObserver imageObserver, Constants.PlayerShotType shotType)
   {
     super(imageObserver, GameEngineConstants.EntityTypes.PLAYER_SHOT);
     setShotType(shotType);

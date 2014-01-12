@@ -1,4 +1,4 @@
-package examples.jframe.asteroidsclone;
+package galacticwarreboot;
 
 public class ScoreManager
 {

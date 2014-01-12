@@ -1,16 +1,16 @@
-package examples.jframe.asteroidsclone;
+package galacticwarreboot;
 
 import java.awt.image.ImageObserver;
 
 import game.framework.entities.EntityImage;
 import game.framework.utilities.GameEngineConstants;
 
-public class EntityEnemy extends EntityImage
+public class EnemyEntity extends EntityImage
 {
   private int pointValue;
   private Constants.EnemyTypes enemyType;
 
-  public EntityEnemy(ImageObserver observer)
+  public EnemyEntity(ImageObserver observer)
   {
     super(observer, GameEngineConstants.EntityTypes.ENEMY);
   }

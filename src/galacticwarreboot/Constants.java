@@ -1,4 +1,4 @@
-package examples.jframe.asteroidsclone;
+package galacticwarreboot;
 
 import game.framework.entities.EntityImage;
 
@@ -8,8 +8,16 @@ public class Constants
 {
   public static enum PowerUpType
   {
-    POWERUP_SHIELD, POWERUP_HEALTH, POWERUP_GUN, POWERUP_SUPER_SHIELD, POWERUP_FULL_HEALTH, POWERUP_FULL_SHIELD, THE_BOMB, POWERUP_250, POWERUP_500, POWERUP_1000, UNDEFINED
+    POWERUP_SHIELD, POWERUP_HEALTH, POWERUP_FIREPOWER, POWERUP_SUPER_SHIELD, POWERUP_FULL_HEALTH, POWERUP_FULL_SHIELD, POWERUP_THE_BOMB, POWERUP_250, POWERUP_500, POWERUP_1000, UNDEFINED
   }
+
+  // TODO: I will need a powerup to attribute type mapping
+  public static enum AttributeType
+  {
+    ATTRIBUTE_SHIELD, ATTRIBUTE_HEALTH, ATTRIBUTE_FIREPOWER, ATTRIBUTE_SUPER_SHIELD, ATTRIBUTE_THE_BOMB, UNDEFINED
+  }
+
+  // TODO: Should there be a attribute type?
 
   public static enum PlayerShotType
   {
@@ -139,7 +147,7 @@ public class Constants
   public static final int    SHIP_STARTING_SHIELD                 = 40;
   public static final int    SHIP_STARTING_SUPER_SHIELD           = 2;
   public static final int    SHIP_STARTING_THE_BOMBS              = 0;
-  public static final double SHIP_ACCELERATION                    = 1;                                                       // Was originally 0.05
+  public static final double SHIP_ACCELERATION                    = 1;                                                       // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
   public static final double SHIP_MAX_VELOCITY                    = 200;                                                     // Was originally 5
   public static final double SHIP_MIN_VELOCITY                    = -SHIP_MAX_VELOCITY;
   public static final int    PLAYER_ROTATION_RATE                 = 200;
@@ -148,19 +156,24 @@ public class Constants
   public static final int    PLAYER_NUMBER_SUPER_SHIELD_BALLS     = 18;
   public static final int    PLAYER_SUPER_SHIELD_SPEED            = 100;
   public static final double PLAYER_SUPER_SHIELD_LIFESPAN         = 1.25;
+  public static final int    PLAYER_DEFAULT_AUTO_SHIELD_SETTING   = 0;
 
   // Powerup constants
   public static final int    POWERUP_ROTAITON_RATE                = 50;
   public static final int    POWERUP_SPEED                        = 40;
-  public static final int    POWERUP_SHIELD_VALUE                 = 5;
-  public static final int    POWERUP_HEALTH_VALUE                 = 5;
-  public static final int    POWERUP_SPAWN_PROBABILITY            = 3;    // NOTE: Was 5                                                   // This is a 5 in 100 chance or 1/20th chance.
+  public static final int    POWERUP_SPAWN_PROBABILITY            = 50;    // Was 3, the 50 is for testing                                                   // NOTE: Was 5                                                   // This is a 5 in 100 chance or 1/20th chance.
   public static final int    POWERUP_TOTAL_EVENTS_TO_SPAWN        = 100;
   public static final int    POWERUP_LIFE_SPAN_IN_SECS            = 20;
-  public static final int    POWERUP_250_VALUE                    = 250;
-  public static final int    POWERUP_500_VALUE                    = 5000;
-  public static final int    POWERUP_1000_VALUE                   = 1000;
   public static final int    POWERUP_THE_BOMB_TIMER               = 1000;
+
+  public static final int    POWERUP_FIREPOWER_VALUE              = 1;
+  public static final int    POWERUP_250_VALUE                    = 250;
+  public static final int    POWERUP_500_VALUE                    = 500;
+  public static final int    POWERUP_1000_VALUE                   = 1000;
+  public static final int    POWERUP_SHIELD_VALUE                 = 5;
+  public static final int    POWERUP_HEALTH_VALUE                 = 5;
+  public static final int    POWERUP_SUPER_SHIELD_VALUE           = 1;
+  public static final int    POWERUP_THE_BOMB_VALUE               = 1;
 
   // UFO Constants
   public static final int    UFO_SPEED                            = 150;

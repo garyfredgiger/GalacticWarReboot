@@ -1,4 +1,4 @@
-package examples.jframe.asteroidsclone;
+package galacticwarreboot;
 
 import game.framework.interfaces.IRender;
 import game.framework.utilities.GameEngineConstants;
