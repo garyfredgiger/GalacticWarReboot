@@ -97,6 +97,7 @@ The game has the current features during game play:
       <li><b>The Bomb</b>  - Sends out a destructive wave to reap havoc on all those who are the enemy. It's the Bomb! Press <b>D</b> to use.</li>
       <li><b>Full Health</b> - Restores all health that was previously lost.</li>
       <li><b>Full Shield</b> - Regenerates all depleted shields.</li>
+      <li><b>Increased Thrust</b> - Makes the player ship more maneuverable.</li>
     </ul>
   </li>
 
