@@ -8,6 +8,7 @@ import java.awt.image.ImageObserver;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import galacticwarreboot.Constants.AttributeType;
 import galacticwarreboot.entities.AsteroidEntity;
 import galacticwarreboot.entities.PlasmaShotEntity;
 import galacticwarreboot.entities.PlayerEntity;
@@ -24,6 +25,7 @@ import galacticwarreboot.powerups.PowerupHealth;
 import galacticwarreboot.powerups.PowerupShield;
 import galacticwarreboot.powerups.PowerupSuperShield;
 import galacticwarreboot.powerups.PowerupTheBomb;
+import galacticwarreboot.powerups.PowerupThrust;
 import game.framework.GameEngine;
 import game.framework.entities.Entity;
 import game.framework.entities.EntityImage;
@@ -88,7 +90,7 @@ public class Asteroids extends GameEngine
   EntityImage[]               tinyAsteroids;
   EntityImage[]               barImage                         = new EntityImage[2];
   EntityImage                 barFrame;
-  EntityImage[]               shipImage                        = new EntityImage[4];
+  EntityImage[]               shipImage                        = new EntityImage[6];
 
   EntityImage                 powerupGun;
   EntityImage                 powerupShield;
@@ -101,12 +103,13 @@ public class Asteroids extends GameEngine
   EntityImage                 powerupFullHealth;
   EntityImage                 powerupFullShield;
   EntityImage                 powerupAutoShield;
+  EntityImage                 powerupThrust;
 
   EntityImage                 ufo;
   EntityImage                 ufoShot;
   EntityImage                 superShield;
   EntityImage                 hudSuperShield;
-  EntityImage                 hudTheBomb;
+  EntityImage                 hudTheBomb;  
 
   // Variables used for game
   private int                 currentLevel;
@@ -201,6 +204,7 @@ public class Asteroids extends GameEngine
     powerup500 = loadImage(Constants.FILENAME_POWERUP_500);
     powerup1000 = loadImage(Constants.FILENAME_POWERUP_1000);
     powerupSuperShield = loadImage(Constants.FILENAME_POWERUP_SUPER_SHIELD);
+    powerupThrust = loadImage(Constants.FILENAME_POWERUP_ENGINE_2);
     superShield = loadImage(Constants.FILENAME_SUPER_SHIELD);
     hudSuperShield = loadImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON);
     powerupTheBomb = loadImage(Constants.FILENAME_POWERUP_THE_BOMB);
@@ -211,11 +215,15 @@ public class Asteroids extends GameEngine
     ufo = loadImage(Constants.FILENAME_UFO);
     ufoShot = loadImage(Constants.FILENAME_UFO_SHOT);
     bulletImage = loadImage(Constants.FILENAME_PLASMA_SHOT);
+    
     shipImage[0] = loadImage(Constants.FILENAME_SPACESHIP);
     shipImage[1] = loadImage(Constants.FILENAME_SPACESHIP_THRUST);
     shipImage[2] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD);
     shipImage[3] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST);
 
+    shipImage[4] = loadImage(Constants.FILENAME_SPACESHIP_THRUST_2);
+    shipImage[5] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST_2);
+    
     fireShot = false;
 
     // Add the player entity
@@ -520,6 +528,11 @@ public class Asteroids extends GameEngine
       // NOTE: If entity2 is a powerup then entity 1 is the player entity      
       switch (((PowerupEntity) entity2).getPowerupType())
       {
+        case POWERUP_THRUST:
+          Constants.AttributeType attributeTypeTmp = ((PowerupEntity) entity2).getAttributeType();
+          ((PlayerEntity) entity1).setValue(attributeTypeTmp, ((PowerupEntity) entity2).getValue());
+          break;
+          
         case POWERUP_SHIELD:
         case POWERUP_HEALTH:
         case POWERUP_FIREPOWER:
@@ -614,12 +627,27 @@ public class Asteroids extends GameEngine
     if ((thrust) && (keyShield) && ((PlayerEntity) getPlayer()).isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
       // OR: If player has auto shield and collision occurred
     {
-      ((PlayerEntity) getPlayer()).setImage(shipImage[3].getImage());
+      if (((PlayerEntity)getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
+      {
+        ((PlayerEntity) getPlayer()).setImage(shipImage[5].getImage());
+      }
+      else
+      {
+        ((PlayerEntity) getPlayer()).setImage(shipImage[3].getImage());
+      }
+      
       applyThrust();
     }
     else if (thrust)
     {
-      ((PlayerEntity) getPlayer()).setImage(shipImage[1].getImage());
+      if (((PlayerEntity)getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
+      {
+        ((PlayerEntity) getPlayer()).setImage(shipImage[4].getImage());
+      }
+      else
+      {
+        ((PlayerEntity) getPlayer()).setImage(shipImage[1].getImage());
+      }
       applyThrust();
     }
     else if ((keyShield) && ((PlayerEntity) getPlayer()).isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
@@ -766,6 +794,11 @@ public class Asteroids extends GameEngine
         // Draw the auto shield icon along with amount
         //g.drawImage(powerupAutoShield.getImage(), 20, 145, this.imageObserver);
 
+        if (((PlayerEntity)getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
+        {
+          g.drawImage(powerupThrust.getImage(), 20, 185, this.imageObserver);
+        }
+        
         if (prepareTheBomb)
         {
           g.setFont(Constants.FONT_GAME_PLAYING_HUD_LARGE1);
@@ -780,7 +813,7 @@ public class Asteroids extends GameEngine
           g.setFont(Constants.FONT_DEBUG);
           g.setColor(Color.WHITE);
 
-          g.drawString(Constants.DEBUG_MSG_THRUST + thrust, 560, line);
+          g.drawString(Constants.DEBUG_MSG_THRUST_ON + thrust, 560, line);
           line += 16;
 
           g.drawString(Constants.DEBUG_MSG_SHIELD + keyShield, 560, line);
@@ -793,6 +826,8 @@ public class Asteroids extends GameEngine
           //          line += 16;
           //          
           g.drawString(Constants.DEBUG_MSG_UFO_PROB + ufoManager.getProbability(), 560, line);
+          line += 16;
+          g.drawString(Constants.DEBUG_MSG_THRUST_VALUE + ((PlayerEntity)getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST), 560, line);
           line += 16;
         }
 
@@ -986,6 +1021,19 @@ public class Asteroids extends GameEngine
         powerup.setImage(this.powerupFullShield.getImage());
         break;
 
+      case 10:
+        // Only spawn this power-up if the player does not already have increased thrust.
+        // Otherwise the default case is executed, which gives the player health.
+        if (((PlayerEntity)getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_DEFAULT_ACCELERATION)
+        {
+          if (currentLevel > 5)
+          {
+            powerup = new PowerupThrust(this.imageObserver);
+            powerup.setImage(this.powerupThrust.getImage());
+            break;
+          }
+        }
+        
       default:
         
         powerup = new PowerupHealth(this.imageObserver);
@@ -1500,13 +1548,13 @@ public class Asteroids extends GameEngine
 
     // Calculate the X and Y velocity based on angle
     double velx = ship.getVelocityX();
-    velx += calcAngleMoveX(ship.getMoveAngle()) * Constants.SHIP_ACCELERATION;
+    velx += calcAngleMoveX(ship.getMoveAngle()) * ((PlayerEntity)getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST);
     if (velx < Constants.SHIP_MIN_VELOCITY)
       velx = Constants.SHIP_MIN_VELOCITY;
     else if (velx > Constants.SHIP_MAX_VELOCITY)
       velx = Constants.SHIP_MAX_VELOCITY;
     double vely = ship.getVelocityY();
-    vely += calcAngleMoveY(ship.getMoveAngle()) * Constants.SHIP_ACCELERATION;
+    vely += calcAngleMoveY(ship.getMoveAngle()) * ((PlayerEntity)getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST);
     if (vely < Constants.SHIP_MIN_VELOCITY)
       vely = Constants.SHIP_MIN_VELOCITY;
     else if (vely > Constants.SHIP_MAX_VELOCITY)

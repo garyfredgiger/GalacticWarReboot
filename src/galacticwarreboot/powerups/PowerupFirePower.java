@@ -14,6 +14,6 @@ public class PowerupFirePower extends PowerupEntity
     this.setPowerupType(Constants.PowerUpType.POWERUP_FIREPOWER);
     this.setAttributeType(Constants.AttributeType.ATTRIBUTE_FIREPOWER);
     this.setValue(Constants.POWERUP_FIREPOWER_VALUE);
-    System.out.println("POWERUP Fire Power Spawned");
+    //System.out.println("POWERUP Fire Power Spawned");
   }
 }

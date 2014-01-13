@@ -14,6 +14,6 @@ public class PowerupTheBomb extends PowerupEntity
     this.setPowerupType(Constants.PowerUpType.POWERUP_THE_BOMB);
     this.setAttributeType(Constants.AttributeType.ATTRIBUTE_THE_BOMB);
     this.setValue(Constants.POWERUP_THE_BOMB_VALUE);
-    System.out.println("POWERUP The Bomb Spawned");
+    //System.out.println("POWERUP The Bomb Spawned");
   }
 }

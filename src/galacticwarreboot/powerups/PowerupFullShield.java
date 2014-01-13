@@ -15,7 +15,7 @@ public class PowerupFullShield extends PowerupEntity
     this.setPowerupType(Constants.PowerUpType.POWERUP_FULL_SHIELD);
     this.setAttributeType(Constants.AttributeType.ATTRIBUTE_SHIELD);
     this.setValue(Constants.SHIP_STARTING_SHIELD);
-    System.out.println("POWERUP Full Shield Spawned");
+    //System.out.println("POWERUP Full Shield Spawned");
   }
 
 }

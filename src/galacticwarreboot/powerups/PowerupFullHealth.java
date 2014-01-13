@@ -14,6 +14,6 @@ public class PowerupFullHealth extends PowerupEntity
     this.setPowerupType(Constants.PowerUpType.POWERUP_FULL_HEALTH);
     this.setAttributeType(Constants.AttributeType.ATTRIBUTE_HEALTH);
     this.setValue(Constants.SHIP_STARTING_HEALTH);
-    System.out.println("POWERUP Full Health Spawned");
+    //System.out.println("POWERUP Full Health Spawned");
   }
 }

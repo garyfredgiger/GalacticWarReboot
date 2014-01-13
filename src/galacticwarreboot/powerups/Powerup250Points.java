@@ -13,6 +13,6 @@ public class Powerup250Points extends PowerupEntity
 
     this.setPowerupType(Constants.PowerUpType.POWERUP_250);
     this.setValue(Constants.POWERUP_250_VALUE);
-    System.out.println("POWERUP 250 Points Spawned");
+    //System.out.println("POWERUP 250 Points Spawned");
   }
 }
