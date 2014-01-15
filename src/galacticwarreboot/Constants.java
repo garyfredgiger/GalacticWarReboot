@@ -61,6 +61,12 @@ public class Constants
   public static final String FILENAME_POWERUP_FULL_HEALTH           = "powerup_cola_full_health_40x35.png";
   public static final String FILENAME_POWERUP_HEALTH                = "powerup_cola.png";
   public static final String FILENAME_POWERUP_GUN                   = "powerup_gun.png";
+  
+  public static final String FILENAME_POWERUP_GUN_2                 = "powerup_gun_2.png";
+  public static final String FILENAME_POWERUP_GUN_3                 = "powerup_gun_3.png";
+  public static final String FILENAME_POWERUP_GUN_4                 = "powerup_gun_4.png";
+  public static final String FILENAME_POWERUP_GUN_5                 = "powerup_gun_5.png";
+  
   public static final String FILENAME_POWERUP_THE_BOMB              = "powerup_radioactive.png";
   public static final String FILENAME_POWERUP_SHIELD_FULL_RESTORE   = "powerup_shield2_full_restore.png";
   public static final String FILENAME_POWERUP_SHIELD                = "powerup_shield2.png";
@@ -148,7 +154,7 @@ public class Constants
   public static final int    INVULNERABILITY_INTERVAL               = 3000;
   public static final int    SHIP_STARTING_HEALTH                   = 40;
   public static final int    SHIP_STARTING_SHIELD                   = 40;
-  public static final int    SHIP_STARTING_SUPER_SHIELD             = 2;
+  public static final int    SHIP_STARTING_SUPER_SHIELD             = 20; // Was 2
   public static final int    SHIP_STARTING_THE_BOMBS                = 0;
   public static final int    SHIP_DEFAULT_ACCELERATION              = 1;                                                       // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
   public static final int    SHIP_INCREASED_ACCELERATION            = 2;
