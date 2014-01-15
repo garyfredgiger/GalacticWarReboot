@@ -9,12 +9,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import galacticwarreboot.Constants.AttributeType;
+import galacticwarreboot.Constants.EnemyTypes;
 import galacticwarreboot.entities.AsteroidEntity;
+import galacticwarreboot.entities.EnemyEntity;
 import galacticwarreboot.entities.PlasmaShotEntity;
 import galacticwarreboot.entities.PlayerEntity;
 import galacticwarreboot.entities.PlayerShotEntity;
 import galacticwarreboot.entities.PowerupEntity;
 import galacticwarreboot.entities.SuperShieldEntity;
+import galacticwarreboot.entities.UFOEntity;
+import galacticwarreboot.entities.UFOStrongEntity;
 import galacticwarreboot.powerups.Powerup1000Points;
 import galacticwarreboot.powerups.Powerup250Points;
 import galacticwarreboot.powerups.Powerup500Points;
@@ -72,6 +76,7 @@ public class Asteroids extends GameEngine
   private boolean             keyShield;
   private boolean             thrust;
   //private boolean             previousShieldState;
+  private long lastUFOCollisionTime;
 
   private boolean             requestSuperShield;
   private boolean             requestTheBomb;
@@ -103,9 +108,8 @@ public class Asteroids extends GameEngine
   EntityImage                 powerupFullHealth;
   EntityImage                 powerupFullShield;
   EntityImage                 powerupAutoShield;
-  EntityImage                 powerupThrust;
-
-  EntityImage                 ufo;
+  EntityImage                 powerupThrust;                    
+  EntityImage[]               ufo = new EntityImage[4];;
   EntityImage                 ufoShot;
   EntityImage                 superShield;
   EntityImage                 hudSuperShield;
@@ -115,6 +119,8 @@ public class Asteroids extends GameEngine
   private int                 currentLevel;
   EntityImage                 background;
 
+  boolean launchStrongUFO = false;
+  
   /*
    *  Game state management variables
    */
@@ -218,7 +224,10 @@ public class Asteroids extends GameEngine
     powerupFullHealth = loadImage(Constants.FILENAME_POWERUP_FULL_HEALTH);
     powerupFullShield = loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
     powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
-    ufo = loadImage(Constants.FILENAME_UFO);
+    ufo[0] = loadImage(Constants.FILENAME_UFO);
+    ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_1);
+    ufo[2] = loadImage(Constants.FILENAME_UFO_SHIELD_2);
+    ufo[3] = loadImage(Constants.FILENAME_UFO_SHIELD_3);
     ufoShot = loadImage(Constants.FILENAME_UFO_SHOT);
     bulletImage = loadImage(Constants.FILENAME_PLASMA_SHOT);
 
@@ -226,9 +235,8 @@ public class Asteroids extends GameEngine
     shipImage[1] = loadImage(Constants.FILENAME_SPACESHIP_THRUST);
     shipImage[2] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD);
     shipImage[3] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST);
-
     shipImage[4] = loadImage(Constants.FILENAME_SPACESHIP_THRUST_2);
-    shipImage[5] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST_2);
+    shipImage[5] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST_2);    
 
     fireShot = false;
 
@@ -258,6 +266,8 @@ public class Asteroids extends GameEngine
     //invokePlayerDeadState = false;
 
     ufoManager = new UFOEntityManager();
+    lastUFOCollisionTime = System.currentTimeMillis();
+    launchStrongUFO = false;
   }
 
   private EntityImage loadImage(String imageFilename)
@@ -319,8 +329,22 @@ public class Asteroids extends GameEngine
 
         if (ufoManager.ufoShouldBeLaunched(currentLevel))
         {
-          UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo.getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
-          addEnemy(newUfo);
+          if (currentLevel > Constants.GAME_LAUNCH_SUPER_UFO_LEVEL)
+          {
+            launchStrongUFO = GameUtility.random.nextBoolean();
+          }
+          
+          if (launchStrongUFO)
+          {
+            launchStrongUFO = false;
+            UFOStrongEntity newUfo = new UFOStrongEntity(this.imageObserver, ufo, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+            addEnemy(newUfo);
+          }
+          else
+          {
+            UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo[0].getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+            addEnemy(newUfo);
+          }
         }
 
         // This will simulate a 3 second counter before detonating the bomb
@@ -433,15 +457,19 @@ public class Asteroids extends GameEngine
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
         // At this point the enemy is either an asteroid or a UFO
-        int damageAmount;
+        int damageAmount = 0;
 
         // Determine the amount of damage to the player ship.
         switch (((EnemyEntity) entity2).getEnemyType())
         {
           case UFO:
-
-            // If the player collides with a UFO determine the damage amount (if shield are not engaged double damage is done to the players health)
-            damageAmount = (shieldsEngaged ? Constants.UFO_DAMAGE_AMOUNT : (2 * Constants.UFO_DAMAGE_AMOUNT));
+            //System.out.print("UFO: Player before health " + ((PlayerEntity) entity1).getValue(AttributeType.ATTRIBUTE_HEALTH) + " ");
+            if (System.currentTimeMillis() > (Constants.PLAYER_TIME_BETWEEN_REGISTERING_UFO_COLLISIONS + lastUFOCollisionTime))
+            {
+              // If the player collides with a UFO determine the damage amount (if shield are not engaged double damage is done to the players health)
+              damageAmount = (shieldsEngaged ? Constants.UFO_DAMAGE_AMOUNT : (2 * Constants.UFO_DAMAGE_AMOUNT));
+              lastUFOCollisionTime = System.currentTimeMillis();
+            }
             break;
 
           // Default case, and asteroid
@@ -451,7 +479,7 @@ public class Asteroids extends GameEngine
             damageAmount = Constants.DEFAULT_DAMAGE_AMOUNT;
             breakAsteroid((EntityImage) entity2);
         }
-
+        
         // If shields are engaged reduce the shields by the damage amount 
         if (shieldsEngaged)  // TODO: Add flag for auto shields here
         {
@@ -462,8 +490,13 @@ public class Asteroids extends GameEngine
         {
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_HEALTH, damageAmount);
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_FIREPOWER, 1);   // A collision with anything reduces the firepower by 1
-          entity1.setVelocity(0, 0);                    // Stop the player ship when it hits an enemy. This adds some realism. 
+          entity1.setVelocity(0, 0);                    // Stop the player ship when it hits an enemy. This adds some realism.
         }
+        
+//        if (((EnemyEntity) entity2).getEnemyType() == EnemyTypes.UFO)
+//        {
+//          System.out.println("...damage: " + damageAmount + " after health " + ((PlayerEntity) entity1).getValue(AttributeType.ATTRIBUTE_HEALTH));
+//        }
       }
 
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY_SHOT)
@@ -1615,7 +1648,6 @@ public class Asteroids extends GameEngine
   //
   public void nextLevel()
   {
-
     currentLevel++;
 
     // Clear the player shots when moving to the next level. This will clear the screen before the intro screen for the next level is displayed
@@ -1633,6 +1665,7 @@ public class Asteroids extends GameEngine
     requestTheBomb = false;
     prepareTheBomb = false;
     executeTheBomb = false;
+    launchStrongUFO = false;
 
     initializeAsteroidsForCurrentLevel(currentLevel);
     ufoManager.reset(); // Possibly needed for the UFO that will appear in this game

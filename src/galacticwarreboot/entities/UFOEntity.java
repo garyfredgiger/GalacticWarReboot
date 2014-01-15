@@ -1,5 +1,8 @@
-package galacticwarreboot;
+package galacticwarreboot.entities;
 
+import galacticwarreboot.Constants;
+import galacticwarreboot.UFOEntityManager;
+import galacticwarreboot.Constants.EnemyTypes;
 import game.framework.utilities.GameUtility;
 
 import java.awt.Image;
@@ -13,13 +16,12 @@ public class UFOEntity extends EnemyEntity
   private int              leftVerticalLimit;
   private int              rightVerticalLimit;
   private boolean          movingRight;
-  private long             lastShotTime;
+  protected long           lastShotTime;
 
   // TODO: Is this only needed in the constructor?
   private UFOEntityManager manager;
 
   public UFOEntity(ImageObserver observer, Image ufoImage, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
-  //public EntityUFO(ImageObserver observer, Image ufoImage, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
     super(observer);
 

@@ -1,7 +1,5 @@
 package galacticwarreboot.entities;
 
-import galacticwarreboot.EnemyEntity;
-
 import java.awt.image.ImageObserver;
 
 public class AsteroidEntity extends EnemyEntity
