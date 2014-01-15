@@ -1,10 +1,11 @@
 package galacticwarreboot.attributes;
 
+import java.util.HashMap;
+
 import galacticwarreboot.Constants;
 import galacticwarreboot.Constants.AttributeType;
 import galacticwarreboot.interfaces.IAttribute;
 
-import java.util.HashMap;
 
 public class PlayerAttributes
 {
