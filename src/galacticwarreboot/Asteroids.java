@@ -31,7 +31,7 @@ import galacticwarreboot.powerups.PowerupSuperShield;
 import galacticwarreboot.powerups.PowerupTheBomb;
 import galacticwarreboot.powerups.PowerupThrust;
 import game.framework.GameEngine;
-import game.framework.entities.Entity;
+import game.framework.entities.Entity2D;
 import game.framework.entities.EntityImage;
 import game.framework.interfaces.IRender;
 import game.framework.primitives.Position2D;
@@ -412,7 +412,7 @@ public class Asteroids extends GameEngine
   }
 
   @Override
-  public void userGameUpdateEntity(Entity entity)
+  public void userGameUpdateEntity(Entity2D entity)
   {
     // Only update entities that are alive
     if (!entity.isAlive())
@@ -439,7 +439,7 @@ public class Asteroids extends GameEngine
   }
 
   @Override
-  public void userHandleEntityCollision(Entity entity1, Entity entity2)
+  public void userHandleEntityCollision(Entity2D entity1, Entity2D entity2)
   {
     // Handle player entity collision with an enemy
     if (entity1.getEntityType() == GameEngineConstants.EntityTypes.PLAYER)
@@ -600,8 +600,8 @@ public class Asteroids extends GameEngine
   @Override
   public void gameDetectCollisions()
   {
-    LinkedList<Entity> playerShots = getPlayerShot();
-    LinkedList<Entity> enemyShots = getEnemyShots();
+    LinkedList<Entity2D> playerShots = getPlayerShot();
+    LinkedList<Entity2D> enemyShots = getEnemyShots();
 
     /*
      *  First, compare the player shot vector with the enemy shot vector to check for any collisions
@@ -611,14 +611,14 @@ public class Asteroids extends GameEngine
      */
     for (int playerShotIndex = 0; playerShotIndex < playerShots.size(); playerShotIndex++)
     {
-      Entity currentPlayerShot = (Entity) playerShots.get(playerShotIndex);
+      Entity2D currentPlayerShot = (Entity2D) playerShots.get(playerShotIndex);
 
       if (currentPlayerShot.isAlive())
       {
         // Second, compare the player shot vector with all enemies to check for any collisions
         for (int enemyIndex = 0; enemyIndex < enemyShots.size(); enemyIndex++)
         {
-          Entity currentEnemy = (Entity) enemyShots.get(enemyIndex);
+          Entity2D currentEnemy = (Entity2D) enemyShots.get(enemyIndex);
 
           if (currentEnemy.isAlive())
           {
@@ -1311,14 +1311,14 @@ public class Asteroids extends GameEngine
 
   private void executeTheBomb()
   {
-    LinkedList<Entity> enemies = getEnemies();
+    LinkedList<Entity2D> enemies = getEnemies();
 
     // Since enemies are being iterated through, killed and new ones added due to asteroids  
     // breaking into smaller ones, this list will store newly spawned asteroids to avoid a
     // potentially problem of iterating through the original list while adding new items.
-    LinkedList<Entity> newEnemies = new LinkedList<Entity>();
+    LinkedList<Entity2D> newEnemies = new LinkedList<Entity2D>();
 
-    Iterator<Entity> iterator = enemies.iterator();
+    Iterator<Entity2D> iterator = enemies.iterator();
     while (iterator.hasNext())
     {
       EnemyEntity enemy = (EnemyEntity) iterator.next();
@@ -1467,7 +1467,7 @@ public class Asteroids extends GameEngine
     }
   }
 
-  private void breakAsteroid(EntityImage entity, LinkedList<Entity> list)
+  private void breakAsteroid(EntityImage entity, LinkedList<Entity2D> list)
   {
     switch (((EnemyEntity) entity).getEnemyType())
     {
