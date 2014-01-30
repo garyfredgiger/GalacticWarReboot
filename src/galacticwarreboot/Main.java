@@ -10,11 +10,12 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class Main extends JFrame
+public class Main extends JApplet
 {
   /**
    * Used during de-serialization to verify that the sender and receiver of a
@@ -40,30 +41,59 @@ public class Main extends JFrame
     gameScreen = new GameScreen();
     gameScreen.setPreferredSize(gameScreen.getPreferredSize());
 
+    //    this.setContentPane(gameScreen);
+    //    this.pack();
+    //    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    //    this.setTitle(Constants.GAME_NAME);
+    //    this.setResizable(false);
+    //    this.setVisible(true);
+
     this.setContentPane(gameScreen);
-    this.pack();
-    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    this.setTitle(Constants.GAME_NAME);
-    this.setResizable(false);
     this.setVisible(true);
 
-    galacticWarReboot = new Asteroids(gameScreen, this, GameEngineConstants.DEFAULT_CANVAS_WIDTH, GameEngineConstants.DEFAULT_CANVAS_HEIGHT);
+    //    gameDemo = new GameDemo(gameScreen);
+    //    gameDemo.gameInit();
+    //    gameDemo.gameStart();
+
+    galacticWarReboot = new Asteroids(gameScreen, this.gameScreen, GameEngineConstants.DEFAULT_CANVAS_WIDTH, GameEngineConstants.DEFAULT_CANVAS_HEIGHT);
     galacticWarReboot.gameInit();
     galacticWarReboot.gameStart();
   }
 
-  public static void main(String[] args)
+  @Override
+  public void init()
   {
-    // Use the event dispatch thread to build the UI for thread-safety.
-    SwingUtilities.invokeLater(new Runnable()
+    try
     {
-      @Override
-      public void run()
+
+      // Use the event dispatch thread to build the UI for thread-safety.
+      SwingUtilities.invokeLater(new Runnable()
       {
-        new Main();
-      }
-    });
+        @Override
+        public void run()
+        {
+          new Main();
+        }
+      });
+    }
+    catch (Exception e)
+    {
+      System.err.println("createGUI didn't complete successfully");
+    }
   }
+
+  //  public static void main(String[] args)
+  //  {
+  //    // Use the event dispatch thread to build the UI for thread-safety.
+  //    SwingUtilities.invokeLater(new Runnable()
+  //    {
+  //      @Override
+  //      public void run()
+  //      {
+  //        new Main();
+  //      }
+  //    });
+  //  }
 
   /////////////////////////////////////////////////////////////////////////////
   //   ___                          ____ _               
@@ -133,7 +163,7 @@ public class Main extends JFrame
     // KeyEvent handlers
     @Override
     public void keyPressed(KeyEvent e)
-    {       
+    {
       galacticWarReboot.gameKeyPressed(e.getKeyCode());
     }
 
