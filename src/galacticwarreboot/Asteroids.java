@@ -1,6 +1,7 @@
 package galacticwarreboot;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
@@ -18,6 +19,7 @@ import galacticwarreboot.entities.PlayerShotEntity;
 import galacticwarreboot.entities.PowerupEntity;
 import galacticwarreboot.entities.SuperShieldEntity;
 import galacticwarreboot.entities.UFOEntity;
+import galacticwarreboot.entities.UFOShorty;
 import galacticwarreboot.entities.UFOStrongEntity;
 import galacticwarreboot.powerups.Powerup1000Points;
 import galacticwarreboot.powerups.Powerup250Points;
@@ -33,6 +35,7 @@ import galacticwarreboot.powerups.PowerupThrust;
 import game.framework.GameEngine;
 import game.framework.entities.Entity2D;
 import game.framework.entities.EntityImage;
+import game.framework.entities.text.StaticText;
 import game.framework.interfaces.IRender;
 import game.framework.primitives.Position2D;
 import game.framework.utilities.GameEngineConstants;
@@ -109,8 +112,10 @@ public class Asteroids extends GameEngine
   EntityImage                 powerupFullShield;
   EntityImage                 powerupAutoShield;
   EntityImage                 powerupThrust;                    
-  EntityImage[]               ufo = new EntityImage[4];;
+  EntityImage[]               ufo = new EntityImage[4];
+  EntityImage                 ufoShorty;
   EntityImage                 ufoShot;
+  EntityImage                 ufoShortyShot;
   EntityImage                 superShield;
   EntityImage                 hudSuperShield;
   EntityImage                 hudTheBomb;
@@ -119,7 +124,8 @@ public class Asteroids extends GameEngine
   private int                 currentLevel;
   EntityImage                 background;
 
-  boolean launchStrongUFO = false;
+  //boolean launchStrongUFO = false;
+  private int ufoTypeToLaunch;
   
   /*
    *  Game state management variables
@@ -155,6 +161,8 @@ public class Asteroids extends GameEngine
   Rectangle2D                 boundsGameOverMsg;
   Rectangle2D                 boundsGamePlayingHUDMsgs;
   Rectangle2D                 boundsNextLevelMsg;
+
+  StaticText msgGameStartScreen;
 
   public Asteroids(IRender renderer, ImageObserver imageObserver)
   {
@@ -225,23 +233,23 @@ public class Asteroids extends GameEngine
     powerupFullShield = loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
     powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
     ufo[0] = loadImage(Constants.FILENAME_UFO);
-    ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_1);
-    ufo[2] = loadImage(Constants.FILENAME_UFO_SHIELD_2);
-    ufo[3] = loadImage(Constants.FILENAME_UFO_SHIELD_3);
+    ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_WEAK);
+    ufo[2] = loadImage(Constants.FILENAME_UFO_SHIELD_OK);
+    ufo[3] = loadImage(Constants.FILENAME_UFO_SHIELD_STRONG);
+    ufoShorty = loadImage(Constants.FILENAME_UFO_SHORTY);
     ufoShot = loadImage(Constants.FILENAME_UFO_SHOT);
+    ufoShortyShot = loadImage(Constants.FILENAME_UFO_SHORTY_SHOT);
     bulletImage = loadImage(Constants.FILENAME_PLASMA_SHOT);
 
-    shipImage[0] = loadImage(Constants.FILENAME_SPACESHIP);
-    shipImage[1] = loadImage(Constants.FILENAME_SPACESHIP_THRUST);
-    shipImage[2] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD);
-    shipImage[3] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST);
-    shipImage[4] = loadImage(Constants.FILENAME_SPACESHIP_THRUST_2);
-    shipImage[5] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST_2);    
+    shipImage[Constants.IMAGE_SPACESHIP_INDEX] = loadImage(Constants.FILENAME_SPACESHIP);
+    shipImage[Constants.IMAGE_SPACESHIP_SHIELD_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD);
+    shipImage[Constants.IMAGE_SPACESHIP_THRUST1_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST1);
+    shipImage[Constants.IMAGE_SPACESHIP_THRUST2_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST2);
 
     fireShot = false;
 
     // Add the player entity
-    PlayerEntity ship = new PlayerEntity(this.imageObserver);
+    PlayerEntity ship = new PlayerEntity(this.imageObserver, shipImage);
     ship.setImage(shipImage[0].getImage());
     ship.setRotationRate(0.0);
     ship.setFaceAngle(0);
@@ -267,7 +275,10 @@ public class Asteroids extends GameEngine
 
     ufoManager = new UFOEntityManager();
     lastUFOCollisionTime = System.currentTimeMillis();
-    launchStrongUFO = false;
+    //launchStrongUFO = false;
+    ufoTypeToLaunch = 0;
+    
+    msgGameStartScreen = new StaticText(Constants.MSG_GAME_START, Color.YELLOW, Constants.FONT_GAME_START_SCREEN, screenWidth, screenHeight);
   }
 
   private EntityImage loadImage(String imageFilename)
@@ -329,22 +340,34 @@ public class Asteroids extends GameEngine
 
         if (ufoManager.ufoShouldBeLaunched(currentLevel))
         {
-          if (currentLevel > Constants.GAME_LAUNCH_SUPER_UFO_LEVEL)
+          if ((currentLevel >= Constants.GAME_LAUNCH_SUPER_UFO_LEVEL) && (currentLevel < Constants.GAME_LAUNCH_SHORTY_UFO_LEVEL))
           {
-            launchStrongUFO = GameUtility.random.nextBoolean();
+            ufoTypeToLaunch = GameUtility.random.nextInt(2);
           }
-          
-          if (launchStrongUFO)
+          else if (currentLevel >= Constants.GAME_LAUNCH_SHORTY_UFO_LEVEL)
           {
-            launchStrongUFO = false;
-            UFOStrongEntity newUfo = new UFOStrongEntity(this.imageObserver, ufo, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
-            addEnemy(newUfo);
+            // Starting with level GAME_LAUNCH_SHORTY_UFO_LEVEL we only want to launch strong or shorty UFOs
+            ufoTypeToLaunch = GameUtility.random.nextInt(2);
+            ufoTypeToLaunch = ufoTypeToLaunch+1;
           }
-          else
+
+          switch(ufoTypeToLaunch)
           {
-            UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo[0].getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
-            addEnemy(newUfo);
-          }
+            case 1:
+              UFOStrongEntity newStrongUfo = new UFOStrongEntity(this.imageObserver, ufo, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+              addEnemy(newStrongUfo);
+              break;
+              
+            case 2:
+              UFOShorty newShortyUfo = new UFOShorty(this.imageObserver, ufoShorty, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), ufoShorty.getWidth(), screenWidth+ufoShorty.getWidth());
+              addEnemy(newShortyUfo);
+              break;
+              
+            default:
+                
+                UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo[0].getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+                addEnemy(newUfo);
+          }          
         }
 
         // This will simulate a 3 second counter before detonating the bomb
@@ -430,6 +453,18 @@ public class Asteroids extends GameEngine
           addEnemyShot(stockUFOBullet(entity.getCenter(), getPlayer().getCenter()));
         }
 
+        // We do not want to warp the UFO
+        return;
+      }
+      
+      if (((EnemyEntity) entity).getEnemyType() == Constants.EnemyTypes.UFO_SHORTY)
+      {
+        if (((UFOEntity) entity).shouldFireShot())
+        {
+          // TODO: See if this method stockUFOShortyBullet() can be combined with the method stockUFOBullet()
+          addEnemyShot(stockUFOShortyBullet(entity.getCenter(), getPlayer().getCenter()));
+        }
+        
         // We do not want to warp the UFO
         return;
       }
@@ -659,49 +694,12 @@ public class Asteroids extends GameEngine
           fireShot = false;
         }
 
-        //    // Not sure if this is needed Check the shield state. If it is completely depleted then clear the keyShield flag
-        //    if (!((PlayerEntity)getPlayer()).hasShieldRemaining())
-        //    {
-        //      keyShield = false;
-        //    }
-
-        // Given the current user input (thrust, shields ot nothing) display the proper image for the player entity
-        if ((thrust) && (keyShield) && ((PlayerEntity) getPlayer()).isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
-        // OR: If player has auto shield and collision occurred
+        if (thrust)
         {
-          if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
-          {
-            ((PlayerEntity) getPlayer()).setImage(shipImage[5].getImage());
-          }
-          else
-          {
-            ((PlayerEntity) getPlayer()).setImage(shipImage[3].getImage());
-          }
-
           applyThrust();
         }
-        else if (thrust)
-        {
-          if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
-          {
-            ((PlayerEntity) getPlayer()).setImage(shipImage[4].getImage());
-          }
-          else
-          {
-            ((PlayerEntity) getPlayer()).setImage(shipImage[1].getImage());
-          }
-          applyThrust();
-        }
-        else if ((keyShield) && ((PlayerEntity) getPlayer()).isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
-        // OR: If player has auto shield and collision occurred
-        {
-          ((PlayerEntity) getPlayer()).setImage(shipImage[2].getImage());
-        }
-        else
-        {
-          // Set ship image to normal non-thrust image
-          ((PlayerEntity) getPlayer()).setImage(shipImage[0].getImage());
-        }
+
+        ((PlayerEntity) getPlayer()).applyPlayerControlsToDisplayRespectiveImages(keyShield, thrust);        
 
         if (requestSuperShield)
         {
@@ -1422,6 +1420,26 @@ public class Asteroids extends GameEngine
     return bullet;
   }
 
+//Fire a shot at the player ship
+ // NOTE: Since the bullets are round, we do not need to work with any angles like the plasma shots.
+ private EntityImage stockUFOShortyBullet(Position2D ufoPos, Position2D playerPos)
+ {
+   EntityImage bullet = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.ENEMY_SHOT);
+   bullet.setImage(ufoShortyShot.getImage());
+
+   // Compute bullet heading given current position of player and this ufo entity     
+   bullet.setVelocity(GameUtility.computeUnitVectorBetweenTwoPositions(ufoPos, playerPos).createScaledVector(Constants.UFO_SHORTY_SHOT_SPEED));
+
+   // Set the bullet's starting position
+   double x = ufoPos.x - bullet.getWidth() / 2;
+   double y = ufoPos.y - bullet.getHeight() / 2;
+   bullet.setPosition(x, y);
+
+   // Initialize the life span and life age
+   bullet.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.UFO_BULLET_LIFE_SPAN_IN_SECS));
+   return bullet;
+ }
+  
   /*
    * Break up an asteroid into smaller pieces
    */
@@ -1665,7 +1683,7 @@ public class Asteroids extends GameEngine
     requestTheBomb = false;
     prepareTheBomb = false;
     executeTheBomb = false;
-    launchStrongUFO = false;
+    //launchStrongUFO = false;
 
     initializeAsteroidsForCurrentLevel(currentLevel);
     ufoManager.reset(); // Possibly needed for the UFO that will appear in this game
@@ -1726,10 +1744,12 @@ public class Asteroids extends GameEngine
 
   private void displayGameStartScreen(Graphics2D g)
   {
-    g.setFont(Constants.FONT_GAME_START_SCREEN);
-    boundsGameStartMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_START, g);
-    g.setColor(Color.YELLOW);
-    g.drawString(Constants.MSG_GAME_START, (int) ((screenWidth - boundsGameStartMsg.getWidth()) / 2), (int) ((screenHeight - boundsGameStartMsg.getHeight()) / 2));
+    msgGameStartScreen.draw(g);
+    
+//    g.setFont(Constants.FONT_GAME_START_SCREEN);
+//    boundsGameStartMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_START, g);
+//    g.setColor(Color.YELLOW);
+//    g.drawString(Constants.MSG_GAME_START, (int) ((screenWidth - boundsGameStartMsg.getWidth()) / 2), (int) ((screenHeight - boundsGameStartMsg.getHeight()) / 2));
   }
 
   private void displayNextLevelScreen(Graphics2D g)

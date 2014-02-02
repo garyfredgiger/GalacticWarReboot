@@ -3,6 +3,7 @@ package galacticwarreboot.entities;
 import galacticwarreboot.Constants;
 import galacticwarreboot.UFOEntityManager;
 import galacticwarreboot.Constants.EnemyTypes;
+import game.framework.primitives.Vector2D;
 import game.framework.utilities.GameUtility;
 
 import java.awt.Image;
@@ -10,12 +11,12 @@ import java.awt.image.ImageObserver;
 
 public class UFOEntity extends EnemyEntity
 {
-  private int              endingXPosition;
-  private int              upperHorizontalLimit;
-  private int              lowerHorizontalLimit;
-  private int              leftVerticalLimit;
-  private int              rightVerticalLimit;
-  private boolean          movingRight;
+  protected int            endingXPosition;
+  protected int            upperHorizontalLimit;
+  protected int            lowerHorizontalLimit;
+  protected int            leftVerticalLimit;
+  protected int            rightVerticalLimit;
+  protected boolean        movingRight;
   protected long           lastShotTime;
 
   // TODO: Is this only needed in the constructor?
@@ -98,6 +99,7 @@ public class UFOEntity extends EnemyEntity
       {
         if (this.position.x > endingXPosition)
         {
+          //System.out.println("updatePosition - UFO Entity::UFO Just went off RIGHT side of screen. Ready to Kill it off.");
           this.kill();
         }
       }
@@ -107,6 +109,7 @@ public class UFOEntity extends EnemyEntity
         // If the entity is moving left, check the case where it moves off the right side of the screen, when it does kill it off
         if ((this.position.x + this.getWidth()) < endingXPosition)
         {
+          //System.out.println("updatePosition - UFO Entity::UFO Just went off LEFT side of screen. Ready to Kill it off.");
           this.kill();
         }
       }
@@ -135,6 +138,7 @@ public class UFOEntity extends EnemyEntity
   @Override
   public void kill()
   {
+    //System.out.println("UFO Entity Kill. Resetting manager.");
     if (manager != null)
     {
       manager.reset();
