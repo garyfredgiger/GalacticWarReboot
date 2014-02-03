@@ -1,6 +1,7 @@
 package galacticwarreboot.entities;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.ScoreManager;
 import galacticwarreboot.UFOEntityManager;
 import game.framework.entities.EntityImage;
 
@@ -23,7 +24,6 @@ public class UFOStrongEntity extends UFOEntity
     this.ufoImages = ufoImages;
     ufoStrength = 3;
     this.shieldImage = ufoImages[ufoStrength].getImage();
-    ufoWentOffScreen = false;
     lastHitTime = System.currentTimeMillis();
   }
   

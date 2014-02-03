@@ -1,6 +1,7 @@
 package galacticwarreboot.entities;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.ScoreManager;
 import galacticwarreboot.UFOEntityManager;
 import galacticwarreboot.Constants.EnemyTypes;
 import game.framework.primitives.Vector2D;
@@ -18,6 +19,7 @@ public class UFOEntity extends EnemyEntity
   protected int            rightVerticalLimit;
   protected boolean        movingRight;
   protected long           lastShotTime;
+  protected boolean        ufoWentOffScreen;
 
   // TODO: Is this only needed in the constructor?
   private UFOEntityManager manager;
@@ -44,6 +46,8 @@ public class UFOEntity extends EnemyEntity
     this.setEnemyType(Constants.EnemyTypes.UFO);
     this.setPointValue((GameUtility.random.nextInt(10) + 1) * 100);
 
+    ufoWentOffScreen = false;
+    
     lastShotTime = System.currentTimeMillis();
   }
 
@@ -100,6 +104,7 @@ public class UFOEntity extends EnemyEntity
         if (this.position.x > endingXPosition)
         {
           //System.out.println("updatePosition - UFO Entity::UFO Just went off RIGHT side of screen. Ready to Kill it off.");
+          ufoWentOffScreen = true;
           this.kill();
         }
       }
@@ -110,6 +115,7 @@ public class UFOEntity extends EnemyEntity
         if ((this.position.x + this.getWidth()) < endingXPosition)
         {
           //System.out.println("updatePosition - UFO Entity::UFO Just went off LEFT side of screen. Ready to Kill it off.");
+          ufoWentOffScreen = true;
           this.kill();
         }
       }
@@ -143,6 +149,13 @@ public class UFOEntity extends EnemyEntity
     {
       manager.reset();
     }
+    
+    if (!ufoWentOffScreen)
+    {
+      System.out.println("UFO did not move off screen and was killed by player. Point value was: " + getPointValue());
+      ScoreManager.incrementScore(this.getPointValue());
+    }
+    
     super.kill();
   }
 }

@@ -507,11 +507,12 @@ public class Asteroids extends GameEngine
             }
             break;
 
-          // Default case, and asteroid
+          // Default case, an asteroid
           default:
 
             // Regardless of whether the shields are engaged or not, the asteroid damage is the same, one unit
             damageAmount = Constants.DEFAULT_DAMAGE_AMOUNT;
+            //ScoreManager.incrementScore(((EnemyEntity) entity2).getPointValue());
             breakAsteroid((EntityImage) entity2);
         }
         
@@ -520,7 +521,7 @@ public class Asteroids extends GameEngine
         {
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_SHIELD, damageAmount);
         }
-        // Otherwise reduce the player health by the damage amount, stop the player and reduce its firepower 
+        // Otherwise reduce the player health by the damage amount, stop the player and reduce its fire power 
         else
         {
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_HEALTH, damageAmount);
@@ -534,6 +535,9 @@ public class Asteroids extends GameEngine
 //        }
       }
 
+      /*
+       * Collision between player and enemy shot 
+       */
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY_SHOT)
       {
         // If shields are engaged reduce the shields by the damage amount 
@@ -553,7 +557,9 @@ public class Asteroids extends GameEngine
       entity2.kill();
     }
 
-    // Handle player shot collision with an enemy
+    /* 
+     * Collision between player shot and enemy
+     */
     if (entity1.getEntityType() == GameEngineConstants.EntityTypes.PLAYER_SHOT)
     {
       // Plasma shot collides with enemy, kill off both 
@@ -570,6 +576,7 @@ public class Asteroids extends GameEngine
           case ASTEROID_SMALL:
           case ASTEROID_TINY:
 
+            // Add the point value of the asteroid to the player's score 
             breakAsteroid((EntityImage) entity2);
             break;
 
@@ -581,8 +588,10 @@ public class Asteroids extends GameEngine
         {
           entity1.kill();
         }
-
-        ScoreManager.incrementScore(((EnemyEntity) entity2).getPointValue());
+        
+        // NOTE: All enemy entities point values will be added to the player's score inside of each entity's kill
+        //       method since a call to the kill method here may not kill the enemy depending on what type of enemy
+        //       it is (e.g., a UFO).
         entity2.kill();
       }
 
@@ -621,7 +630,6 @@ public class Asteroids extends GameEngine
         case POWERUP_250:
         case POWERUP_500:
         case POWERUP_1000:
-          ScoreManager.incrementScore(((PowerupEntity) entity2).getValue());
           break;
 
         default:
@@ -1325,7 +1333,7 @@ public class Asteroids extends GameEngine
         breakAsteroid((AsteroidEntity) enemy, newEnemies);
       }
       enemy.kill();
-      ScoreManager.incrementScore(enemy.getPointValue());
+      //ScoreManager.incrementScore(enemy.getPointValue());
     }
 
     // Add the newly created asteroids to the original enemy list
@@ -1436,7 +1444,7 @@ public class Asteroids extends GameEngine
    bullet.setPosition(x, y);
 
    // Initialize the life span and life age
-   bullet.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.UFO_BULLET_LIFE_SPAN_IN_SECS));
+   bullet.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.UFO_SHORTY_BULLET_LIFE_SPAN_IN_SECS));
    return bullet;
  }
   
