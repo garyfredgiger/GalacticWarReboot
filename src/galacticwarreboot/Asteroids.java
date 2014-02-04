@@ -491,6 +491,7 @@ public class Asteroids extends GameEngine
 
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
+        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
         // At this point the enemy is either an asteroid or a UFO
         int damageAmount = 0;
 
@@ -512,7 +513,6 @@ public class Asteroids extends GameEngine
 
             // Regardless of whether the shields are engaged or not, the asteroid damage is the same, one unit
             damageAmount = Constants.DEFAULT_DAMAGE_AMOUNT;
-            //ScoreManager.incrementScore(((EnemyEntity) entity2).getPointValue());
             breakAsteroid((EntityImage) entity2);
         }
         
@@ -529,10 +529,8 @@ public class Asteroids extends GameEngine
           entity1.setVelocity(0, 0);                    // Stop the player ship when it hits an enemy. This adds some realism.
         }
         
-//        if (((EnemyEntity) entity2).getEnemyType() == EnemyTypes.UFO)
-//        {
-//          System.out.println("...damage: " + damageAmount + " after health " + ((PlayerEntity) entity1).getValue(AttributeType.ATTRIBUTE_HEALTH));
-//        }
+        // Only kill off the entity if it is either a UFO or ASTEROID, hence why it is in this condition body
+        entity2.kill();
       }
 
       /*
@@ -540,6 +538,7 @@ public class Asteroids extends GameEngine
        */
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY_SHOT)
       {
+        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
         // If shields are engaged reduce the shields by the damage amount 
         if (shieldsEngaged) // OR: Player had auto shield and shield amount 
         {
@@ -550,11 +549,16 @@ public class Asteroids extends GameEngine
         {
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_HEALTH, 1);
         }
+        
+        // Only kill off the entity if it is an ENEMY_SHOT, hence why it is in this condition body
+        entity2.kill();
       }
 
-      // Kill off both entities
-      entity1.kill();                               // This call will only kill the player if the players health runs out
-      entity2.kill();
+      // Kill off the player entity
+      // NOTE: This call will only kill the player if the players health runs out
+      entity1.kill();              
+      
+      // NOTE: If the call entity2.kill() was called from here, it would kill off any entity2 regardless of type
     }
 
     /* 
@@ -569,6 +573,8 @@ public class Asteroids extends GameEngine
 
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
+        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
+        
         switch (((EnemyEntity) entity2).getEnemyType())
         {
           case ASTEROID_BIG:
@@ -600,6 +606,7 @@ public class Asteroids extends GameEngine
       {
         if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY_SHOT)
         {
+          //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
           entity2.kill();
         }
       }
@@ -608,6 +615,8 @@ public class Asteroids extends GameEngine
     // Handle player entity collision with powerup
     if (entity2.getEntityType() == GameEngineConstants.EntityTypes.POWER_UP)
     {
+      //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((PowerupEntity)entity2).getPowerupType());
+      
       // NOTE: If entity2 is a powerup then entity 1 is the player entity      
       switch (((PowerupEntity) entity2).getPowerupType())
       {
@@ -636,6 +645,7 @@ public class Asteroids extends GameEngine
           break;
       }
 
+      // NOTE: This is being called somewhere else for powerups.
       entity2.kill();
     }
   }
@@ -1121,7 +1131,7 @@ public class Asteroids extends GameEngine
 
     this.addPowerup(powerup);
   }
-
+  
   /*
    * Create a random "big" asteroid
    */
@@ -1333,7 +1343,6 @@ public class Asteroids extends GameEngine
         breakAsteroid((AsteroidEntity) enemy, newEnemies);
       }
       enemy.kill();
-      //ScoreManager.incrementScore(enemy.getPointValue());
     }
 
     // Add the newly created asteroids to the original enemy list

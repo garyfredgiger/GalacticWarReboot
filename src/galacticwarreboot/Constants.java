@@ -26,7 +26,19 @@ public class Constants
 
   public static enum EnemyTypes
   {
-    ASTEROID_BIG, ASTEROID_MEDIUM, ASTEROID_SMALL, ASTEROID_TINY, UFO, UFO_SHORTY
+    ASTEROID_BIG("ASTEROID_BIG"), ASTEROID_MEDIUM("ASTEROID_MEDIUM"), ASTEROID_SMALL("ASTEROID_SMALL"), ASTEROID_TINY("ASTEROID_TINY"), UFO("UFO"), UFO_SHORTY("UFO_SHORTY");
+    
+    private String label;
+
+    EnemyTypes(String label)
+    {
+      this.label = label;
+    }
+
+    public String toString()
+    {
+      return label;
+    }
   }
 
   // Game name
@@ -159,7 +171,7 @@ public class Constants
 
   // General Game Constants
   public static final int    STARTING_LEVEL                                 = 0;
-  public static final int    STARTING_NUMBER_OF_ASTEROIDS                   = 1;                                                       // Was 1
+  public static final int    STARTING_NUMBER_OF_ASTEROIDS                   = 1;
   public static final int    MAX_NUMBER_ASTEROIDS_ON_SCREEN                 = 20;
 
   public static final String DOT_DOT_DOT                                    = "...";
@@ -171,15 +183,15 @@ public class Constants
   public static final int    NEXT_LEVEL_INTERVAL                            = 3000;
   public static final int    DEFAULT_DAMAGE_AMOUNT                          = 1;
   public static final int    UFO_DAMAGE_AMOUNT                              = 4;
-  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                    = 1;   // Was 10
-  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                   = 1;   // Was 15
+  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                    = 10;   // Was 10
+  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                   = 15;   // Was 15
 
   // Constants used for player entity 
   public static final int    INVULNERABILITY_INTERVAL                       = 3000;
   public static final int    SHIP_STARTING_HEALTH                           = 40;
   public static final int    SHIP_STARTING_SHIELD                           = 40;
   public static final int    SHIP_STARTING_SUPER_SHIELD                     = 2;  // Was 2
-  public static final int    SHIP_STARTING_THE_BOMBS                        = 10;  // Was O
+  public static final int    SHIP_STARTING_THE_BOMBS                        = 0;  // Was O
   public static final int    SHIP_DEFAULT_ACCELERATION                      = 1;                                                       // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
   public static final int    SHIP_INCREASED_ACCELERATION                    = 2;
   public static final double SHIP_MAX_VELOCITY                              = 200;                                                     // Was originally 5

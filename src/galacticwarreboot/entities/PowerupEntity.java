@@ -20,7 +20,7 @@ public class PowerupEntity extends EntityImage
   {
     super(imageObserver, EntityTypes.POWER_UP);
 
-    powerupType = Constants.PowerUpType.UNDEFINED;
+    //powerupType = Constants.PowerUpType.UNDEFINED;
     correspondingAttributeMapping = Constants.AttributeType.UNDEFINED;
   }
 
