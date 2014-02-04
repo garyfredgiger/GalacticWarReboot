@@ -1,6 +1,7 @@
 package galacticwarreboot;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
@@ -18,6 +19,7 @@ import galacticwarreboot.entities.PlayerShotEntity;
 import galacticwarreboot.entities.PowerupEntity;
 import galacticwarreboot.entities.SuperShieldEntity;
 import galacticwarreboot.entities.UFOEntity;
+import galacticwarreboot.entities.UFOShorty;
 import galacticwarreboot.entities.UFOStrongEntity;
 import galacticwarreboot.powerups.Powerup1000Points;
 import galacticwarreboot.powerups.Powerup250Points;
@@ -33,6 +35,7 @@ import galacticwarreboot.powerups.PowerupThrust;
 import game.framework.GameEngine;
 import game.framework.entities.Entity2D;
 import game.framework.entities.EntityImage;
+import game.framework.entities.text.StaticText;
 import game.framework.interfaces.IRender;
 import game.framework.primitives.Position2D;
 import game.framework.utilities.GameEngineConstants;
@@ -89,13 +92,15 @@ public class Asteroids extends GameEngine
   ImageObserver               imageObserver;
 
   // Variables used for enemy entities
+  // TODO: Rather than having a bunch of image variables, possibly have an image store that stores the variables. It may not 
+  //       reduce the amount of space, but it will definitely reduce the number of variables requried to manage the images.
   EntityImage[]               bigAsteroids;
   EntityImage[]               mediumAsteroids;
   EntityImage[]               smallAsteroids;
   EntityImage[]               tinyAsteroids;
   EntityImage[]               barImage                         = new EntityImage[2];
-  EntityImage                 barFrame;
-  EntityImage[]               shipImage                        = new EntityImage[6];
+  EntityImage[]               barFrame                         = new EntityImage[3];
+  EntityImage[]               shipImage                        = new EntityImage[4];
 
   EntityImage[]               powerupGun                       = new EntityImage[5];
   EntityImage                 powerupShield;
@@ -109,8 +114,10 @@ public class Asteroids extends GameEngine
   EntityImage                 powerupFullShield;
   EntityImage                 powerupAutoShield;
   EntityImage                 powerupThrust;                    
-  EntityImage[]               ufo = new EntityImage[4];;
+  EntityImage[]               ufo = new EntityImage[4];
+  EntityImage                 ufoShorty;
   EntityImage                 ufoShot;
+  EntityImage                 ufoShortyShot;
   EntityImage                 superShield;
   EntityImage                 hudSuperShield;
   EntityImage                 hudTheBomb;
@@ -119,7 +126,8 @@ public class Asteroids extends GameEngine
   private int                 currentLevel;
   EntityImage                 background;
 
-  boolean launchStrongUFO = false;
+  //boolean launchStrongUFO = false;
+  private int ufoTypeToLaunch;
   
   /*
    *  Game state management variables
@@ -147,14 +155,20 @@ public class Asteroids extends GameEngine
   /*
    * Bounding boxes used for messages displayed to the screen
    */
-  Rectangle2D                 boundsIntroductionTitleMsg;
-  Rectangle2D                 boundsIntroductionStateTitle;
-  Rectangle2D                 boundsIntroductionPowerupsMsg;
-  Rectangle2D                 boundsGameStartMsg;
-  Rectangle2D                 boundsPlayerDeadMsg;
-  Rectangle2D                 boundsGameOverMsg;
-  Rectangle2D                 boundsGamePlayingHUDMsgs;
-  Rectangle2D                 boundsNextLevelMsg;
+  private Rectangle2D                 boundsIntroductionTitleMsg;
+  private Rectangle2D                 boundsIntroductionStateTitle;
+  private Rectangle2D                 boundsIntroductionPowerupsMsg;
+  private Rectangle2D                 boundsGameStartMsg;
+  private Rectangle2D                 boundsPlayerDeadMsg;
+  private Rectangle2D                 boundsGameOverMsg;
+  private Rectangle2D                 boundsGamePlayingHUDMsgs;
+  private Rectangle2D                 boundsNextLevelMsg;
+
+  private StaticText                  msgGameStartScreen;
+  
+  // Game Power-up Flags
+  private boolean firstIncreasedHealthPointMark;        // When user's score reaches above a certain score, he/she will get an increased health bonus from 10 to 20
+  private boolean secondIncreasedHealthPointMark;       // When user's score reaches above a certain score, he/she will get another increased health bonus from 20 to 40
 
   public Asteroids(IRender renderer, ImageObserver imageObserver)
   {
@@ -200,7 +214,13 @@ public class Asteroids extends GameEngine
     tinyAsteroids[2] = loadImage(Constants.FILENAME_TINY_ASTEROID_3);
     tinyAsteroids[3] = loadImage(Constants.FILENAME_TINY_ASTEROID_4);
     background = loadImage(Constants.FILENAME_BACKGROUND);
-    barFrame = loadImage(Constants.FILENAME_BAR_FRAME);
+
+    System.out.println("Size of barFrame = " + barFrame.length);
+    
+    barFrame[0] = loadImage(Constants.FILENAME_BAR_FRAME_10);
+    barFrame[1] = loadImage(Constants.FILENAME_BAR_FRAME_20);
+    barFrame[2] = loadImage(Constants.FILENAME_BAR_FRAME_40);
+
     barImage[0] = loadImage(Constants.FILENAME_BAR_HEALTH);
     barImage[1] = loadImage(Constants.FILENAME_BAR_SHIELD);
 
@@ -225,23 +245,23 @@ public class Asteroids extends GameEngine
     powerupFullShield = loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
     powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
     ufo[0] = loadImage(Constants.FILENAME_UFO);
-    ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_1);
-    ufo[2] = loadImage(Constants.FILENAME_UFO_SHIELD_2);
-    ufo[3] = loadImage(Constants.FILENAME_UFO_SHIELD_3);
+    ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_WEAK);
+    ufo[2] = loadImage(Constants.FILENAME_UFO_SHIELD_OK);
+    ufo[3] = loadImage(Constants.FILENAME_UFO_SHIELD_STRONG);
+    ufoShorty = loadImage(Constants.FILENAME_UFO_SHORTY);
     ufoShot = loadImage(Constants.FILENAME_UFO_SHOT);
+    ufoShortyShot = loadImage(Constants.FILENAME_UFO_SHORTY_SHOT);
     bulletImage = loadImage(Constants.FILENAME_PLASMA_SHOT);
 
-    shipImage[0] = loadImage(Constants.FILENAME_SPACESHIP);
-    shipImage[1] = loadImage(Constants.FILENAME_SPACESHIP_THRUST);
-    shipImage[2] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD);
-    shipImage[3] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST);
-    shipImage[4] = loadImage(Constants.FILENAME_SPACESHIP_THRUST_2);
-    shipImage[5] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD_AND_THRUST_2);    
+    shipImage[Constants.IMAGE_SPACESHIP_INDEX] = loadImage(Constants.FILENAME_SPACESHIP);
+    shipImage[Constants.IMAGE_SPACESHIP_SHIELD_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD);
+    shipImage[Constants.IMAGE_SPACESHIP_THRUST1_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST1);
+    shipImage[Constants.IMAGE_SPACESHIP_THRUST2_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST2);
 
     fireShot = false;
 
     // Add the player entity
-    PlayerEntity ship = new PlayerEntity(this.imageObserver);
+    PlayerEntity ship = new PlayerEntity(this.imageObserver, shipImage);
     ship.setImage(shipImage[0].getImage());
     ship.setRotationRate(0.0);
     ship.setFaceAngle(0);
@@ -267,7 +287,13 @@ public class Asteroids extends GameEngine
 
     ufoManager = new UFOEntityManager();
     lastUFOCollisionTime = System.currentTimeMillis();
-    launchStrongUFO = false;
+    //launchStrongUFO = false;
+    ufoTypeToLaunch = 0;
+    
+    msgGameStartScreen = new StaticText(Constants.MSG_GAME_START, Color.YELLOW, Constants.FONT_GAME_START_SCREEN, screenWidth, screenHeight);
+    
+    firstIncreasedHealthPointMark = false;
+    secondIncreasedHealthPointMark = false;
   }
 
   private EntityImage loadImage(String imageFilename)
@@ -329,22 +355,34 @@ public class Asteroids extends GameEngine
 
         if (ufoManager.ufoShouldBeLaunched(currentLevel))
         {
-          if (currentLevel > Constants.GAME_LAUNCH_SUPER_UFO_LEVEL)
+          if ((currentLevel >= Constants.GAME_LAUNCH_SUPER_UFO_LEVEL) && (currentLevel < Constants.GAME_LAUNCH_SHORTY_UFO_LEVEL))
           {
-            launchStrongUFO = GameUtility.random.nextBoolean();
+            ufoTypeToLaunch = GameUtility.random.nextInt(2);
           }
-          
-          if (launchStrongUFO)
+          else if (currentLevel >= Constants.GAME_LAUNCH_SHORTY_UFO_LEVEL)
           {
-            launchStrongUFO = false;
-            UFOStrongEntity newUfo = new UFOStrongEntity(this.imageObserver, ufo, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
-            addEnemy(newUfo);
+            // Starting with level GAME_LAUNCH_SHORTY_UFO_LEVEL we only want to launch strong or shorty UFOs
+            ufoTypeToLaunch = GameUtility.random.nextInt(2);
+            ufoTypeToLaunch = ufoTypeToLaunch+1;
           }
-          else
+
+          switch(ufoTypeToLaunch)
           {
-            UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo[0].getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
-            addEnemy(newUfo);
-          }
+            case 1:
+              UFOStrongEntity newStrongUfo = new UFOStrongEntity(this.imageObserver, ufo, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+              addEnemy(newStrongUfo);
+              break;
+              
+            case 2:
+              UFOShorty newShortyUfo = new UFOShorty(this.imageObserver, ufoShorty, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), ufoShorty.getWidth(), screenWidth+ufoShorty.getWidth());
+              addEnemy(newShortyUfo);
+              break;
+              
+            default:
+                
+                UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo[0].getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+                addEnemy(newUfo);
+          }          
         }
 
         // This will simulate a 3 second counter before detonating the bomb
@@ -433,6 +471,18 @@ public class Asteroids extends GameEngine
         // We do not want to warp the UFO
         return;
       }
+      
+      if (((EnemyEntity) entity).getEnemyType() == Constants.EnemyTypes.UFO_SHORTY)
+      {
+        if (((UFOEntity) entity).shouldFireShot())
+        {
+          // TODO: See if this method stockUFOShortyBullet() can be combined with the method stockUFOBullet()
+          addEnemyShot(stockUFOShortyBullet(entity.getCenter(), getPlayer().getCenter()));
+        }
+        
+        // We do not want to warp the UFO
+        return;
+      }
     }
 
     GameUtility.warp(entity, screenWidth, screenHeight);
@@ -456,6 +506,7 @@ public class Asteroids extends GameEngine
 
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
+        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
         // At this point the enemy is either an asteroid or a UFO
         int damageAmount = 0;
 
@@ -472,7 +523,7 @@ public class Asteroids extends GameEngine
             }
             break;
 
-          // Default case, and asteroid
+          // Default case, an asteroid
           default:
 
             // Regardless of whether the shields are engaged or not, the asteroid damage is the same, one unit
@@ -485,7 +536,7 @@ public class Asteroids extends GameEngine
         {
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_SHIELD, damageAmount);
         }
-        // Otherwise reduce the player health by the damage amount, stop the player and reduce its firepower 
+        // Otherwise reduce the player health by the damage amount, stop the player and reduce its fire power 
         else
         {
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_HEALTH, damageAmount);
@@ -493,14 +544,16 @@ public class Asteroids extends GameEngine
           entity1.setVelocity(0, 0);                    // Stop the player ship when it hits an enemy. This adds some realism.
         }
         
-//        if (((EnemyEntity) entity2).getEnemyType() == EnemyTypes.UFO)
-//        {
-//          System.out.println("...damage: " + damageAmount + " after health " + ((PlayerEntity) entity1).getValue(AttributeType.ATTRIBUTE_HEALTH));
-//        }
+        // Only kill off the entity if it is either a UFO or ASTEROID, hence why it is in this condition body
+        entity2.kill();
       }
 
+      /*
+       * Collision between player and enemy shot 
+       */
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY_SHOT)
       {
+        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
         // If shields are engaged reduce the shields by the damage amount 
         if (shieldsEngaged) // OR: Player had auto shield and shield amount 
         {
@@ -511,14 +564,21 @@ public class Asteroids extends GameEngine
         {
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_HEALTH, 1);
         }
+        
+        // Only kill off the entity if it is an ENEMY_SHOT, hence why it is in this condition body
+        entity2.kill();
       }
 
-      // Kill off both entities
-      entity1.kill();                               // This call will only kill the player if the players health runs out
-      entity2.kill();
+      // Kill off the player entity
+      // NOTE: This call will only kill the player if the players health runs out
+      entity1.kill();              
+      
+      // NOTE: If the call entity2.kill() was called from here, it would kill off any entity2 regardless of type
     }
 
-    // Handle player shot collision with an enemy
+    /* 
+     * Collision between player shot and enemy
+     */
     if (entity1.getEntityType() == GameEngineConstants.EntityTypes.PLAYER_SHOT)
     {
       // Plasma shot collides with enemy, kill off both 
@@ -528,6 +588,8 @@ public class Asteroids extends GameEngine
 
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
+        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
+        
         switch (((EnemyEntity) entity2).getEnemyType())
         {
           case ASTEROID_BIG:
@@ -535,6 +597,7 @@ public class Asteroids extends GameEngine
           case ASTEROID_SMALL:
           case ASTEROID_TINY:
 
+            // Add the point value of the asteroid to the player's score 
             breakAsteroid((EntityImage) entity2);
             break;
 
@@ -546,8 +609,10 @@ public class Asteroids extends GameEngine
         {
           entity1.kill();
         }
-
-        ScoreManager.incrementScore(((EnemyEntity) entity2).getPointValue());
+        
+        // NOTE: All enemy entities point values will be added to the player's score inside of each entity's kill
+        //       method since a call to the kill method here may not kill the enemy depending on what type of enemy
+        //       it is (e.g., a UFO).
         entity2.kill();
       }
 
@@ -556,6 +621,7 @@ public class Asteroids extends GameEngine
       {
         if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY_SHOT)
         {
+          //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
           entity2.kill();
         }
       }
@@ -564,6 +630,8 @@ public class Asteroids extends GameEngine
     // Handle player entity collision with powerup
     if (entity2.getEntityType() == GameEngineConstants.EntityTypes.POWER_UP)
     {
+      //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((PowerupEntity)entity2).getPowerupType());
+      
       // NOTE: If entity2 is a powerup then entity 1 is the player entity      
       switch (((PowerupEntity) entity2).getPowerupType())
       {
@@ -586,13 +654,13 @@ public class Asteroids extends GameEngine
         case POWERUP_250:
         case POWERUP_500:
         case POWERUP_1000:
-          ScoreManager.incrementScore(((PowerupEntity) entity2).getValue());
           break;
 
         default:
           break;
       }
 
+      // NOTE: This is being called somewhere else for powerups.
       entity2.kill();
     }
   }
@@ -659,49 +727,12 @@ public class Asteroids extends GameEngine
           fireShot = false;
         }
 
-        //    // Not sure if this is needed Check the shield state. If it is completely depleted then clear the keyShield flag
-        //    if (!((PlayerEntity)getPlayer()).hasShieldRemaining())
-        //    {
-        //      keyShield = false;
-        //    }
-
-        // Given the current user input (thrust, shields ot nothing) display the proper image for the player entity
-        if ((thrust) && (keyShield) && ((PlayerEntity) getPlayer()).isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
-        // OR: If player has auto shield and collision occurred
+        if (thrust)
         {
-          if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
-          {
-            ((PlayerEntity) getPlayer()).setImage(shipImage[5].getImage());
-          }
-          else
-          {
-            ((PlayerEntity) getPlayer()).setImage(shipImage[3].getImage());
-          }
-
           applyThrust();
         }
-        else if (thrust)
-        {
-          if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
-          {
-            ((PlayerEntity) getPlayer()).setImage(shipImage[4].getImage());
-          }
-          else
-          {
-            ((PlayerEntity) getPlayer()).setImage(shipImage[1].getImage());
-          }
-          applyThrust();
-        }
-        else if ((keyShield) && ((PlayerEntity) getPlayer()).isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
-        // OR: If player has auto shield and collision occurred
-        {
-          ((PlayerEntity) getPlayer()).setImage(shipImage[2].getImage());
-        }
-        else
-        {
-          // Set ship image to normal non-thrust image
-          ((PlayerEntity) getPlayer()).setImage(shipImage[0].getImage());
-        }
+
+        ((PlayerEntity) getPlayer()).applyPlayerControlsToDisplayRespectiveImages(keyShield, thrust);        
 
         if (requestSuperShield)
         {
@@ -769,11 +800,12 @@ public class Asteroids extends GameEngine
 
       case PLAYING:
 
+        // TODO: If is here where the different users
         // Draw player health bar
-        g.drawImage(barFrame.getImage(), screenWidth - barFrame.getWidth() - 20, 18, this.imageObserver);
+        g.drawImage(barFrame[2].getImage(), screenWidth - barFrame[2].getWidth() - 20, 18, this.imageObserver);
         for (int n = 0; n < ((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_HEALTH); n++)
         {
-          int dx = (screenWidth - barFrame.getWidth() - 18) + n * 5;
+          int dx = (screenWidth - barFrame[2].getWidth() - 18) + n * 5;
           g.drawImage(barImage[0].getImage(), dx, 20, this.imageObserver);
         }
 
@@ -781,13 +813,13 @@ public class Asteroids extends GameEngine
         g.setFont(Constants.FONT_GAME_PLAYING_HUD_SMALL);
         boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_HEALTH, g);
         g.setColor(Color.WHITE);
-        g.drawString(Constants.MSG_GAME_PLAYING_HEALTH, (int) (screenWidth - barFrame.getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 30);
+        g.drawString(Constants.MSG_GAME_PLAYING_HEALTH, (int) (screenWidth - barFrame[2].getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 30);
 
         // Draw player shield bar
-        g.drawImage(barFrame.getImage(), screenWidth - barFrame.getWidth() - 20, 33, this.imageObserver);
+        g.drawImage(barFrame[2].getImage(), screenWidth - barFrame[2].getWidth() - 20, 33, this.imageObserver);
         for (int n = 0; n < ((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SHIELD); n++)
         {
-          int dx = (screenWidth - barFrame.getWidth() - 18) + n * 5;
+          int dx = (screenWidth - barFrame[2].getWidth() - 18) + n * 5;
           g.drawImage(barImage[1].getImage(), dx, 35, this.imageObserver);
         }
 
@@ -795,7 +827,7 @@ public class Asteroids extends GameEngine
         g.setFont(Constants.FONT_GAME_PLAYING_HUD_SMALL);
         boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_SHIELD, g);
         g.setColor(Color.WHITE);
-        g.drawString(Constants.MSG_GAME_PLAYING_SHIELD, (int) (screenWidth - barFrame.getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 47);
+        g.drawString(Constants.MSG_GAME_PLAYING_SHIELD, (int) (screenWidth - barFrame[2].getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 47);
 
         // Draw label next to bullet upgrades
         g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
@@ -1013,7 +1045,7 @@ public class Asteroids extends GameEngine
   // Create a random powerup at the supplied sprite location
   private void spawnPowerup(double xPos, double yPos)
   {
-    // Only a few tiny sprites spit out a powerup
+    // Only a few tiny sprites spit out a power-up
     int n = GameUtility.random.nextInt(Constants.POWERUP_TOTAL_EVENTS_TO_SPAWN);
 
     if (n > Constants.POWERUP_SPAWN_PROBABILITY)
@@ -1037,6 +1069,7 @@ public class Asteroids extends GameEngine
         break;
 
       case 2:
+        // TODO: Only spawn a gun if the player has less than 5 guns
         powerup = new PowerupFirePower(this.imageObserver);
         powerup.setImage(powerupGun[0].getImage());
         break;
@@ -1067,11 +1100,15 @@ public class Asteroids extends GameEngine
         break;
 
       case 8:
+        // TODO: Only spawn full health if the player has less than full health.
+        // TODO: Consider only spawning full health if the player has less than half health.
         powerup = new PowerupFullHealth(this.imageObserver);
         powerup.setImage(this.powerupFullHealth.getImage());
         break;
 
       case 9:
+        // TODO: Only spawn full health if the player has less than full shields.
+        // TODO: Consider only spawning full health if the player has less than half shields.
         powerup = new PowerupFullShield(this.imageObserver);
         powerup.setImage(this.powerupFullShield.getImage());
         break;
@@ -1091,11 +1128,14 @@ public class Asteroids extends GameEngine
 
       default:
 
+        // Possibly spawn some of the common power ups here if special case ones do not spawn
+        // Common power-ups are health, shield, super shield, the bomb and point bonuses 
+        
         powerup = new PowerupHealth(this.imageObserver);
         powerup.setImage(powerupHealth.getImage());
     }
 
-    // Make the powerup have the same position as the entity
+    // Make the power-up have the same position as the entity
     powerup.setPosition(xPos, yPos);
 
     // Set rotation and direction angles of asteroid
@@ -1115,7 +1155,7 @@ public class Asteroids extends GameEngine
 
     this.addPowerup(powerup);
   }
-
+  
   /*
    * Create a random "big" asteroid
    */
@@ -1290,7 +1330,8 @@ public class Asteroids extends GameEngine
     // the players ship
     if ((x >= screenWidth * lowerHorizontalBufferFactor) && (x <= screenWidth * 0.5))
     {
-      x += -entityWidth;
+      //x += -entityWidth;
+      x -= entityWidth;
     }
     else if ((x <= screenWidth * upperHorizontalBufferFactor) && (x >= screenWidth * 0.5))
     {
@@ -1299,7 +1340,8 @@ public class Asteroids extends GameEngine
 
     if ((y >= screenHeight * lowerVerticalBufferFactor) && (y <= screenHeight * 0.5))
     {
-      y += -entityHeight;
+      //y += -entityHeight;
+      y -= entityHeight;
     }
     else if ((y <= screenHeight * upperVerticalBufferFactor) && (y >= screenHeight * 0.5))
     {
@@ -1327,7 +1369,6 @@ public class Asteroids extends GameEngine
         breakAsteroid((AsteroidEntity) enemy, newEnemies);
       }
       enemy.kill();
-      ScoreManager.incrementScore(enemy.getPointValue());
     }
 
     // Add the newly created asteroids to the original enemy list
@@ -1422,6 +1463,26 @@ public class Asteroids extends GameEngine
     return bullet;
   }
 
+//Fire a shot at the player ship
+ // NOTE: Since the bullets are round, we do not need to work with any angles like the plasma shots.
+ private EntityImage stockUFOShortyBullet(Position2D ufoPos, Position2D playerPos)
+ {
+   EntityImage bullet = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.ENEMY_SHOT);
+   bullet.setImage(ufoShortyShot.getImage());
+
+   // Compute bullet heading given current position of player and this ufo entity     
+   bullet.setVelocity(GameUtility.computeUnitVectorBetweenTwoPositions(ufoPos, playerPos).createScaledVector(Constants.UFO_SHORTY_SHOT_SPEED));
+
+   // Set the bullet's starting position
+   double x = ufoPos.x - bullet.getWidth() / 2;
+   double y = ufoPos.y - bullet.getHeight() / 2;
+   bullet.setPosition(x, y);
+
+   // Initialize the life span and life age
+   bullet.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.UFO_SHORTY_BULLET_LIFE_SPAN_IN_SECS));
+   return bullet;
+ }
+  
   /*
    * Break up an asteroid into smaller pieces
    */
@@ -1665,14 +1726,15 @@ public class Asteroids extends GameEngine
     requestTheBomb = false;
     prepareTheBomb = false;
     executeTheBomb = false;
-    launchStrongUFO = false;
+    //launchStrongUFO = false;
 
-    initializeAsteroidsForCurrentLevel(currentLevel);
-    ufoManager.reset(); // Possibly needed for the UFO that will appear in this game
-
+    // TODO: Determine if the order in which the asteroids and player are placed causes the bug where the player ship hitting the asteroid when a new level begins.  
     ((PlayerEntity) getPlayer()).moveToHomePosition();
     getPlayer().setVelocity(0.0, 0.0);  // Possibly move this call into the method above.
     getPlayer().setVisible(true);
+    
+    initializeAsteroidsForCurrentLevel(currentLevel);
+    ufoManager.reset(); // Possibly needed for the UFO that will appear in this game
   }
 
   private void initializeAsteroidsForCurrentLevel(int currentLevel)
@@ -1726,10 +1788,12 @@ public class Asteroids extends GameEngine
 
   private void displayGameStartScreen(Graphics2D g)
   {
-    g.setFont(Constants.FONT_GAME_START_SCREEN);
-    boundsGameStartMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_START, g);
-    g.setColor(Color.YELLOW);
-    g.drawString(Constants.MSG_GAME_START, (int) ((screenWidth - boundsGameStartMsg.getWidth()) / 2), (int) ((screenHeight - boundsGameStartMsg.getHeight()) / 2));
+    msgGameStartScreen.draw(g);
+    
+//    g.setFont(Constants.FONT_GAME_START_SCREEN);
+//    boundsGameStartMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_START, g);
+//    g.setColor(Color.YELLOW);
+//    g.drawString(Constants.MSG_GAME_START, (int) ((screenWidth - boundsGameStartMsg.getWidth()) / 2), (int) ((screenHeight - boundsGameStartMsg.getHeight()) / 2));
   }
 
   private void displayNextLevelScreen(Graphics2D g)

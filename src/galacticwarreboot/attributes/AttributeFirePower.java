@@ -5,7 +5,7 @@ import galacticwarreboot.Constants;
 public class AttributeFirePower extends AttributeBase
 {
   private int firePower;
-  
+
   public AttributeFirePower()
   {
     setValue(0);

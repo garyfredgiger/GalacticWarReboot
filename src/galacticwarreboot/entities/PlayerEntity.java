@@ -1,8 +1,10 @@
 package galacticwarreboot.entities;
 
+import java.awt.Graphics2D;
 import java.awt.image.ImageObserver;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.Constants.AttributeType;
 import galacticwarreboot.attributes.PlayerAttributes;
 import game.framework.entities.EntityImage;
 import game.framework.primitives.Position2D;
@@ -13,7 +15,13 @@ public class PlayerEntity extends EntityImage
   private PlayerAttributes attributes;
   private Position2D homePosition; 
 
-  public PlayerEntity(ImageObserver imageObserver)
+  private boolean displayShield;
+  private boolean displayThrust;
+
+  EntityImage[] spaceshipImages;
+  
+  // TODO: Add the image array to the 
+  public PlayerEntity(ImageObserver imageObserver, EntityImage[] spaceshipImages)
   {
     super(imageObserver, GameEngineConstants.EntityTypes.PLAYER);
     homePosition = new Position2D();
@@ -21,6 +29,8 @@ public class PlayerEntity extends EntityImage
     // Be safe, initialize the variables
     attributes = new PlayerAttributes();
     attributes.initialize();
+
+    this.spaceshipImages = spaceshipImages;
   }
 
   public void defineHomePosition(double homePositionX, double homePositionY)
@@ -77,6 +87,12 @@ public class PlayerEntity extends EntityImage
     return attributes.isEquipped(powerupType);
   }
   
+  public void applyPlayerControlsToDisplayRespectiveImages(boolean shield, boolean thrust)
+  {
+    displayShield = shield; 
+    displayThrust = thrust;
+  }
+  
   @Override
   public void kill()
   {
@@ -88,5 +104,34 @@ public class PlayerEntity extends EntityImage
 
     // A call to the parent method will clear both the visible and dead flags of the player entity.
     super.kill();
+  }
+  
+  @Override
+  public void draw(Graphics2D g)
+  {
+    super.draw(g);
+    
+    if (isAlive() && isVisible())
+    {
+      if (displayShield)
+      {
+        if (this.isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
+        {
+          g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_SHIELD_INDEX].getImage(), at, imageObserver);
+        }
+      }
+      
+      if (displayThrust)
+      {
+        if (this.getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
+        {
+          g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST2_INDEX].getImage(), at, imageObserver);
+        }
+        else
+        {
+          g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST1_INDEX].getImage(), at, imageObserver);
+        }
+      }
+    }
   }
 }
