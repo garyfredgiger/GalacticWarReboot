@@ -92,13 +92,15 @@ public class Asteroids extends GameEngine
   ImageObserver               imageObserver;
 
   // Variables used for enemy entities
+  // TODO: Rather than having a bunch of image variables, possibly have an image store that stores the variables. It may not 
+  //       reduce the amount of space, but it will definitely reduce the number of variables requried to manage the images.
   EntityImage[]               bigAsteroids;
   EntityImage[]               mediumAsteroids;
   EntityImage[]               smallAsteroids;
   EntityImage[]               tinyAsteroids;
   EntityImage[]               barImage                         = new EntityImage[2];
-  EntityImage                 barFrame;
-  EntityImage[]               shipImage                        = new EntityImage[6];
+  EntityImage[]               barFrame                         = new EntityImage[3];
+  EntityImage[]               shipImage                        = new EntityImage[4];
 
   EntityImage[]               powerupGun                       = new EntityImage[5];
   EntityImage                 powerupShield;
@@ -153,16 +155,20 @@ public class Asteroids extends GameEngine
   /*
    * Bounding boxes used for messages displayed to the screen
    */
-  Rectangle2D                 boundsIntroductionTitleMsg;
-  Rectangle2D                 boundsIntroductionStateTitle;
-  Rectangle2D                 boundsIntroductionPowerupsMsg;
-  Rectangle2D                 boundsGameStartMsg;
-  Rectangle2D                 boundsPlayerDeadMsg;
-  Rectangle2D                 boundsGameOverMsg;
-  Rectangle2D                 boundsGamePlayingHUDMsgs;
-  Rectangle2D                 boundsNextLevelMsg;
+  private Rectangle2D                 boundsIntroductionTitleMsg;
+  private Rectangle2D                 boundsIntroductionStateTitle;
+  private Rectangle2D                 boundsIntroductionPowerupsMsg;
+  private Rectangle2D                 boundsGameStartMsg;
+  private Rectangle2D                 boundsPlayerDeadMsg;
+  private Rectangle2D                 boundsGameOverMsg;
+  private Rectangle2D                 boundsGamePlayingHUDMsgs;
+  private Rectangle2D                 boundsNextLevelMsg;
 
-  StaticText msgGameStartScreen;
+  private StaticText                  msgGameStartScreen;
+  
+  // Game Power-up Flags
+  private boolean firstIncreasedHealthPointMark;        // When user's score reaches above a certain score, he/she will get an increased health bonus from 10 to 20
+  private boolean secondIncreasedHealthPointMark;       // When user's score reaches above a certain score, he/she will get another increased health bonus from 20 to 40
 
   public Asteroids(IRender renderer, ImageObserver imageObserver)
   {
@@ -208,7 +214,13 @@ public class Asteroids extends GameEngine
     tinyAsteroids[2] = loadImage(Constants.FILENAME_TINY_ASTEROID_3);
     tinyAsteroids[3] = loadImage(Constants.FILENAME_TINY_ASTEROID_4);
     background = loadImage(Constants.FILENAME_BACKGROUND);
-    barFrame = loadImage(Constants.FILENAME_BAR_FRAME);
+
+    System.out.println("Size of barFrame = " + barFrame.length);
+    
+    barFrame[0] = loadImage(Constants.FILENAME_BAR_FRAME_10);
+    barFrame[1] = loadImage(Constants.FILENAME_BAR_FRAME_20);
+    barFrame[2] = loadImage(Constants.FILENAME_BAR_FRAME_40);
+
     barImage[0] = loadImage(Constants.FILENAME_BAR_HEALTH);
     barImage[1] = loadImage(Constants.FILENAME_BAR_SHIELD);
 
@@ -279,6 +291,9 @@ public class Asteroids extends GameEngine
     ufoTypeToLaunch = 0;
     
     msgGameStartScreen = new StaticText(Constants.MSG_GAME_START, Color.YELLOW, Constants.FONT_GAME_START_SCREEN, screenWidth, screenHeight);
+    
+    firstIncreasedHealthPointMark = false;
+    secondIncreasedHealthPointMark = false;
   }
 
   private EntityImage loadImage(String imageFilename)
@@ -785,11 +800,12 @@ public class Asteroids extends GameEngine
 
       case PLAYING:
 
+        // TODO: If is here where the different users
         // Draw player health bar
-        g.drawImage(barFrame.getImage(), screenWidth - barFrame.getWidth() - 20, 18, this.imageObserver);
+        g.drawImage(barFrame[2].getImage(), screenWidth - barFrame[2].getWidth() - 20, 18, this.imageObserver);
         for (int n = 0; n < ((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_HEALTH); n++)
         {
-          int dx = (screenWidth - barFrame.getWidth() - 18) + n * 5;
+          int dx = (screenWidth - barFrame[2].getWidth() - 18) + n * 5;
           g.drawImage(barImage[0].getImage(), dx, 20, this.imageObserver);
         }
 
@@ -797,13 +813,13 @@ public class Asteroids extends GameEngine
         g.setFont(Constants.FONT_GAME_PLAYING_HUD_SMALL);
         boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_HEALTH, g);
         g.setColor(Color.WHITE);
-        g.drawString(Constants.MSG_GAME_PLAYING_HEALTH, (int) (screenWidth - barFrame.getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 30);
+        g.drawString(Constants.MSG_GAME_PLAYING_HEALTH, (int) (screenWidth - barFrame[2].getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 30);
 
         // Draw player shield bar
-        g.drawImage(barFrame.getImage(), screenWidth - barFrame.getWidth() - 20, 33, this.imageObserver);
+        g.drawImage(barFrame[2].getImage(), screenWidth - barFrame[2].getWidth() - 20, 33, this.imageObserver);
         for (int n = 0; n < ((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SHIELD); n++)
         {
-          int dx = (screenWidth - barFrame.getWidth() - 18) + n * 5;
+          int dx = (screenWidth - barFrame[2].getWidth() - 18) + n * 5;
           g.drawImage(barImage[1].getImage(), dx, 35, this.imageObserver);
         }
 
@@ -811,7 +827,7 @@ public class Asteroids extends GameEngine
         g.setFont(Constants.FONT_GAME_PLAYING_HUD_SMALL);
         boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_SHIELD, g);
         g.setColor(Color.WHITE);
-        g.drawString(Constants.MSG_GAME_PLAYING_SHIELD, (int) (screenWidth - barFrame.getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 47);
+        g.drawString(Constants.MSG_GAME_PLAYING_SHIELD, (int) (screenWidth - barFrame[2].getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 47);
 
         // Draw label next to bullet upgrades
         g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
@@ -1029,7 +1045,7 @@ public class Asteroids extends GameEngine
   // Create a random powerup at the supplied sprite location
   private void spawnPowerup(double xPos, double yPos)
   {
-    // Only a few tiny sprites spit out a powerup
+    // Only a few tiny sprites spit out a power-up
     int n = GameUtility.random.nextInt(Constants.POWERUP_TOTAL_EVENTS_TO_SPAWN);
 
     if (n > Constants.POWERUP_SPAWN_PROBABILITY)
@@ -1053,6 +1069,7 @@ public class Asteroids extends GameEngine
         break;
 
       case 2:
+        // TODO: Only spawn a gun if the player has less than 5 guns
         powerup = new PowerupFirePower(this.imageObserver);
         powerup.setImage(powerupGun[0].getImage());
         break;
@@ -1083,11 +1100,15 @@ public class Asteroids extends GameEngine
         break;
 
       case 8:
+        // TODO: Only spawn full health if the player has less than full health.
+        // TODO: Consider only spawning full health if the player has less than half health.
         powerup = new PowerupFullHealth(this.imageObserver);
         powerup.setImage(this.powerupFullHealth.getImage());
         break;
 
       case 9:
+        // TODO: Only spawn full health if the player has less than full shields.
+        // TODO: Consider only spawning full health if the player has less than half shields.
         powerup = new PowerupFullShield(this.imageObserver);
         powerup.setImage(this.powerupFullShield.getImage());
         break;
@@ -1107,11 +1128,14 @@ public class Asteroids extends GameEngine
 
       default:
 
+        // Possibly spawn some of the common power ups here if special case ones do not spawn
+        // Common power-ups are health, shield, super shield, the bomb and point bonuses 
+        
         powerup = new PowerupHealth(this.imageObserver);
         powerup.setImage(powerupHealth.getImage());
     }
 
-    // Make the powerup have the same position as the entity
+    // Make the power-up have the same position as the entity
     powerup.setPosition(xPos, yPos);
 
     // Set rotation and direction angles of asteroid
@@ -1306,7 +1330,8 @@ public class Asteroids extends GameEngine
     // the players ship
     if ((x >= screenWidth * lowerHorizontalBufferFactor) && (x <= screenWidth * 0.5))
     {
-      x += -entityWidth;
+      //x += -entityWidth;
+      x -= entityWidth;
     }
     else if ((x <= screenWidth * upperHorizontalBufferFactor) && (x >= screenWidth * 0.5))
     {
@@ -1315,7 +1340,8 @@ public class Asteroids extends GameEngine
 
     if ((y >= screenHeight * lowerVerticalBufferFactor) && (y <= screenHeight * 0.5))
     {
-      y += -entityHeight;
+      //y += -entityHeight;
+      y -= entityHeight;
     }
     else if ((y <= screenHeight * upperVerticalBufferFactor) && (y >= screenHeight * 0.5))
     {
@@ -1702,12 +1728,13 @@ public class Asteroids extends GameEngine
     executeTheBomb = false;
     //launchStrongUFO = false;
 
-    initializeAsteroidsForCurrentLevel(currentLevel);
-    ufoManager.reset(); // Possibly needed for the UFO that will appear in this game
-
+    // TODO: Determine if the order in which the asteroids and player are placed causes the bug where the player ship hitting the asteroid when a new level begins.  
     ((PlayerEntity) getPlayer()).moveToHomePosition();
     getPlayer().setVelocity(0.0, 0.0);  // Possibly move this call into the method above.
     getPlayer().setVisible(true);
+    
+    initializeAsteroidsForCurrentLevel(currentLevel);
+    ufoManager.reset(); // Possibly needed for the UFO that will appear in this game
   }
 
   private void initializeAsteroidsForCurrentLevel(int currentLevel)

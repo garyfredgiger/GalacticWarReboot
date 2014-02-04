@@ -4,7 +4,10 @@ import galacticwarreboot.Constants;
 
 public class AttributeHealth extends AttributeBase
 {
-  private int health;
+  private int currentHealth;
+  private int healthLimit;
+  
+  // TODO: May need to add another method to define the limit of the attribute
   
   public AttributeHealth()
   {
@@ -19,7 +22,7 @@ public class AttributeHealth extends AttributeBase
   @Override
   public int getValue()
   {
-    return health;
+    return currentHealth;
   }
 
   @Override
@@ -35,7 +38,7 @@ public class AttributeHealth extends AttributeBase
       value = 0;
     }
     
-    health = value;
+    currentHealth = value;
   }
 
   @Override
@@ -46,11 +49,11 @@ public class AttributeHealth extends AttributeBase
       return;
     }
     
-    health += amount;
+    currentHealth += amount;
     
-    if (health > Constants.SHIP_STARTING_HEALTH)
+    if (currentHealth > Constants.SHIP_STARTING_HEALTH)
     {
-      health = Constants.SHIP_STARTING_HEALTH;
+      currentHealth = Constants.SHIP_STARTING_HEALTH;
     }
   }
 
@@ -62,11 +65,11 @@ public class AttributeHealth extends AttributeBase
       return;
     }
     
-    health -= amount;
+    currentHealth -= amount;
     
-    if (health < 0)
+    if (currentHealth < 0)
     {
-      health = 0;
+      currentHealth = 0;
     }
   }
 
@@ -79,6 +82,6 @@ public class AttributeHealth extends AttributeBase
   @Override
   public boolean isEquipped()
   {
-    return (health > 0 ? true : false);
+    return (currentHealth > 0 ? true : false);
   }
 }

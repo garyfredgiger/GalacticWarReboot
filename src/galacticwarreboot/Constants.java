@@ -27,7 +27,7 @@ public class Constants
   public static enum EnemyTypes
   {
     ASTEROID_BIG("ASTEROID_BIG"), ASTEROID_MEDIUM("ASTEROID_MEDIUM"), ASTEROID_SMALL("ASTEROID_SMALL"), ASTEROID_TINY("ASTEROID_TINY"), UFO("UFO"), UFO_SHORTY("UFO_SHORTY");
-    
+
     private String label;
 
     EnemyTypes(String label)
@@ -69,7 +69,11 @@ public class Constants
   public static final String FILENAME_TINY_ASTEROID_4                       = "tiny4.png";
   public static final String FILENAME_BAR_HEALTH                            = "bar_health.png";
   public static final String FILENAME_BAR_SHIELD                            = "bar_shield.png";
-  public static final String FILENAME_BAR_FRAME                             = "barframe.png";
+
+  public static final String FILENAME_BAR_FRAME_10                          = "barframe_10.png";
+  public static final String FILENAME_BAR_FRAME_20                          = "barframe_20.png";
+  public static final String FILENAME_BAR_FRAME_40                          = "barframe_40.png";
+
   public static final String FILENAME_HUD_THE_BOMB_ICON                     = "hud_radioactive.png";
   public static final String FILENAME_HUD_SUPERSHIELD_ICON                  = "hud_supershield.png";
   public static final String FILENAME_PLASMA_SHOT                           = "plasmashot.png";
@@ -98,9 +102,6 @@ public class Constants
   public static final String FILENAME_SPACESHIP_THRUST1                     = "spaceship_thrust1.png";
   public static final String FILENAME_SPACESHIP_THRUST2                     = "spaceship_thrust2.png";
 
-  //  public static final String FILENAME_SPACESHIP_THRUST                      = "ship_thrust.png";
-  //  public static final String FILENAME_SPACESHIP_THRUST_2                    = "ship_thrust2.png";  
-
   public static final String FILENAME_UFO                                   = "ufo.png";
   public static final String FILENAME_UFO_SHORTY                            = "ufo_shorty.png";
   public static final String FILENAME_UFO_SHIELD_WEAK                       = "ufo_shield_weak.png";
@@ -111,11 +112,11 @@ public class Constants
   public static final String FILENAME_UFO_SHORTY_SHOT                       = "ufoshot2.png";
 
   // Indices for the spaceship image array
-  public static final int IMAGE_SPACESHIP_INDEX = 0;
-  public static final int IMAGE_SPACESHIP_SHIELD_INDEX = 1;
-  public static final int IMAGE_SPACESHIP_THRUST1_INDEX = 2;
-  public static final int IMAGE_SPACESHIP_THRUST2_INDEX = 3;  
-  
+  public static final int    IMAGE_SPACESHIP_INDEX                          = 0;
+  public static final int    IMAGE_SPACESHIP_SHIELD_INDEX                   = 1;
+  public static final int    IMAGE_SPACESHIP_THRUST1_INDEX                  = 2;
+  public static final int    IMAGE_SPACESHIP_THRUST2_INDEX                  = 3;
+
   // Fonts used in the Introduction screen
   public static final Font   FONT_INTRO_SCREEN_MAIN_TITLE                   = new Font("Verdana", Font.BOLD, 36);
   public static final Font   FONT_INTRO_SCREEN_MAIN_CONTROLS                = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 20);
@@ -171,7 +172,7 @@ public class Constants
 
   // General Game Constants
   public static final int    STARTING_LEVEL                                 = 0;
-  public static final int    STARTING_NUMBER_OF_ASTEROIDS                   = 1;
+  public static final int    STARTING_NUMBER_OF_ASTEROIDS                   = 15;                                                      // Was 1
   public static final int    MAX_NUMBER_ASTEROIDS_ON_SCREEN                 = 20;
 
   public static final String DOT_DOT_DOT                                    = "...";
@@ -183,15 +184,15 @@ public class Constants
   public static final int    NEXT_LEVEL_INTERVAL                            = 3000;
   public static final int    DEFAULT_DAMAGE_AMOUNT                          = 1;
   public static final int    UFO_DAMAGE_AMOUNT                              = 4;
-  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                    = 10;   // Was 10
-  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                   = 15;   // Was 15
+  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                    = 10;                                                      // Was 10
+  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                   = 15;                                                      // Was 15
 
   // Constants used for player entity 
   public static final int    INVULNERABILITY_INTERVAL                       = 3000;
   public static final int    SHIP_STARTING_HEALTH                           = 40;
   public static final int    SHIP_STARTING_SHIELD                           = 40;
-  public static final int    SHIP_STARTING_SUPER_SHIELD                     = 2;  // Was 2
-  public static final int    SHIP_STARTING_THE_BOMBS                        = 0;  // Was O
+  public static final int    SHIP_STARTING_SUPER_SHIELD                     = 2;                                                       // Was 2
+  public static final int    SHIP_STARTING_THE_BOMBS                        = 0;                                                       // Was O
   public static final int    SHIP_DEFAULT_ACCELERATION                      = 1;                                                       // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
   public static final int    SHIP_INCREASED_ACCELERATION                    = 2;
   public static final double SHIP_MAX_VELOCITY                              = 200;                                                     // Was originally 5
@@ -222,6 +223,9 @@ public class Constants
   public static final int    POWERUP_SUPER_SHIELD_VALUE                     = 1;
   public static final int    POWERUP_THE_BOMB_VALUE                         = 1;
 
+  public static final int    POWERUP_INCREASE_HEALTH_TO_20_LIMIT            = 50000;
+  public static final int    POWERUP_INCREASE_HEALTH_TO_40_LIMIT            = 200000;
+  
   // UFO Constants
   public static final int    UFO_SPEED                                      = 150;
   public static final int    UFO_SHOT_INTERVAL                              = 750;
@@ -234,7 +238,7 @@ public class Constants
   public static final int    UFO_SPAWN_PROBABILITY                          = 50;
   public static final int    UFO_TOTAL_EVENTS_TO_SPAWN                      = 10000;
   public static final long   UFO_MIN_TIME_BETWEEN_LAUNCHES                  = 10000;
-  public static final long   UFO_MIN_UFO_LAUNCH_LEVEL                       = 5;      // Was 5
+  public static final long   UFO_MIN_UFO_LAUNCH_LEVEL                       = 5;                                                       // Was 5
   public static final long   UFO_TIME_BETWEEN_SHIELD_HITS                   = 750;
 
   public static final long   UFO_SHORTY_TIME_BETWEEN_HITS                   = 50;

@@ -6,6 +6,8 @@ public interface IAttribute
   
   public int getValue();
 
+  // TODO: Think about adding another method setLimit(int upperlimit), which can be used to set attribute max values such as health and shields for instance.
+  
   public void setValue(int value);
 
   public void incrementByAmount(int amount);
