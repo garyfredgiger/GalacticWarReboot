@@ -5,18 +5,20 @@ import galacticwarreboot.Constants;
 public class AttributeHealth extends AttributeBase
 {
   private int currentHealth;
-  private int healthLimit;
+  private int healthCapacity;
   
   // TODO: May need to add another method to define the limit of the attribute
   
   public AttributeHealth()
   {
-    setValue(0);
+    this(Constants.SHIP_INITIAL_HEALTH, Constants.SHIP_INITIAL_HEALTH);
   }
 
-  public AttributeHealth(int level)
+  public AttributeHealth(int initialHealthValue, int initialHealthCapacity)
   {
-    setValue(level);
+    // NOTE: limit needs to be set before value
+    setLimit(initialHealthCapacity);
+    setValue(initialHealthValue);
   }
   
   @Override
@@ -29,10 +31,10 @@ public class AttributeHealth extends AttributeBase
   public void setValue(int value)
   {
     //if (value > Constants.SHIP_STARTING_HEALTH)
-    if (value > healthLimit)
+    if (value > healthCapacity)
     {
       //value = Constants.SHIP_STARTING_HEALTH;
-      value = healthLimit;
+      value = healthCapacity;
     }
     
     if (value < 0)
@@ -54,10 +56,10 @@ public class AttributeHealth extends AttributeBase
     currentHealth += amount;
     
     //if (currentHealth > Constants.SHIP_STARTING_HEALTH)
-    if (currentHealth > healthLimit)
+    if (currentHealth > healthCapacity)
     {
       //currentHealth = Constants.SHIP_STARTING_HEALTH;
-      currentHealth = healthLimit;
+      currentHealth = healthCapacity;
     }
   }
 
@@ -92,17 +94,19 @@ public class AttributeHealth extends AttributeBase
   @Override
   public void setLimit(int limit)
   {
+    System.out.println("Limit is: " + limit);
     if (limit < 0)
     {
-      healthLimit = 0;
+      healthCapacity = 0;
     }
     
-    healthLimit = limit;
+    healthCapacity = limit;
+    System.out.println("healthCapacity is now: " + healthCapacity);
   }
 
   @Override
   public int getLimit()
   {
-    return healthLimit;
+    return healthCapacity;
   }
 }

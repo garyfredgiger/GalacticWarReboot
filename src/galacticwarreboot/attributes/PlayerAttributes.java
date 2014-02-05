@@ -50,13 +50,12 @@ public class PlayerAttributes
 
   public void setLimit(Constants.AttributeType powerupType, int value)
   {
-    //powerups.get(powerupType).setLimit(value);
+    powerups.get(powerupType).setLimit(value);
   }
 
   public int getLimit(Constants.AttributeType powerupType)
   {
-    //return powerups.get(powerupType).getLimit();
-    return 0;
+    return powerups.get(powerupType).getLimit();
   }
   
   public void setValue(Constants.AttributeType powerupType, int value)

@@ -659,12 +659,12 @@ public class Asteroids extends GameEngine
           // Not sure if these will be power-ups or actual bonuses that the player earns when 
         case POWERUP_INCREASE_HEALTH_CAPACITY:
         case POWERUP_INCREASE_SHIELD_CAPACITY:
-          
-//          Constants.AttributeType attributeTypeForIncreaseCapacity = ((PowerupEntity) entity2).getAttributeType();
-//          ((PlayerEntity) entity1).incrementByAmount(attributeTypeForIncreaseCapacity, ((PowerupEntity) entity2).getValue());
-//          System.out.println("Player collided with INCREASED HEALTH CAPACITY powerup. Health Capacity now " + ((PlayerEntity) entity1).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH));
+          System.out.print("Player collided with a powerup of type: " + ((PowerupEntity) entity2).getPowerupType() + " with value of " + ((PowerupEntity) entity2).getValue());
+          Constants.AttributeType attributeTypeForIncreaseCapacity = ((PowerupEntity) entity2).getAttributeType();
+          ((PlayerEntity) entity1).setLimit(attributeTypeForIncreaseCapacity, ((PowerupEntity) entity2).getValue());
+          System.out.println(". Health Capacity now " + ((PlayerEntity) entity1).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH));
           break;
-          
+
         // TODO: Have two more powerups that increase shield and health capacity, when invoked they will be applied to the shield and heath attribute
           
         case POWERUP_250:
@@ -1144,9 +1144,9 @@ public class Asteroids extends GameEngine
 
       case 11:
         // Spawn Increase health capacity
-//        System.out.println("Spawned Powerup INCREASE HEALTH CAPACITY.");
-//        powerup = new PowerupIncreasedHealthCapacityTo20(this.imageObserver);
-//        powerup.setImage(this.powerupIncreaseHealthCapacity.getImage());
+        System.out.println("Spawned Powerup INCREASE HEALTH CAPACITY.");
+        powerup = new PowerupIncreasedHealthCapacityTo20(this.imageObserver);
+        powerup.setImage(this.powerupIncreaseHealthCapacity.getImage());
         break;
       default:
         // Possibly spawn some of the common power ups here if special case ones do not spawn

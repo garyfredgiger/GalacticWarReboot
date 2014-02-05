@@ -58,7 +58,7 @@ public class PlayerEntity extends EntityImage
     position.set(homePosition);
   }
 
-  public void setlimit(Constants.AttributeType powerupType, int value)
+  public void setLimit(Constants.AttributeType powerupType, int value)
   {
     attributes.setLimit(powerupType, value);
   }

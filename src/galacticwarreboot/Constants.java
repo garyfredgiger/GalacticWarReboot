@@ -6,16 +6,53 @@ import java.awt.Font;
 
 public class Constants
 {
-  // Possibly have two new powerups increase health capacity and increase shield capacity
+  // Possibly have two new power-ups increase health capacity and increase shield capacity
   public static enum PowerUpType
   {
-    POWERUP_SHIELD, POWERUP_HEALTH, POWERUP_FIREPOWER, POWERUP_SUPER_SHIELD, POWERUP_FULL_HEALTH, POWERUP_FULL_SHIELD, POWERUP_THE_BOMB, POWERUP_THRUST, POWERUP_INCREASE_HEALTH_CAPACITY, POWERUP_INCREASE_SHIELD_CAPACITY, POWERUP_250, POWERUP_500, POWERUP_1000, UNDEFINED
+    POWERUP_SHIELD("POWERUP_SHIELD"), 
+    POWERUP_HEALTH("POWERUP_HEALTH"), 
+    POWERUP_FIREPOWER("POWERUP_FIREPOWER"), 
+    POWERUP_SUPER_SHIELD("POWERUP_SUPER_SHIELD"), 
+    POWERUP_FULL_HEALTH("POWERUP_FULL_HEALTH"), 
+    POWERUP_FULL_SHIELD("POWERUP_FULL_SHIELD"), 
+    POWERUP_THE_BOMB("POWERUP_THE_BOMB"), 
+    POWERUP_THRUST("POWERUP_THRUST"), 
+    POWERUP_INCREASE_HEALTH_CAPACITY("POWERUP_INCREASE_HEALTH_CAPACITY"), 
+    POWERUP_INCREASE_SHIELD_CAPACITY("POWERUP_INCREASE_SHIELD_CAPACITY"), 
+    POWERUP_250("POWERUP_250"), 
+    POWERUP_500("POWERUP_500"), 
+    POWERUP_1000("POWERUP_1000"), 
+    UNDEFINED("UNDEFINED");
+    
+    private String type;
+    
+    PowerUpType(String str)
+    {
+      type = str;
+    }
+    
+    public String toString()
+    {
+      return type;
+    }
   }
 
   // TODO: I will need a power-up to attribute type mapping
   public static enum AttributeType
   {
-    ATTRIBUTE_SHIELD, ATTRIBUTE_HEALTH, ATTRIBUTE_FIREPOWER, ATTRIBUTE_SUPER_SHIELD, ATTRIBUTE_THE_BOMB, ATTRIBUTE_THRUST, UNDEFINED
+    ATTRIBUTE_SHIELD("ATTRIBUTE_SHIELD"), ATTRIBUTE_HEALTH("ATTRIBUTE_HEALTH"), ATTRIBUTE_FIREPOWER("ATTRIBUTE_FIREPOWER"), ATTRIBUTE_SUPER_SHIELD("ATTRIBUTE_SUPER_SHIELD"), ATTRIBUTE_THE_BOMB("ATTRIBUTE_THE_BOMB"), ATTRIBUTE_THRUST("ATTRIBUTE_THRUST"), UNDEFINED("UNDEFINED");
+    
+    private String type;
+    
+    AttributeType(String str)
+    {
+      type = str;
+    }
+    
+    public String toString()
+    {
+      return type;
+    }
   }
 
   // TODO: Should there be a attribute type?
@@ -191,7 +228,7 @@ public class Constants
 
   // Constants used for player entity 
   public static final int    INVULNERABILITY_INTERVAL                       = 3000;
-  public static final int    SHIP_INITIAL_HEALTH                            = 40;
+  public static final int    SHIP_INITIAL_HEALTH                            = 10;
   public static final int    SHIP_HEALTH_CAPACITY_INCREASE_TO_20            = 20;
   public static final int    SHIP_HEALTH_CAPACITY_INCREASE_TO_40            = 40;
 
