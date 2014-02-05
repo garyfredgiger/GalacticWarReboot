@@ -67,4 +67,18 @@ public class AttributeThrust implements IAttribute
     return true;
   }
 
+  @Override
+  public void setLimit(int limit)
+  {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public int getLimit()
+  {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
 }

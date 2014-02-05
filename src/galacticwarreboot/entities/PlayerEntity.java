@@ -15,8 +15,9 @@ public class PlayerEntity extends EntityImage
   private PlayerAttributes attributes;
   private Position2D homePosition; 
 
-  private boolean displayShield;
-  private boolean displayThrust;
+  // Variables that indicate whether to draw the shields and thrust given the current user key strokes.
+  private boolean drawShield;
+  private boolean drawThrust;
 
   EntityImage[] spaceshipImages;
   
@@ -28,7 +29,7 @@ public class PlayerEntity extends EntityImage
     
     // Be safe, initialize the variables
     attributes = new PlayerAttributes();
-    attributes.initialize();
+    //attributes.initialize();
 
     this.spaceshipImages = spaceshipImages;
   }
@@ -57,6 +58,16 @@ public class PlayerEntity extends EntityImage
     position.set(homePosition);
   }
 
+  public void setlimit(Constants.AttributeType powerupType, int value)
+  {
+    attributes.setLimit(powerupType, value);
+  }
+
+  public int getLimit(Constants.AttributeType powerupType)
+  {
+    return attributes.getValue(powerupType);
+  }
+  
   public void setValue(Constants.AttributeType powerupType, int value)
   {
     attributes.setValue(powerupType, value);
@@ -89,8 +100,8 @@ public class PlayerEntity extends EntityImage
   
   public void applyPlayerControlsToDisplayRespectiveImages(boolean shield, boolean thrust)
   {
-    displayShield = shield; 
-    displayThrust = thrust;
+    drawShield = shield; 
+    drawThrust = thrust;
   }
   
   @Override
@@ -109,11 +120,13 @@ public class PlayerEntity extends EntityImage
   @Override
   public void draw(Graphics2D g)
   {
+    // Draw the player ship
     super.draw(g);
     
     if (isAlive() && isVisible())
     {
-      if (displayShield)
+      // If the player is pressing the shield button, display the shield around the player ship
+      if (drawShield)
       {
         if (this.isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
         {
@@ -121,7 +134,8 @@ public class PlayerEntity extends EntityImage
         }
       }
       
-      if (displayThrust)
+      // If the player is applying thrust, draw the respective thrust image 
+      if (drawThrust)
       {
         if (this.getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
         {

@@ -82,4 +82,15 @@ public class AttributeFirePower extends AttributeBase
     // NOTE: Not used in for this attribute
     return false;
   }
+
+  @Override
+  public void setLimit(int limit)
+  { 
+  }
+
+  @Override
+  public int getLimit()
+  {
+    return 0;
+  }
 }

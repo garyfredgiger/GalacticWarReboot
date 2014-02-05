@@ -28,6 +28,7 @@ import galacticwarreboot.powerups.PowerupFirePower;
 import galacticwarreboot.powerups.PowerupFullHealth;
 import galacticwarreboot.powerups.PowerupFullShield;
 import galacticwarreboot.powerups.PowerupHealth;
+import galacticwarreboot.powerups.PowerupIncreasedHealthCapacityTo20;
 import galacticwarreboot.powerups.PowerupShield;
 import galacticwarreboot.powerups.PowerupSuperShield;
 import galacticwarreboot.powerups.PowerupTheBomb;
@@ -113,7 +114,8 @@ public class Asteroids extends GameEngine
   EntityImage                 powerupFullHealth;
   EntityImage                 powerupFullShield;
   EntityImage                 powerupAutoShield;
-  EntityImage                 powerupThrust;                    
+  EntityImage                 powerupThrust;                
+  EntityImage                 powerupIncreaseHealthCapacity;
   EntityImage[]               ufo = new EntityImage[4];
   EntityImage                 ufoShorty;
   EntityImage                 ufoShot;
@@ -244,6 +246,9 @@ public class Asteroids extends GameEngine
     powerupFullHealth = loadImage(Constants.FILENAME_POWERUP_FULL_HEALTH);
     powerupFullShield = loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
     powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
+    
+    powerupIncreaseHealthCapacity = loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY);
+    
     ufo[0] = loadImage(Constants.FILENAME_UFO);
     ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_WEAK);
     ufo[2] = loadImage(Constants.FILENAME_UFO_SHIELD_OK);
@@ -339,7 +344,7 @@ public class Asteroids extends GameEngine
 
       case PLAYING:
 
-        // If there is no more health remaining for the player ship, it needs to be 
+        // If there is no more health remaining for the player ship, the player needs to be marked dead. 
         if (!((PlayerEntity) getPlayer()).isEquipped(Constants.AttributeType.ATTRIBUTE_HEALTH))
         {
           state = GameEngineConstants.GameState.PLAYER_DEAD;
@@ -636,8 +641,8 @@ public class Asteroids extends GameEngine
       switch (((PowerupEntity) entity2).getPowerupType())
       {
         case POWERUP_THRUST:
-          Constants.AttributeType attributeTypeTmp = ((PowerupEntity) entity2).getAttributeType();
-          ((PlayerEntity) entity1).setValue(attributeTypeTmp, ((PowerupEntity) entity2).getValue());
+          Constants.AttributeType attributeTypeForThrust = ((PowerupEntity) entity2).getAttributeType();
+          ((PlayerEntity) entity1).setValue(attributeTypeForThrust, ((PowerupEntity) entity2).getValue());
           break;
 
         case POWERUP_SHIELD:
@@ -651,6 +656,17 @@ public class Asteroids extends GameEngine
           ((PlayerEntity) entity1).incrementByAmount(attributeType, ((PowerupEntity) entity2).getValue());
           break;
 
+          // Not sure if these will be power-ups or actual bonuses that the player earns when 
+        case POWERUP_INCREASE_HEALTH_CAPACITY:
+        case POWERUP_INCREASE_SHIELD_CAPACITY:
+          
+//          Constants.AttributeType attributeTypeForIncreaseCapacity = ((PowerupEntity) entity2).getAttributeType();
+//          ((PlayerEntity) entity1).incrementByAmount(attributeTypeForIncreaseCapacity, ((PowerupEntity) entity2).getValue());
+//          System.out.println("Player collided with INCREASED HEALTH CAPACITY powerup. Health Capacity now " + ((PlayerEntity) entity1).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH));
+          break;
+          
+        // TODO: Have two more powerups that increase shield and health capacity, when invoked they will be applied to the shield and heath attribute
+          
         case POWERUP_250:
         case POWERUP_500:
         case POWERUP_1000:
@@ -1126,11 +1142,15 @@ public class Asteroids extends GameEngine
           }
         }
 
+      case 11:
+        // Spawn Increase health capacity
+//        System.out.println("Spawned Powerup INCREASE HEALTH CAPACITY.");
+//        powerup = new PowerupIncreasedHealthCapacityTo20(this.imageObserver);
+//        powerup.setImage(this.powerupIncreaseHealthCapacity.getImage());
+        break;
       default:
-
         // Possibly spawn some of the common power ups here if special case ones do not spawn
         // Common power-ups are health, shield, super shield, the bomb and point bonuses 
-        
         powerup = new PowerupHealth(this.imageObserver);
         powerup.setImage(powerupHealth.getImage());
     }

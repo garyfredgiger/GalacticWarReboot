@@ -28,9 +28,11 @@ public class AttributeHealth extends AttributeBase
   @Override
   public void setValue(int value)
   {
-    if (value > Constants.SHIP_STARTING_HEALTH)
+    //if (value > Constants.SHIP_STARTING_HEALTH)
+    if (value > healthLimit)
     {
-      value = Constants.SHIP_STARTING_HEALTH;
+      //value = Constants.SHIP_STARTING_HEALTH;
+      value = healthLimit;
     }
     
     if (value < 0)
@@ -51,9 +53,11 @@ public class AttributeHealth extends AttributeBase
     
     currentHealth += amount;
     
-    if (currentHealth > Constants.SHIP_STARTING_HEALTH)
+    //if (currentHealth > Constants.SHIP_STARTING_HEALTH)
+    if (currentHealth > healthLimit)
     {
-      currentHealth = Constants.SHIP_STARTING_HEALTH;
+      //currentHealth = Constants.SHIP_STARTING_HEALTH;
+      currentHealth = healthLimit;
     }
   }
 
@@ -83,5 +87,22 @@ public class AttributeHealth extends AttributeBase
   public boolean isEquipped()
   {
     return (currentHealth > 0 ? true : false);
+  }
+
+  @Override
+  public void setLimit(int limit)
+  {
+    if (limit < 0)
+    {
+      healthLimit = 0;
+    }
+    
+    healthLimit = limit;
+  }
+
+  @Override
+  public int getLimit()
+  {
+    return healthLimit;
   }
 }

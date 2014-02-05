@@ -87,4 +87,18 @@ public class AttributesShields extends AttributeBase
   {
     return (shield > 0 ? true : false);
   }
+
+  @Override
+  public void setLimit(int limit)
+  {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public int getLimit()
+  {
+    // TODO Auto-generated method stub
+    return 0;
+  }
 }

@@ -6,9 +6,10 @@ import java.awt.Font;
 
 public class Constants
 {
+  // Possibly have two new powerups increase health capacity and increase shield capacity
   public static enum PowerUpType
   {
-    POWERUP_SHIELD, POWERUP_HEALTH, POWERUP_FIREPOWER, POWERUP_SUPER_SHIELD, POWERUP_FULL_HEALTH, POWERUP_FULL_SHIELD, POWERUP_THE_BOMB, POWERUP_THRUST, POWERUP_250, POWERUP_500, POWERUP_1000, UNDEFINED
+    POWERUP_SHIELD, POWERUP_HEALTH, POWERUP_FIREPOWER, POWERUP_SUPER_SHIELD, POWERUP_FULL_HEALTH, POWERUP_FULL_SHIELD, POWERUP_THE_BOMB, POWERUP_THRUST, POWERUP_INCREASE_HEALTH_CAPACITY, POWERUP_INCREASE_SHIELD_CAPACITY, POWERUP_250, POWERUP_500, POWERUP_1000, UNDEFINED
   }
 
   // TODO: I will need a power-up to attribute type mapping
@@ -96,6 +97,7 @@ public class Constants
   public static final String FILENAME_POWERUP_SUPER_SHIELD                  = "powerup_supershield.png";
   public static final String FILENAME_POWERUP_ENGINE_2                      = "thrust2.png";
   public static final String FILENAME_SUPER_SHIELD                          = "supershield.png";
+  public static final String FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY      = "powerup_health_capacity_20.png";
 
   public static final String FILENAME_SPACESHIP                             = "spaceship.png";
   public static final String FILENAME_SPACESHIP_SHIELD                      = "spaceship_shields.png";
@@ -172,7 +174,7 @@ public class Constants
 
   // General Game Constants
   public static final int    STARTING_LEVEL                                 = 0;
-  public static final int    STARTING_NUMBER_OF_ASTEROIDS                   = 15;                                                      // Was 1
+  public static final int    STARTING_NUMBER_OF_ASTEROIDS                   = 1;
   public static final int    MAX_NUMBER_ASTEROIDS_ON_SCREEN                 = 20;
 
   public static final String DOT_DOT_DOT                                    = "...";
@@ -189,7 +191,10 @@ public class Constants
 
   // Constants used for player entity 
   public static final int    INVULNERABILITY_INTERVAL                       = 3000;
-  public static final int    SHIP_STARTING_HEALTH                           = 40;
+  public static final int    SHIP_INITIAL_HEALTH                            = 40;
+  public static final int    SHIP_HEALTH_CAPACITY_INCREASE_TO_20            = 20;
+  public static final int    SHIP_HEALTH_CAPACITY_INCREASE_TO_40            = 40;
+
   public static final int    SHIP_STARTING_SHIELD                           = 40;
   public static final int    SHIP_STARTING_SUPER_SHIELD                     = 2;                                                       // Was 2
   public static final int    SHIP_STARTING_THE_BOMBS                        = 0;                                                       // Was O
@@ -223,9 +228,9 @@ public class Constants
   public static final int    POWERUP_SUPER_SHIELD_VALUE                     = 1;
   public static final int    POWERUP_THE_BOMB_VALUE                         = 1;
 
-  public static final int    POWERUP_INCREASE_HEALTH_TO_20_LIMIT            = 50000;
-  public static final int    POWERUP_INCREASE_HEALTH_TO_40_LIMIT            = 200000;
-  
+  public static final int    POWERUP_INCREASE_HEALTH_TO_20_SCORE_LIMIT      = 50000;                                                   // When this score is reached, the player's health will be increased from 10 to 20
+  public static final int    POWERUP_INCREASE_HEALTH_TO_40_SCORE_LIMIT      = 200000;                                                  // When this score is reached, the player's health will be increased from 20 to 40
+
   // UFO Constants
   public static final int    UFO_SPEED                                      = 150;
   public static final int    UFO_SHOT_INTERVAL                              = 750;

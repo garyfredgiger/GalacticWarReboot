@@ -24,4 +24,10 @@ public abstract class AttributeBase implements IAttribute
   
   @Override
   public abstract boolean isEquipped();
+  
+  @Override
+  public abstract void setLimit(int limit);
+  
+  @Override
+  public abstract int getLimit();
 }
