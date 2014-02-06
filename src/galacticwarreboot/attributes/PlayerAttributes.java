@@ -46,7 +46,7 @@ public class PlayerAttributes
     powerups.get(AttributeType.ATTRIBUTE_HEALTH).setLimit(Constants.SHIP_INITIAL_HEALTH);
     powerups.get(AttributeType.ATTRIBUTE_SHIELD).setLimit(Constants.SHIP_INITIAL_SHIELD);
     
-    displayAttributes();
+    //displayAttributes();
   }
 
   public void setLimit(Constants.AttributeType powerupType, int value)
@@ -89,15 +89,15 @@ public class PlayerAttributes
     return powerups.get(powerupType).isEquipped();
   }
   
-  public void displayAttributes()
-  {
-    System.out.println("Player Attribute Values: ");
-    for (int i = 0; i < availableAttributes.length; i++)
-    {
-      System.out.println(attributeTypes[i].toString() + ":\t" +  powerups.get(attributeTypes[i]).getValue());
-    }
-    System.out.println("Health Capacity:\t" +  getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH));
-    System.out.println("Shield Capacity:\t" +  getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD));
-    System.out.println("Player Attribute Values DONE");
-  }
+//  public void displayAttributes()
+//  {
+//    System.out.println("Player Attribute Values: ");
+//    for (int i = 0; i < availableAttributes.length; i++)
+//    {
+//      System.out.println(attributeTypes[i].toString() + ":\t" +  powerups.get(attributeTypes[i]).getValue());
+//    }
+//    System.out.println("Health Capacity:\t" +  getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH));
+//    System.out.println("Shield Capacity:\t" +  getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD));
+//    System.out.println("Player Attribute Values DONE");
+//  }
 }

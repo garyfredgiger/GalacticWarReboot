@@ -67,7 +67,7 @@ public class PlayerEntity extends EntityImage
   public void setLimit(Constants.AttributeType powerupType, int value)
   {
     attributes.setLimit(powerupType, value);
-    attributes.displayAttributes();
+    //attributes.displayAttributes();
 
     if (getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) == Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20)
     {
