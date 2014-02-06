@@ -1,39 +1,56 @@
 package galacticwarreboot;
 
 import game.framework.entities.EntityImage;
+import game.framework.utilities.GameUtility;
 
 import java.awt.Font;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Constants
 {
   // Possibly have two new power-ups increase health capacity and increase shield capacity
   public static enum PowerUpType
   {
-    POWERUP_SHIELD("POWERUP_SHIELD"), 
-    POWERUP_HEALTH("POWERUP_HEALTH"), 
-    POWERUP_FIREPOWER("POWERUP_FIREPOWER"), 
-    POWERUP_SUPER_SHIELD("POWERUP_SUPER_SHIELD"), 
-    POWERUP_FULL_HEALTH("POWERUP_FULL_HEALTH"), 
-    POWERUP_FULL_SHIELD("POWERUP_FULL_SHIELD"), 
-    POWERUP_THE_BOMB("POWERUP_THE_BOMB"), 
-    POWERUP_THRUST("POWERUP_THRUST"), 
-    POWERUP_INCREASE_HEALTH_CAPACITY("POWERUP_INCREASE_HEALTH_CAPACITY"), 
-    POWERUP_INCREASE_SHIELD_CAPACITY("POWERUP_INCREASE_SHIELD_CAPACITY"), 
-    POWERUP_250("POWERUP_250"), 
-    POWERUP_500("POWERUP_500"), 
-    POWERUP_1000("POWERUP_1000"), 
-    UNDEFINED("UNDEFINED");
-    
+    POWERUP_SHIELD("POWERUP_SHIELD", 0), 
+    POWERUP_HEALTH("POWERUP_HEALTH", 1), 
+    POWERUP_FIREPOWER("POWERUP_FIREPOWER", 2), 
+    POWERUP_SUPER_SHIELD("POWERUP_SUPER_SHIELD", 3), 
+    POWERUP_FULL_HEALTH("POWERUP_FULL_HEALTH", 4), 
+    POWERUP_FULL_SHIELD("POWERUP_FULL_SHIELD", 5), 
+    POWERUP_THE_BOMB("POWERUP_THE_BOMB", 6), 
+    POWERUP_THRUST("POWERUP_THRUST", 7), 
+    POWERUP_INCREASE_HEALTH_CAPACITY("POWERUP_INCREASE_HEALTH_CAPACITY", 8), 
+    POWERUP_INCREASE_SHIELD_CAPACITY("POWERUP_INCREASE_SHIELD_CAPACITY", 9), 
+    POWERUP_250("POWERUP_250", 10), 
+    POWERUP_500("POWERUP_500", 11), 
+    POWERUP_1000("POWERUP_1000", 12), 
+    UNDEFINED("UNDEFINED", 13);
+
     private String type;
-    
-    PowerUpType(String str)
+    private int index; 
+    private static int randomIndex;
+
+    PowerUpType(String str, int index)
     {
-      type = str;
+      this.type = str;
+      this.index = index;
     }
-    
+
     public String toString()
     {
       return type;
+    }
+    
+    private static final List<PowerUpType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+    private static final int NUMBER_OF_POWERUP_TYPES = VALUES.size();
+
+    public static PowerUpType randomPowerupType()
+    {
+      randomIndex = GameUtility.random.nextInt(NUMBER_OF_POWERUP_TYPES - 1);
+      
+      return VALUES.get(randomIndex);
     }
   }
 
@@ -41,21 +58,19 @@ public class Constants
   public static enum AttributeType
   {
     ATTRIBUTE_SHIELD("ATTRIBUTE_SHIELD"), ATTRIBUTE_HEALTH("ATTRIBUTE_HEALTH"), ATTRIBUTE_FIREPOWER("ATTRIBUTE_FIREPOWER"), ATTRIBUTE_SUPER_SHIELD("ATTRIBUTE_SUPER_SHIELD"), ATTRIBUTE_THE_BOMB("ATTRIBUTE_THE_BOMB"), ATTRIBUTE_THRUST("ATTRIBUTE_THRUST"), UNDEFINED("UNDEFINED");
-    
+
     private String type;
-    
+
     AttributeType(String str)
     {
       type = str;
     }
-    
+
     public String toString()
     {
       return type;
     }
   }
-
-  // TODO: Should there be a attribute type?
 
   public static enum PlayerShotType
   {
@@ -134,7 +149,11 @@ public class Constants
   public static final String FILENAME_POWERUP_SUPER_SHIELD                  = "powerup_supershield.png";
   public static final String FILENAME_POWERUP_ENGINE_2                      = "thrust2.png";
   public static final String FILENAME_SUPER_SHIELD                          = "supershield.png";
-  public static final String FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY      = "powerup_health_capacity_20.png";
+  
+  public static final String FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20   = "powerup_health_capacity_20.png";
+  public static final String FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40   = "powerup_health_capacity_40.png";
+  public static final String FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_20   = "powerup_shield_capacity_20.png";
+  public static final String FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_40   = "powerup_shield_capacity_40.png";
 
   public static final String FILENAME_SPACESHIP                             = "spaceship.png";
   public static final String FILENAME_SPACESHIP_SHIELD                      = "spaceship_shields.png";
@@ -228,13 +247,17 @@ public class Constants
 
   // Constants used for player entity 
   public static final int    INVULNERABILITY_INTERVAL                       = 3000;
+  
   public static final int    SHIP_INITIAL_HEALTH                            = 10;
   public static final int    SHIP_HEALTH_CAPACITY_INCREASE_TO_20            = 20;
   public static final int    SHIP_HEALTH_CAPACITY_INCREASE_TO_40            = 40;
 
-  public static final int    SHIP_STARTING_SHIELD                           = 40;
+  public static final int    SHIP_INITIAL_SHIELD                            = 10;
+  public static final int    SHIP_SHIELD_CAPACITY_INCREASE_TO_20            = 20;
+  public static final int    SHIP_SHIELD_CAPACITY_INCREASE_TO_40            = 40;
+  
   public static final int    SHIP_STARTING_SUPER_SHIELD                     = 2;                                                       // Was 2
-  public static final int    SHIP_STARTING_THE_BOMBS                        = 0;                                                       // Was O
+  public static final int    SHIP_STARTING_THE_BOMBS                        = 1;                                                       // Was O
   public static final int    SHIP_DEFAULT_ACCELERATION                      = 1;                                                       // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
   public static final int    SHIP_INCREASED_ACCELERATION                    = 2;
   public static final double SHIP_MAX_VELOCITY                              = 200;                                                     // Was originally 5
@@ -265,8 +288,11 @@ public class Constants
   public static final int    POWERUP_SUPER_SHIELD_VALUE                     = 1;
   public static final int    POWERUP_THE_BOMB_VALUE                         = 1;
 
-  public static final int    POWERUP_INCREASE_HEALTH_TO_20_SCORE_LIMIT      = 50000;                                                   // When this score is reached, the player's health will be increased from 10 to 20
-  public static final int    POWERUP_INCREASE_HEALTH_TO_40_SCORE_LIMIT      = 200000;                                                  // When this score is reached, the player's health will be increased from 20 to 40
+  public static final int    HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT      = 15000;    // Was 50000
+  public static final int    HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT      = 75000;    // Was 200000
+
+  public static final int    SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT      = 10000;    // Possibly think about increasing this to 15K or 25K                           
+  public static final int    SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT      = 50000;    // Was 75000
 
   // UFO Constants
   public static final int    UFO_SPEED                                      = 150;

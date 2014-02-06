@@ -7,8 +7,6 @@ public class AttributeHealth extends AttributeBase
   private int currentHealth;
   private int healthCapacity;
   
-  // TODO: May need to add another method to define the limit of the attribute
-  
   public AttributeHealth()
   {
     this(Constants.SHIP_INITIAL_HEALTH, Constants.SHIP_INITIAL_HEALTH);
@@ -30,10 +28,8 @@ public class AttributeHealth extends AttributeBase
   @Override
   public void setValue(int value)
   {
-    //if (value > Constants.SHIP_STARTING_HEALTH)
     if (value > healthCapacity)
     {
-      //value = Constants.SHIP_STARTING_HEALTH;
       value = healthCapacity;
     }
     
@@ -55,10 +51,8 @@ public class AttributeHealth extends AttributeBase
     
     currentHealth += amount;
     
-    //if (currentHealth > Constants.SHIP_STARTING_HEALTH)
     if (currentHealth > healthCapacity)
     {
-      //currentHealth = Constants.SHIP_STARTING_HEALTH;
       currentHealth = healthCapacity;
     }
   }
@@ -94,14 +88,12 @@ public class AttributeHealth extends AttributeBase
   @Override
   public void setLimit(int limit)
   {
-    System.out.println("Limit is: " + limit);
     if (limit < 0)
     {
       healthCapacity = 0;
     }
     
     healthCapacity = limit;
-    System.out.println("healthCapacity is now: " + healthCapacity);
   }
 
   @Override

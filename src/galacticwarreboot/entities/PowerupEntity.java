@@ -48,8 +48,8 @@ public class PowerupEntity extends EntityImage
   {
     powerupType = type;
   }
-  
-  protected void setValue(int value)
+
+  public void setValue(int value)
   {
     this.value = value;
   }

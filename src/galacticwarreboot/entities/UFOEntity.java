@@ -152,7 +152,6 @@ public class UFOEntity extends EnemyEntity
     
     if (!ufoWentOffScreen)
     {
-      System.out.println("UFO did not move off screen and was killed by player. Point value was: " + getPointValue());
       ScoreManager.incrementScore(this.getPointValue());
     }
     

@@ -19,7 +19,7 @@ public class PlayerAttributes
    */
   private IAttribute[]                         availableAttributes    = new IAttribute[] { new AttributeFirePower(), new AttributeHealth(), new AttributesShields(), new AttributeSuperShields(), new AttributeTheBomb(), new AttributeThrust() };
   private AttributeType[]                      attributeTypes         = new AttributeType[] { AttributeType.ATTRIBUTE_FIREPOWER, AttributeType.ATTRIBUTE_HEALTH, AttributeType.ATTRIBUTE_SHIELD, AttributeType.ATTRIBUTE_SUPER_SHIELD, AttributeType.ATTRIBUTE_THE_BOMB, AttributeType.ATTRIBUTE_THRUST };
-  private Integer[]                            attributeDefaultValues = new Integer[] { Constants.SHIP_STARTING_FIREPOWER, Constants.SHIP_INITIAL_HEALTH, Constants.SHIP_STARTING_SHIELD, Constants.SHIP_STARTING_SUPER_SHIELD, Constants.SHIP_STARTING_THE_BOMBS, Constants.SHIP_DEFAULT_ACCELERATION };
+  private Integer[]                            attributeDefaultValues = new Integer[] { Constants.SHIP_STARTING_FIREPOWER, Constants.SHIP_INITIAL_HEALTH, Constants.SHIP_INITIAL_SHIELD, Constants.SHIP_STARTING_SUPER_SHIELD, Constants.SHIP_STARTING_THE_BOMBS, Constants.SHIP_DEFAULT_ACCELERATION };
   HashMap<Constants.AttributeType, IAttribute> powerups               = new HashMap<Constants.AttributeType, IAttribute>();
 
   public PlayerAttributes()
@@ -43,7 +43,8 @@ public class PlayerAttributes
       powerups.get(attributeTypes[i]).setValue(attributeDefaultValues[i]);
     }
     
-    powerups.get(attributeTypes[0]).setValue(Constants.SHIP_INITIAL_HEALTH);
+    powerups.get(AttributeType.ATTRIBUTE_HEALTH).setLimit(Constants.SHIP_INITIAL_HEALTH);
+    powerups.get(AttributeType.ATTRIBUTE_SHIELD).setLimit(Constants.SHIP_INITIAL_SHIELD);
     
     displayAttributes();
   }
@@ -88,13 +89,15 @@ public class PlayerAttributes
     return powerups.get(powerupType).isEquipped();
   }
   
-  private void displayAttributes()
+  public void displayAttributes()
   {
     System.out.println("Player Attribute Values: ");
     for (int i = 0; i < availableAttributes.length; i++)
     {
-      System.out.println(powerups.get(attributeTypes[i]).getValue());
+      System.out.println(attributeTypes[i].toString() + ":\t" +  powerups.get(attributeTypes[i]).getValue());
     }
+    System.out.println("Health Capacity:\t" +  getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH));
+    System.out.println("Shield Capacity:\t" +  getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD));
     System.out.println("Player Attribute Values DONE");
   }
 }

@@ -13,23 +13,27 @@ import game.framework.utilities.GameEngineConstants;
 public class PlayerEntity extends EntityImage
 {
   private PlayerAttributes attributes;
-  private Position2D homePosition; 
+  private Position2D       homePosition;
 
   // Variables that indicate whether to draw the shields and thrust given the current user key strokes.
-  private boolean drawShield;
-  private boolean drawThrust;
+  private boolean          drawShield;
+  private boolean          drawThrust;
 
-  EntityImage[] spaceshipImages;
-  
+  private int              shieldCapacityLevel;
+  private int              healthCapacityLevel;
+
+  EntityImage[]            spaceshipImages;
+
   // TODO: Add the image array to the 
   public PlayerEntity(ImageObserver imageObserver, EntityImage[] spaceshipImages)
   {
     super(imageObserver, GameEngineConstants.EntityTypes.PLAYER);
     homePosition = new Position2D();
-    
-    // Be safe, initialize the variables
+
     attributes = new PlayerAttributes();
-    //attributes.initialize();
+
+    shieldCapacityLevel = 0;
+    healthCapacityLevel = 0;
 
     this.spaceshipImages = spaceshipImages;
   }
@@ -47,9 +51,11 @@ public class PlayerEntity extends EntityImage
    */
   @Override
   public void reset()
-  {    
+  {
     attributes.initialize();
     moveToHomePosition();
+    shieldCapacityLevel = 0;
+    healthCapacityLevel = 0;
     super.reset();
   }
 
@@ -61,13 +67,32 @@ public class PlayerEntity extends EntityImage
   public void setLimit(Constants.AttributeType powerupType, int value)
   {
     attributes.setLimit(powerupType, value);
+    attributes.displayAttributes();
+
+    if (getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) == Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20)
+    {
+      healthCapacityLevel = 1;
+    }
+    else if (getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) == Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40)
+    {
+      healthCapacityLevel = 2;
+    }
+
+    if (getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD) == Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_20)
+    {
+      shieldCapacityLevel = 1;
+    }
+    else if (getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD) == Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_40)
+    {
+      shieldCapacityLevel = 2;
+    }
   }
 
   public int getLimit(Constants.AttributeType powerupType)
   {
-    return attributes.getValue(powerupType);
+    return attributes.getLimit(powerupType);
   }
-  
+
   public void setValue(Constants.AttributeType powerupType, int value)
   {
     attributes.setValue(powerupType, value);
@@ -92,18 +117,38 @@ public class PlayerEntity extends EntityImage
   {
     attributes.toggleFlag(powerupType);
   }
-  
+
   public boolean isEquipped(Constants.AttributeType powerupType)
   {
     return attributes.isEquipped(powerupType);
   }
-  
+
   public void applyPlayerControlsToDisplayRespectiveImages(boolean shield, boolean thrust)
   {
-    drawShield = shield; 
+    drawShield = shield;
     drawThrust = thrust;
   }
-  
+
+  public int getShieldCapacity()
+  {
+    return getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD);
+  }
+
+  public int getHealthCapacity()
+  {
+    return getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH);
+  }
+
+  public int getShieldContainerIndex()
+  {
+    return shieldCapacityLevel;
+  }
+
+  public int getHealthContainerIndex()
+  {
+    return healthCapacityLevel;
+  }
+
   @Override
   public void kill()
   {
@@ -116,13 +161,13 @@ public class PlayerEntity extends EntityImage
     // A call to the parent method will clear both the visible and dead flags of the player entity.
     super.kill();
   }
-  
+
   @Override
   public void draw(Graphics2D g)
   {
     // Draw the player ship
     super.draw(g);
-    
+
     if (isAlive() && isVisible())
     {
       // If the player is pressing the shield button, display the shield around the player ship
@@ -133,7 +178,7 @@ public class PlayerEntity extends EntityImage
           g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_SHIELD_INDEX].getImage(), at, imageObserver);
         }
       }
-      
+
       // If the player is applying thrust, draw the respective thrust image 
       if (drawThrust)
       {

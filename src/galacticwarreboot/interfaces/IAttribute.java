@@ -2,6 +2,8 @@ package galacticwarreboot.interfaces;
 
 public interface IAttribute
 {  
+  // TODO: Possible need an initialize method that can be called to reset the attribute
+  
   public int getValue();
   
   public void setValue(int value);

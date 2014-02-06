@@ -48,7 +48,6 @@ public class UFOStrongEntity extends UFOEntity
       {
         if (this.position.x > endingXPosition)
         {
-          System.out.println("updatePosition - Strong::UFO Just went off RIGHT side of screen. Ready to Kill it off. Setting ufoWentOffScreen flag.");
           ufoWentOffScreen = true;
         }
       }
@@ -58,7 +57,6 @@ public class UFOStrongEntity extends UFOEntity
         // If the entity is moving left, check the case where it moves off the right side of the screen, when it does kill it off
         if ((this.position.x + this.getWidth()) < endingXPosition)
         {
-          System.out.println("updatePosition - Strong::UFO Just went off LEFT side of screen. Setting ufoWentOffScreen flag.");
           ufoWentOffScreen = true;
         }
       }
@@ -72,20 +70,17 @@ public class UFOStrongEntity extends UFOEntity
   {
     if (ufoWentOffScreen)
     {
-      System.out.println("UFO STRONG KILL::UFO is now off screen. Killing it!");
       super.kill();
     }
 
     // Give the UFO a little time to recover between hits. This will give the appearance of strength
     if (System.currentTimeMillis() < (lastHitTime + Constants.UFO_TIME_BETWEEN_SHIELD_HITS))
     {
-      System.out.println("STRONG UFO Taking Damage!");
       return;
     }
     
     ufoStrength--;  
     lastHitTime = System.currentTimeMillis();
-    System.out.println("STRONG UFO loses shield! Now at " + ufoStrength);
     switch(ufoStrength)
     {
       // Choose the proper shield to draw
@@ -96,12 +91,10 @@ public class UFOStrongEntity extends UFOEntity
         break;        
       // Shields gone, ufo gets hit one more time and it will be dead 
       case 0:
-        System.out.println("STRONG UFO shields are gone. One more hit and UFO is dead. ufoStrength = " + ufoStrength);
         this.shieldImage = null;
         break;
         
       default:
-        System.out.println("STRONG UFO Calling Super.kill()");
         super.kill();
     }
   }
@@ -114,6 +107,7 @@ public class UFOStrongEntity extends UFOEntity
     {
       if (this.shieldImage != null)
       {
+        // The transform was already applied to the call to the parent draw mwthod.
         //this.transform();
         g.drawImage(this.shieldImage, at, imageObserver);
       }

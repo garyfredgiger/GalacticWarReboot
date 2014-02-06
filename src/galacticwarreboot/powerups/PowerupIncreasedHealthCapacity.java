@@ -7,9 +7,9 @@ import galacticwarreboot.entities.PowerupEntity;
 
 // TODO: Not sure how this will be used. 
 
-public class PowerupIncreasedHealthCapacityTo20 extends PowerupEntity
+public class PowerupIncreasedHealthCapacity extends PowerupEntity
 {
-  public PowerupIncreasedHealthCapacityTo20(ImageObserver imageObserver)
+  public PowerupIncreasedHealthCapacity(ImageObserver imageObserver)
   {
     super(imageObserver);
     

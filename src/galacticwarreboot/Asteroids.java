@@ -3,6 +3,7 @@ package galacticwarreboot;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
@@ -28,7 +29,8 @@ import galacticwarreboot.powerups.PowerupFirePower;
 import galacticwarreboot.powerups.PowerupFullHealth;
 import galacticwarreboot.powerups.PowerupFullShield;
 import galacticwarreboot.powerups.PowerupHealth;
-import galacticwarreboot.powerups.PowerupIncreasedHealthCapacityTo20;
+import galacticwarreboot.powerups.PowerupIncreasedHealthCapacity;
+import galacticwarreboot.powerups.PowerupIncreasedShieldCapacity;
 import galacticwarreboot.powerups.PowerupShield;
 import galacticwarreboot.powerups.PowerupSuperShield;
 import galacticwarreboot.powerups.PowerupTheBomb;
@@ -80,7 +82,7 @@ public class Asteroids extends GameEngine
   private boolean             keyShield;
   private boolean             thrust;
   //private boolean             previousShieldState;
-  private long lastUFOCollisionTime;
+  private long                lastUFOCollisionTime;
 
   private boolean             requestSuperShield;
   private boolean             requestTheBomb;
@@ -114,9 +116,14 @@ public class Asteroids extends GameEngine
   EntityImage                 powerupFullHealth;
   EntityImage                 powerupFullShield;
   EntityImage                 powerupAutoShield;
-  EntityImage                 powerupThrust;                
-  EntityImage                 powerupIncreaseHealthCapacity;
-  EntityImage[]               ufo = new EntityImage[4];
+  EntityImage                 powerupThrust;
+
+  EntityImage                 powerupIncreaseHealthCapacity20;
+  EntityImage                 powerupIncreaseHealthCapacity40;
+  EntityImage                 powerupIncreaseShieldCapacity20;
+  EntityImage                 powerupIncreaseShieldCapacity40;
+
+  EntityImage[]               ufo                              = new EntityImage[4];
   EntityImage                 ufoShorty;
   EntityImage                 ufoShot;
   EntityImage                 ufoShortyShot;
@@ -129,8 +136,8 @@ public class Asteroids extends GameEngine
   EntityImage                 background;
 
   //boolean launchStrongUFO = false;
-  private int ufoTypeToLaunch;
-  
+  private int                 ufoTypeToLaunch;
+
   /*
    *  Game state management variables
    */
@@ -157,20 +164,20 @@ public class Asteroids extends GameEngine
   /*
    * Bounding boxes used for messages displayed to the screen
    */
-  private Rectangle2D                 boundsIntroductionTitleMsg;
-  private Rectangle2D                 boundsIntroductionStateTitle;
-  private Rectangle2D                 boundsIntroductionPowerupsMsg;
-  private Rectangle2D                 boundsGameStartMsg;
-  private Rectangle2D                 boundsPlayerDeadMsg;
-  private Rectangle2D                 boundsGameOverMsg;
-  private Rectangle2D                 boundsGamePlayingHUDMsgs;
-  private Rectangle2D                 boundsNextLevelMsg;
+  private Rectangle2D         boundsIntroductionTitleMsg;
+  private Rectangle2D         boundsIntroductionStateTitle;
+  private Rectangle2D         boundsIntroductionPowerupsMsg;
+  private Rectangle2D         boundsGameStartMsg;
+  private Rectangle2D         boundsPlayerDeadMsg;
+  private Rectangle2D         boundsGameOverMsg;
+  private Rectangle2D         boundsGamePlayingHUDMsgs;
+  private Rectangle2D         boundsNextLevelMsg;
 
-  private StaticText                  msgGameStartScreen;
-  
+  private StaticText          msgGameStartScreen;
+
   // Game Power-up Flags
-  private boolean firstIncreasedHealthPointMark;        // When user's score reaches above a certain score, he/she will get an increased health bonus from 10 to 20
-  private boolean secondIncreasedHealthPointMark;       // When user's score reaches above a certain score, he/she will get another increased health bonus from 20 to 40
+  private boolean             firstIncreasedHealthPointMark;                                              // When user's score reaches above a certain score, he/she will get an increased health bonus from 10 to 20
+  private boolean             secondIncreasedHealthPointMark;                                             // When user's score reaches above a certain score, he/she will get another increased health bonus from 20 to 40
 
   public Asteroids(IRender renderer, ImageObserver imageObserver)
   {
@@ -217,8 +224,6 @@ public class Asteroids extends GameEngine
     tinyAsteroids[3] = loadImage(Constants.FILENAME_TINY_ASTEROID_4);
     background = loadImage(Constants.FILENAME_BACKGROUND);
 
-    System.out.println("Size of barFrame = " + barFrame.length);
-    
     barFrame[0] = loadImage(Constants.FILENAME_BAR_FRAME_10);
     barFrame[1] = loadImage(Constants.FILENAME_BAR_FRAME_20);
     barFrame[2] = loadImage(Constants.FILENAME_BAR_FRAME_40);
@@ -246,9 +251,12 @@ public class Asteroids extends GameEngine
     powerupFullHealth = loadImage(Constants.FILENAME_POWERUP_FULL_HEALTH);
     powerupFullShield = loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
     powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
-    
-    powerupIncreaseHealthCapacity = loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY);
-    
+
+    powerupIncreaseHealthCapacity20 = loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20);
+    powerupIncreaseHealthCapacity40 = loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40);
+    powerupIncreaseShieldCapacity20 = loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_20);
+    powerupIncreaseShieldCapacity40 = loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_40);
+
     ufo[0] = loadImage(Constants.FILENAME_UFO);
     ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_WEAK);
     ufo[2] = loadImage(Constants.FILENAME_UFO_SHIELD_OK);
@@ -294,9 +302,9 @@ public class Asteroids extends GameEngine
     lastUFOCollisionTime = System.currentTimeMillis();
     //launchStrongUFO = false;
     ufoTypeToLaunch = 0;
-    
+
     msgGameStartScreen = new StaticText(Constants.MSG_GAME_START, Color.YELLOW, Constants.FONT_GAME_START_SCREEN, screenWidth, screenHeight);
-    
+
     firstIncreasedHealthPointMark = false;
     secondIncreasedHealthPointMark = false;
   }
@@ -368,26 +376,26 @@ public class Asteroids extends GameEngine
           {
             // Starting with level GAME_LAUNCH_SHORTY_UFO_LEVEL we only want to launch strong or shorty UFOs
             ufoTypeToLaunch = GameUtility.random.nextInt(2);
-            ufoTypeToLaunch = ufoTypeToLaunch+1;
+            ufoTypeToLaunch = ufoTypeToLaunch + 1;
           }
 
-          switch(ufoTypeToLaunch)
+          switch (ufoTypeToLaunch)
           {
             case 1:
               UFOStrongEntity newStrongUfo = new UFOStrongEntity(this.imageObserver, ufo, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
               addEnemy(newStrongUfo);
               break;
-              
+
             case 2:
-              UFOShorty newShortyUfo = new UFOShorty(this.imageObserver, ufoShorty, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), ufoShorty.getWidth(), screenWidth+ufoShorty.getWidth());
+              UFOShorty newShortyUfo = new UFOShorty(this.imageObserver, ufoShorty, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), ufoShorty.getWidth(), screenWidth + ufoShorty.getWidth());
               addEnemy(newShortyUfo);
               break;
-              
+
             default:
-                
-                UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo[0].getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
-                addEnemy(newUfo);
-          }          
+
+              UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo[0].getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+              addEnemy(newUfo);
+          }
         }
 
         // This will simulate a 3 second counter before detonating the bomb
@@ -476,7 +484,7 @@ public class Asteroids extends GameEngine
         // We do not want to warp the UFO
         return;
       }
-      
+
       if (((EnemyEntity) entity).getEnemyType() == Constants.EnemyTypes.UFO_SHORTY)
       {
         if (((UFOEntity) entity).shouldFireShot())
@@ -484,7 +492,7 @@ public class Asteroids extends GameEngine
           // TODO: See if this method stockUFOShortyBullet() can be combined with the method stockUFOBullet()
           addEnemyShot(stockUFOShortyBullet(entity.getCenter(), getPlayer().getCenter()));
         }
-        
+
         // We do not want to warp the UFO
         return;
       }
@@ -535,7 +543,7 @@ public class Asteroids extends GameEngine
             damageAmount = Constants.DEFAULT_DAMAGE_AMOUNT;
             breakAsteroid((EntityImage) entity2);
         }
-        
+
         // If shields are engaged reduce the shields by the damage amount 
         if (shieldsEngaged)  // TODO: Add flag for auto shields here
         {
@@ -548,7 +556,7 @@ public class Asteroids extends GameEngine
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_FIREPOWER, 1);   // A collision with anything reduces the firepower by 1
           entity1.setVelocity(0, 0);                    // Stop the player ship when it hits an enemy. This adds some realism.
         }
-        
+
         // Only kill off the entity if it is either a UFO or ASTEROID, hence why it is in this condition body
         entity2.kill();
       }
@@ -569,15 +577,15 @@ public class Asteroids extends GameEngine
         {
           ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_HEALTH, 1);
         }
-        
+
         // Only kill off the entity if it is an ENEMY_SHOT, hence why it is in this condition body
         entity2.kill();
       }
 
       // Kill off the player entity
       // NOTE: This call will only kill the player if the players health runs out
-      entity1.kill();              
-      
+      entity1.kill();
+
       // NOTE: If the call entity2.kill() was called from here, it would kill off any entity2 regardless of type
     }
 
@@ -594,7 +602,7 @@ public class Asteroids extends GameEngine
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
         //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
-        
+
         switch (((EnemyEntity) entity2).getEnemyType())
         {
           case ASTEROID_BIG:
@@ -614,7 +622,7 @@ public class Asteroids extends GameEngine
         {
           entity1.kill();
         }
-        
+
         // NOTE: All enemy entities point values will be added to the player's score inside of each entity's kill
         //       method since a call to the kill method here may not kill the enemy depending on what type of enemy
         //       it is (e.g., a UFO).
@@ -636,7 +644,7 @@ public class Asteroids extends GameEngine
     if (entity2.getEntityType() == GameEngineConstants.EntityTypes.POWER_UP)
     {
       //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((PowerupEntity)entity2).getPowerupType());
-      
+
       // NOTE: If entity2 is a powerup then entity 1 is the player entity      
       switch (((PowerupEntity) entity2).getPowerupType())
       {
@@ -656,17 +664,13 @@ public class Asteroids extends GameEngine
           ((PlayerEntity) entity1).incrementByAmount(attributeType, ((PowerupEntity) entity2).getValue());
           break;
 
-          // Not sure if these will be power-ups or actual bonuses that the player earns when 
         case POWERUP_INCREASE_HEALTH_CAPACITY:
         case POWERUP_INCREASE_SHIELD_CAPACITY:
-          System.out.print("Player collided with a powerup of type: " + ((PowerupEntity) entity2).getPowerupType() + " with value of " + ((PowerupEntity) entity2).getValue());
-          Constants.AttributeType attributeTypeForIncreaseCapacity = ((PowerupEntity) entity2).getAttributeType();
-          ((PlayerEntity) entity1).setLimit(attributeTypeForIncreaseCapacity, ((PowerupEntity) entity2).getValue());
-          System.out.println(". Health Capacity now " + ((PlayerEntity) entity1).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH));
+          Constants.AttributeType attributeTypeForIncreaseCapacityShield = ((PowerupEntity) entity2).getAttributeType();
+          ((PlayerEntity) entity1).setLimit(attributeTypeForIncreaseCapacityShield, ((PowerupEntity) entity2).getValue());
+          ((PlayerEntity) entity1).setValue(attributeTypeForIncreaseCapacityShield, ((PowerupEntity) entity2).getValue());
           break;
 
-        // TODO: Have two more powerups that increase shield and health capacity, when invoked they will be applied to the shield and heath attribute
-          
         case POWERUP_250:
         case POWERUP_500:
         case POWERUP_1000:
@@ -748,7 +752,7 @@ public class Asteroids extends GameEngine
           applyThrust();
         }
 
-        ((PlayerEntity) getPlayer()).applyPlayerControlsToDisplayRespectiveImages(keyShield, thrust);        
+        ((PlayerEntity) getPlayer()).applyPlayerControlsToDisplayRespectiveImages(keyShield, thrust);
 
         if (requestSuperShield)
         {
@@ -818,7 +822,8 @@ public class Asteroids extends GameEngine
 
         // TODO: If is here where the different users
         // Draw player health bar
-        g.drawImage(barFrame[2].getImage(), screenWidth - barFrame[2].getWidth() - 20, 18, this.imageObserver);
+        int healthBarIndex = ((PlayerEntity)getPlayer()).getHealthContainerIndex();
+        g.drawImage(barFrame[healthBarIndex].getImage(), screenWidth - barFrame[2].getWidth() - 20, 18, this.imageObserver);
         for (int n = 0; n < ((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_HEALTH); n++)
         {
           int dx = (screenWidth - barFrame[2].getWidth() - 18) + n * 5;
@@ -832,7 +837,8 @@ public class Asteroids extends GameEngine
         g.drawString(Constants.MSG_GAME_PLAYING_HEALTH, (int) (screenWidth - barFrame[2].getWidth() - 20 - boundsGamePlayingHUDMsgs.getWidth()), 30);
 
         // Draw player shield bar
-        g.drawImage(barFrame[2].getImage(), screenWidth - barFrame[2].getWidth() - 20, 33, this.imageObserver);
+        int shieldBarIndex = ((PlayerEntity)getPlayer()).getShieldContainerIndex();
+        g.drawImage(barFrame[shieldBarIndex].getImage(), screenWidth - barFrame[2].getWidth() - 20, 33, this.imageObserver);
         for (int n = 0; n < ((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SHIELD); n++)
         {
           int dx = (screenWidth - barFrame[2].getWidth() - 18) + n * 5;
@@ -1059,7 +1065,8 @@ public class Asteroids extends GameEngine
    */
 
   // Create a random powerup at the supplied sprite location
-  private void spawnPowerup(double xPos, double yPos)
+  //private void spawnPowerup(double xPos, double yPos)
+  private void spawnPowerup(Position2D position)
   {
     // Only a few tiny sprites spit out a power-up
     int n = GameUtility.random.nextInt(Constants.POWERUP_TOTAL_EVENTS_TO_SPAWN);
@@ -1071,111 +1078,286 @@ public class Asteroids extends GameEngine
 
     PowerupEntity powerup = null; //= new PowerupEntity(this.imageObserver);
 
-    int randomPowerupType = GameUtility.random.nextInt(Constants.PowerUpType.values().length - 1);
+    //int randomPowerupType = GameUtility.random.nextInt(Constants.PowerUpType.values().length - 1);
+    
+    Constants.PowerUpType randomPowerupType =  Constants.PowerUpType.randomPowerupType();
+    
+    // TODO: Choose a random type
+
     switch (randomPowerupType)
     {
-      case 0:
-        powerup = new PowerupShield(this.imageObserver);
-        powerup.setImage(powerupShield.getImage());
-        break;
+      // The cases in this switch statement will be the special cases where certian powerups are generate if certain conditions are true      
+      
+      case POWERUP_FULL_HEALTH:
 
-      case 1:
-        powerup = new PowerupHealth(this.imageObserver);
-        powerup.setImage(powerupHealth.getImage());
-        break;
-
-      case 2:
-        // TODO: Only spawn a gun if the player has less than 5 guns
-        powerup = new PowerupFirePower(this.imageObserver);
-        powerup.setImage(powerupGun[0].getImage());
-        break;
-
-      case 3:
-        powerup = new Powerup250Points(this.imageObserver);
-        powerup.setImage(powerup250.getImage());
-        break;
-
-      case 4:
-        powerup = new Powerup500Points(this.imageObserver);
-        powerup.setImage(powerup500.getImage());
-        break;
-
-      case 5:
-        powerup = new Powerup1000Points(this.imageObserver);
-        powerup.setImage(powerup1000.getImage());
-        break;
-
-      case 6:
-        powerup = new PowerupSuperShield(this.imageObserver);
-        powerup.setImage(this.powerupSuperShield.getImage());
-        break;
-
-      case 7:
-        powerup = new PowerupTheBomb(this.imageObserver);
-        powerup.setImage(this.powerupTheBomb.getImage());
-        break;
-
-      case 8:
-        // TODO: Only spawn full health if the player has less than full health.
+        // Only spawn a health or full health if the player has less than full health.
         // TODO: Consider only spawning full health if the player has less than half health.
-        powerup = new PowerupFullHealth(this.imageObserver);
-        powerup.setImage(this.powerupFullHealth.getImage());
+        if (((PlayerEntity)getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_HEALTH) < ((PlayerEntity)getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH))
+        {
+          // Since the player current health is less than the max, generate a full health power-up
+          powerup = createPowerup(randomPowerupType, null, position, -1);
+          break;
+        }
+
+        // Otherwise, spawn a different power-up
+        powerup = createPowerup(Constants.PowerUpType.POWERUP_250, null, position, -1);
         break;
 
-      case 9:
-        // TODO: Only spawn full health if the player has less than full shields.
-        // TODO: Consider only spawning full health if the player has less than half shields.
-        powerup = new PowerupFullShield(this.imageObserver);
-        powerup.setImage(this.powerupFullShield.getImage());
+      case POWERUP_FULL_SHIELD:
+        
+        // Only spawn full health if the player has less than full health.
+        // TODO: Consider only spawning full health if the player has less than half health.
+        if (((PlayerEntity)getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SHIELD) < ((PlayerEntity)getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD))
+        {
+          // Since the player current health is less than the max, generate a full health power-up
+          powerup = createPowerup(randomPowerupType, null, position, -1);
+          break;
+        }
+
+        // Otherwise, spawn a different power-up
+        powerup = createPowerup(Constants.PowerUpType.POWERUP_500, null, position, -1);
         break;
 
-      case 10:
-        // Only spawn this power-up if the player does not already have increased thrust.
-        // Otherwise the default case is executed, which gives the player health.
+      case POWERUP_THRUST:
+        
+        // Only spawn thrust increase power-up if the player does not already have increased thrust.
         if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_DEFAULT_ACCELERATION)
         {
           if (currentLevel > 5)
           {
-            powerup = new PowerupThrust(this.imageObserver);
-            powerup.setImage(this.powerupThrust.getImage());
+            powerup = createPowerup(randomPowerupType, null, position, -1);            
             break;
           }
         }
-
-      case 11:
-        // Spawn Increase health capacity
-        System.out.println("Spawned Powerup INCREASE HEALTH CAPACITY.");
-        powerup = new PowerupIncreasedHealthCapacityTo20(this.imageObserver);
-        powerup.setImage(this.powerupIncreaseHealthCapacity.getImage());
+        
+        // Otherwise, spawn a different power-up
+        powerup = createPowerup(Constants.PowerUpType.POWERUP_1000, null, position, -1);
         break;
+
+      case POWERUP_FIREPOWER:
+
+        if (((PlayerEntity)getPlayer()).getValue(AttributeType.ATTRIBUTE_FIREPOWER) < Constants.SHIP_MAX_FIREPOWER)
+        {
+          powerup = createPowerup(randomPowerupType, null, position, -1);
+          break;
+        }
+        
+        // Otherwise, spawn a different power-up
+        powerup = createPowerup(Constants.PowerUpType.POWERUP_SUPER_SHIELD, null, position, -1);
+        break;  
+
+      case POWERUP_INCREASE_HEALTH_CAPACITY:
+        
+        switch (((PlayerEntity) getPlayer()).getHealthCapacity())
+        {
+          // If players current health capacity is the initial value, spawn the next level. 
+          case Constants.SHIP_INITIAL_HEALTH:
+            
+            if (ScoreManager.getScore() > Constants.HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT)
+            {
+              powerup = createPowerup(randomPowerupType, this.powerupIncreaseHealthCapacity20.getImage(), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
+              break;
+            }
+            
+          case Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20:
+            
+            if (ScoreManager.getScore() > Constants.HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT)
+            {
+              powerup = createPowerup(randomPowerupType, this.powerupIncreaseHealthCapacity40.getImage(), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40);
+              break;
+            }
+
+          default:
+            // Create another power-up since it is pointless to create an increase shield powerup.
+            powerup = createPowerup(Constants.PowerUpType.POWERUP_SUPER_SHIELD, null, position, -1);
+        }
+        break;
+        
+      case POWERUP_INCREASE_SHIELD_CAPACITY:
+        
+        System.out.print("Attempting to spawn a " + randomPowerupType.toString() + " powerup...");
+        
+        switch (((PlayerEntity) getPlayer()).getShieldCapacity())
+        {
+          // If players current shield capacity is the initial value, increase to the next level. 
+          case Constants.SHIP_INITIAL_SHIELD:
+            
+            if (ScoreManager.getScore() > Constants.SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT)
+            {
+              powerup = createPowerup(randomPowerupType, this.powerupIncreaseShieldCapacity20.getImage(), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
+              break;
+            }
+
+          // If players current shield capacity is the 2nd level value, increase to the next level.
+          case Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_20:  
+
+            // Only increase it if the respective score level is reached 
+            if (ScoreManager.getScore() > Constants.SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT)
+            {
+              powerup = createPowerup(randomPowerupType, this.powerupIncreaseShieldCapacity40.getImage(), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40);
+              break;
+            }
+            
+          default:
+            // Create another power-up since it is pointless to create an increase shield powerup.
+            powerup = createPowerup(Constants.PowerUpType.POWERUP_THE_BOMB, null, position, -1);      
+        }        
+
+        break;
+
+      // These are common power-ups that have no special conditions that need to be in place before being spawned
+      case POWERUP_SHIELD:
+      case POWERUP_HEALTH:      
+      case POWERUP_SUPER_SHIELD:
+      case POWERUP_THE_BOMB:
+      case POWERUP_250:
+      case POWERUP_500:
+      case POWERUP_1000:      
       default:
-        // Possibly spawn some of the common power ups here if special case ones do not spawn
-        // Common power-ups are health, shield, super shield, the bomb and point bonuses 
+        
+        powerup = createPowerup(randomPowerupType, null, position, -1);            
+    }
+
+    this.addPowerup(powerup);
+  }
+
+  private PowerupEntity createPowerup(Constants.PowerUpType type, Image image, Position2D position, int value)
+  {
+    PowerupEntity powerup = null;
+    
+    // Note that the image parameter is still used even though a number of power-ups do not need it since it is 
+    //      obvious which image to use. Other power-ups will need to have an image specified if it can have 
+    //      different values such as the increased health and shield power-ups.
+
+    switch (type)
+    {  
+      case POWERUP_SHIELD:
+        powerup = new PowerupShield(this.imageObserver);
+        powerup.setImage(powerupShield.getImage());
+        break;
+
+      case POWERUP_FIREPOWER:
+        powerup = new PowerupFirePower(this.imageObserver);
+        powerup.setImage(powerupGun[0].getImage());
+        break;
+
+      case POWERUP_SUPER_SHIELD:
+        powerup = new PowerupSuperShield(this.imageObserver);
+        powerup.setImage(this.powerupSuperShield.getImage());
+        break;
+
+      case POWERUP_FULL_HEALTH:
+        powerup = new PowerupFullHealth(this.imageObserver);
+        powerup.setImage(this.powerupFullHealth.getImage());
+        break;
+
+      case POWERUP_FULL_SHIELD:
+        powerup = new PowerupFullShield(this.imageObserver);
+        powerup.setImage(this.powerupFullShield.getImage());
+        break;
+
+      case POWERUP_THE_BOMB:
+        powerup = new PowerupTheBomb(this.imageObserver);
+        powerup.setImage(this.powerupTheBomb.getImage());
+        break;
+
+      case POWERUP_THRUST:
+        powerup = new PowerupThrust(this.imageObserver);
+        powerup.setImage(this.powerupThrust.getImage());
+        break;
+
+      case POWERUP_INCREASE_HEALTH_CAPACITY:
+        powerup = new PowerupIncreasedHealthCapacity(this.imageObserver);
+        powerup.setValue(value);
+        if (image != null)
+        {
+          powerup.setImage(image);
+        }
+        break;
+
+      case POWERUP_INCREASE_SHIELD_CAPACITY:
+        powerup = new PowerupIncreasedShieldCapacity(this.imageObserver);
+        powerup.setValue(value);
+        if (image != null)
+        {
+          powerup.setImage(image);
+        }
+        break;
+
+      case POWERUP_250:
+        powerup = new Powerup250Points(this.imageObserver);
+        powerup.setImage(powerup250.getImage());
+        break;
+
+      case POWERUP_500:
+        powerup = new Powerup500Points(this.imageObserver);
+        powerup.setImage(powerup500.getImage());
+        break;
+        
+      case POWERUP_1000:
+        powerup = new Powerup1000Points(this.imageObserver);
+        powerup.setImage(powerup1000.getImage());
+        break;
+
+      // Spawning a health power-up is the default case
+      default:
+
         powerup = new PowerupHealth(this.imageObserver);
         powerup.setImage(powerupHealth.getImage());
     }
 
     // Make the power-up have the same position as the entity
-    powerup.setPosition(xPos, yPos);
+    powerup.setPosition(position);
 
     // Set rotation and direction angles of asteroid
     int faceAngle = GameUtility.random.nextInt((int) DEGREES_IN_A_CIRCLE);
     int moveAngle = GameUtility.random.nextInt((int) DEGREES_IN_A_CIRCLE);
     powerup.setFaceAngle(faceAngle);
     powerup.setMoveAngle(moveAngle);
-
     powerup.setRotationRate(Constants.POWERUP_ROTAITON_RATE);
 
     // Set velocity based on movement direction
     double angle = powerup.getMoveAngle() - 90;
     powerup.setVelocity(calcAngleMoveX(angle), calcAngleMoveY(angle));
     powerup.getVelocity().scaleThisVector(Constants.POWERUP_SPEED);
-
+    
+    // Set the lifespan
     powerup.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.POWERUP_LIFE_SPAN_IN_SECS));
 
-    this.addPowerup(powerup);
+    return powerup;
   }
-  
+
+  private PowerupEntity spawnCommonPowerups()
+  {
+    PowerupEntity powerup = null;
+    int n = GameUtility.random.nextInt(5); // 5 is the number of common pwerups
+
+    switch (n)
+    {
+    // Shield powerup
+      case 0:
+        powerup = new PowerupShield(this.imageObserver);
+        powerup.setImage(powerupShield.getImage());
+        break;
+
+      case 1:
+        break;
+
+      case 2:
+        break;
+
+      case 3:
+        break;
+
+      case 4:
+        break;
+
+      default:
+    }
+
+    return powerup;
+  }
+
   /*
    * Create a random "big" asteroid
    */
@@ -1483,26 +1665,26 @@ public class Asteroids extends GameEngine
     return bullet;
   }
 
-//Fire a shot at the player ship
- // NOTE: Since the bullets are round, we do not need to work with any angles like the plasma shots.
- private EntityImage stockUFOShortyBullet(Position2D ufoPos, Position2D playerPos)
- {
-   EntityImage bullet = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.ENEMY_SHOT);
-   bullet.setImage(ufoShortyShot.getImage());
+  //Fire a shot at the player ship
+  // NOTE: Since the bullets are round, we do not need to work with any angles like the plasma shots.
+  private EntityImage stockUFOShortyBullet(Position2D ufoPos, Position2D playerPos)
+  {
+    EntityImage bullet = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.ENEMY_SHOT);
+    bullet.setImage(ufoShortyShot.getImage());
 
-   // Compute bullet heading given current position of player and this ufo entity     
-   bullet.setVelocity(GameUtility.computeUnitVectorBetweenTwoPositions(ufoPos, playerPos).createScaledVector(Constants.UFO_SHORTY_SHOT_SPEED));
+    // Compute bullet heading given current position of player and this ufo entity     
+    bullet.setVelocity(GameUtility.computeUnitVectorBetweenTwoPositions(ufoPos, playerPos).createScaledVector(Constants.UFO_SHORTY_SHOT_SPEED));
 
-   // Set the bullet's starting position
-   double x = ufoPos.x - bullet.getWidth() / 2;
-   double y = ufoPos.y - bullet.getHeight() / 2;
-   bullet.setPosition(x, y);
+    // Set the bullet's starting position
+    double x = ufoPos.x - bullet.getWidth() / 2;
+    double y = ufoPos.y - bullet.getHeight() / 2;
+    bullet.setPosition(x, y);
 
-   // Initialize the life span and life age
-   bullet.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.UFO_SHORTY_BULLET_LIFE_SPAN_IN_SECS));
-   return bullet;
- }
-  
+    // Initialize the life span and life age
+    bullet.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.UFO_SHORTY_BULLET_LIFE_SPAN_IN_SECS));
+    return bullet;
+  }
+
   /*
    * Break up an asteroid into smaller pieces
    */
@@ -1539,7 +1721,7 @@ public class Asteroids extends GameEngine
 
       case ASTEROID_TINY:
         // Spawn a random powerup
-        spawnPowerup(entity.getPositionX(), entity.getPositionY());
+        spawnPowerup(entity.getPosition());
 
         // TODO: Draw small explosion
         break;
@@ -1581,8 +1763,9 @@ public class Asteroids extends GameEngine
 
       case ASTEROID_TINY:
         // Spawn a random powerup
-        spawnPowerup(entity.getPositionX(), entity.getPositionY());
-
+        //spawnPowerup(entity.getPositionX(), entity.getPositionY());
+        spawnPowerup(entity.getPosition());
+        
         // TODO: Draw small explosion
         break;
 
@@ -1715,7 +1898,8 @@ public class Asteroids extends GameEngine
     //doNotQuitPlayingGame = false;
     //currentShotType = SIConstants.ShotTypes.NORMAL;
 
-    // This should make the player sprite visible, alive and center the player image on the screen     
+    // This should make the player sprite visible, alive and center the player image on the screen
+    System.out.println("Resetting Player");
     getPlayer().reset();
 
     currentLevel = Constants.STARTING_LEVEL;
@@ -1752,7 +1936,7 @@ public class Asteroids extends GameEngine
     ((PlayerEntity) getPlayer()).moveToHomePosition();
     getPlayer().setVelocity(0.0, 0.0);  // Possibly move this call into the method above.
     getPlayer().setVisible(true);
-    
+
     initializeAsteroidsForCurrentLevel(currentLevel);
     ufoManager.reset(); // Possibly needed for the UFO that will appear in this game
   }
@@ -1809,11 +1993,11 @@ public class Asteroids extends GameEngine
   private void displayGameStartScreen(Graphics2D g)
   {
     msgGameStartScreen.draw(g);
-    
-//    g.setFont(Constants.FONT_GAME_START_SCREEN);
-//    boundsGameStartMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_START, g);
-//    g.setColor(Color.YELLOW);
-//    g.drawString(Constants.MSG_GAME_START, (int) ((screenWidth - boundsGameStartMsg.getWidth()) / 2), (int) ((screenHeight - boundsGameStartMsg.getHeight()) / 2));
+
+    //    g.setFont(Constants.FONT_GAME_START_SCREEN);
+    //    boundsGameStartMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_START, g);
+    //    g.setColor(Color.YELLOW);
+    //    g.drawString(Constants.MSG_GAME_START, (int) ((screenWidth - boundsGameStartMsg.getWidth()) / 2), (int) ((screenHeight - boundsGameStartMsg.getHeight()) / 2));
   }
 
   private void displayNextLevelScreen(Graphics2D g)
