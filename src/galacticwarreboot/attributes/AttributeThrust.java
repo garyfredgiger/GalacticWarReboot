@@ -9,13 +9,13 @@ public class AttributeThrust implements IAttribute
   
   public AttributeThrust()
   {
-    setValue(0);
+    initialize();
   }
-
-  public AttributeThrust(int level)
+  
+  @Override
+  public void initialize()
   {
-    //System.out.println("AttributeThrust Constructor called with a value of " + level +" added to Ship");
-    setValue(level);
+    setValue(Constants.SHIP_DEFAULT_ACCELERATION);
   }
   
   @Override

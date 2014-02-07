@@ -20,7 +20,6 @@ public class UFOStrongEntity extends UFOEntity
   public UFOStrongEntity(ImageObserver observer, EntityImage[] ufoImages, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
     super(observer, ufoImages[0].getImage(), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
-    System.out.println("Launching Super UFO.");
     this.ufoImages = ufoImages;
     ufoStrength = 3;
     this.shieldImage = ufoImages[ufoStrength].getImage();

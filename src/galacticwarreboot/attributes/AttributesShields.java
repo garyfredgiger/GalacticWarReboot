@@ -1,24 +1,25 @@
 package galacticwarreboot.attributes;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.interfaces.IAttribute;
 
-public class AttributesShields extends AttributeBase
+public class AttributesShields implements IAttribute
 {
   private int currentShield;
   private int shieldCapacity;
 
   public AttributesShields()
   {
-    this(Constants.SHIP_INITIAL_SHIELD, Constants.SHIP_INITIAL_SHIELD);
+    initialize();
   }
 
-  public AttributesShields(int initialShieldValue, int initialShieldCapacity)
+  @Override
+  public void initialize()
   {
-    // NOTE: limit needs to be set before value
-    setLimit(initialShieldCapacity);
-    setValue(initialShieldValue);
+    setLimit(Constants.SHIP_INITIAL_SHIELD);
+    setValue(Constants.SHIP_INITIAL_SHIELD);
   }
-
+  
   @Override
   public int getValue()
   {

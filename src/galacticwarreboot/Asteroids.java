@@ -519,7 +519,6 @@ public class Asteroids extends GameEngine
 
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
-        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
         // At this point the enemy is either an asteroid or a UFO
         int damageAmount = 0;
 
@@ -527,7 +526,6 @@ public class Asteroids extends GameEngine
         switch (((EnemyEntity) entity2).getEnemyType())
         {
           case UFO:
-            //System.out.print("UFO: Player before health " + ((PlayerEntity) entity1).getValue(AttributeType.ATTRIBUTE_HEALTH) + " ");
             if (System.currentTimeMillis() > (Constants.PLAYER_TIME_BETWEEN_REGISTERING_UFO_COLLISIONS + lastUFOCollisionTime))
             {
               // If the player collides with a UFO determine the damage amount (if shield are not engaged double damage is done to the players health)
@@ -566,7 +564,6 @@ public class Asteroids extends GameEngine
        */
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY_SHOT)
       {
-        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
         // If shields are engaged reduce the shields by the damage amount 
         if (shieldsEngaged) // OR: Player had auto shield and shield amount 
         {
@@ -601,8 +598,6 @@ public class Asteroids extends GameEngine
 
       if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY)
       {
-        //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
-
         switch (((EnemyEntity) entity2).getEnemyType())
         {
           case ASTEROID_BIG:
@@ -634,7 +629,6 @@ public class Asteroids extends GameEngine
       {
         if (entity2.getEntityType() == GameEngineConstants.EntityTypes.ENEMY_SHOT)
         {
-          //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((EnemyEntity)entity2).getEnemyType());
           entity2.kill();
         }
       }
@@ -643,8 +637,6 @@ public class Asteroids extends GameEngine
     // Handle player entity collision with powerup
     if (entity2.getEntityType() == GameEngineConstants.EntityTypes.POWER_UP)
     {
-      //System.out.println("Collision detected between " + entity1.getEntityType() + " and a " + ((PowerupEntity)entity2).getPowerupType());
-
       // NOTE: If entity2 is a powerup then entity 1 is the player entity      
       switch (((PowerupEntity) entity2).getPowerupType())
       {
@@ -1175,8 +1167,6 @@ public class Asteroids extends GameEngine
         
       case POWERUP_INCREASE_SHIELD_CAPACITY:
         
-        System.out.print("Attempting to spawn a " + randomPowerupType.toString() + " powerup...");
-        
         switch (((PlayerEntity) getPlayer()).getShieldCapacity())
         {
           // If players current shield capacity is the initial value, increase to the next level. 
@@ -1532,7 +1522,6 @@ public class Asteroids extends GameEngine
     // the players ship
     if ((x >= screenWidth * lowerHorizontalBufferFactor) && (x <= screenWidth * 0.5))
     {
-      //x += -entityWidth;
       x -= entityWidth;
     }
     else if ((x <= screenWidth * upperHorizontalBufferFactor) && (x >= screenWidth * 0.5))
@@ -1542,7 +1531,6 @@ public class Asteroids extends GameEngine
 
     if ((y >= screenHeight * lowerVerticalBufferFactor) && (y <= screenHeight * 0.5))
     {
-      //y += -entityHeight;
       y -= entityHeight;
     }
     else if ((y <= screenHeight * upperVerticalBufferFactor) && (y >= screenHeight * 0.5))
@@ -1899,7 +1887,6 @@ public class Asteroids extends GameEngine
     //currentShotType = SIConstants.ShotTypes.NORMAL;
 
     // This should make the player sprite visible, alive and center the player image on the screen
-    System.out.println("Resetting Player");
     getPlayer().reset();
 
     currentLevel = Constants.STARTING_LEVEL;

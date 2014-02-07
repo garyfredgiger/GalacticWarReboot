@@ -1,24 +1,25 @@
 package galacticwarreboot.attributes;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.interfaces.IAttribute;
 
-public class AttributeHealth extends AttributeBase
+public class AttributeHealth implements IAttribute
 {
   private int currentHealth;
   private int healthCapacity;
   
   public AttributeHealth()
   {
-    this(Constants.SHIP_INITIAL_HEALTH, Constants.SHIP_INITIAL_HEALTH);
-  }
-
-  public AttributeHealth(int initialHealthValue, int initialHealthCapacity)
-  {
-    // NOTE: limit needs to be set before value
-    setLimit(initialHealthCapacity);
-    setValue(initialHealthValue);
+    initialize();
   }
   
+  @Override
+  public void initialize()
+  {
+    setLimit(Constants.SHIP_INITIAL_HEALTH);
+    setValue(Constants.SHIP_INITIAL_HEALTH);
+  }
+
   @Override
   public int getValue()
   {

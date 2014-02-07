@@ -1,21 +1,23 @@
 package galacticwarreboot.attributes;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.interfaces.IAttribute;
 
-public class AttributeFirePower extends AttributeBase
+public class AttributeFirePower implements IAttribute
 {
   private int firePower;
 
   public AttributeFirePower()
   {
-    setValue(0);
+    initialize();
   }
 
-  public AttributeFirePower(int level)
+  @Override
+  public void initialize()
   {
-    setValue(level);
+    setValue(Constants.SHIP_STARTING_FIREPOWER);
   }
-  
+
   @Override
   public int getValue()
   {
