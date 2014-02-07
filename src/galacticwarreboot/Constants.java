@@ -292,13 +292,13 @@ public class Constants
   public static final int    POWERUP_THE_BOMB_VALUE                         = 1;
 
   public static final int    POWERUP_THRUST_2_MIN_LEVEL                     = 5;
-  public static final int    POWERUP_THRUST_3_MIN_LEVEL                     = 10;
+  public static final int    POWERUP_THRUST_3_MIN_LEVEL                     = 15;
   
-  public static final int    HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT      = 1500;    // Was 15000
-  public static final int    HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT      = 7500;    // Was 75000
+  public static final int    HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT      = 25000;    // Was 15000
+  public static final int    HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT      = 100000;    // Was 75000
 
-  public static final int    SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT      = 1000;    // Was 10000 Possibly think about increasing this to 15K or 25K                           
-  public static final int    SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT      = 5000;    // Was 50000
+  public static final int    SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT      = 15000;    // Was 10000 Possibly think about increasing this to 15K or 25K                           
+  public static final int    SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT      = 75000;    // Was 50000
 
   // UFO Constants
   public static final int    UFO_SPEED                                      = 150;
