@@ -99,11 +99,6 @@ public class Constants
 
   // Filenames of images used in the game
   public static final String FILENAME_BACKGROUND                            = "bluespace.png";
-  //  public static final String FILENAME_BIG_ASTEROID_1                        = "asteroid1.png";
-  //  public static final String FILENAME_BIG_ASTEROID_2                        = "asteroid2.png";
-  //  public static final String FILENAME_BIG_ASTEROID_3                        = "asteroid3.png";
-  //  public static final String FILENAME_BIG_ASTEROID_4                        = "asteroid4.png";
-  //  public static final String FILENAME_BIG_ASTEROID_5                        = "asteroid5.png";
 
   public static final String FILENAME_BIG_ASTEROID_1                        = "asteroid1_smaller.png";
   public static final String FILENAME_BIG_ASTEROID_2                        = "asteroid2_smaller.png";
@@ -133,7 +128,7 @@ public class Constants
   public static final String FILENAME_POWERUP_1000                          = "powerup_1000.png";
   public static final String FILENAME_POWERUP_500                           = "powerup_500.png";
   public static final String FILENAME_POWERUP_250                           = "powerup_250.png";
-  public static final String FILENAME_POWERUP_AUTO_SHIELD                   = "powerup_auto_shield.png";
+  //public static final String FILENAME_POWERUP_AUTO_SHIELD                   = "powerup_auto_shield.png";
   public static final String FILENAME_POWERUP_FULL_HEALTH                   = "powerup_cola_full_health_40x35.png";
   public static final String FILENAME_POWERUP_HEALTH                        = "powerup_cola.png";
   public static final String FILENAME_POWERUP_GUN                           = "powerup_gun.png";
@@ -147,7 +142,10 @@ public class Constants
   public static final String FILENAME_POWERUP_SHIELD_FULL_RESTORE           = "powerup_shield2_full_restore.png";
   public static final String FILENAME_POWERUP_SHIELD                        = "powerup_shield2.png";
   public static final String FILENAME_POWERUP_SUPER_SHIELD                  = "powerup_supershield.png";
+
   public static final String FILENAME_POWERUP_ENGINE_2                      = "thrust2.png";
+  public static final String FILENAME_POWERUP_ENGINE_3                      = "thrust3.png";  
+  
   public static final String FILENAME_SUPER_SHIELD                          = "supershield.png";
   
   public static final String FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20   = "powerup_health_capacity_20.png";
@@ -157,8 +155,10 @@ public class Constants
 
   public static final String FILENAME_SPACESHIP                             = "spaceship.png";
   public static final String FILENAME_SPACESHIP_SHIELD                      = "spaceship_shields.png";
+  
   public static final String FILENAME_SPACESHIP_THRUST1                     = "spaceship_thrust1.png";
   public static final String FILENAME_SPACESHIP_THRUST2                     = "spaceship_thrust2.png";
+  public static final String FILENAME_SPACESHIP_THRUST3                     = "spaceship_thrust3.png";
 
   public static final String FILENAME_UFO                                   = "ufo.png";
   public static final String FILENAME_UFO_SHORTY                            = "ufo_shorty.png";
@@ -174,6 +174,7 @@ public class Constants
   public static final int    IMAGE_SPACESHIP_SHIELD_INDEX                   = 1;
   public static final int    IMAGE_SPACESHIP_THRUST1_INDEX                  = 2;
   public static final int    IMAGE_SPACESHIP_THRUST2_INDEX                  = 3;
+  public static final int    IMAGE_SPACESHIP_THRUST3_INDEX                  = 4;
 
   // Fonts used in the Introduction screen
   public static final Font   FONT_INTRO_SCREEN_MAIN_TITLE                   = new Font("Verdana", Font.BOLD, 36);
@@ -259,7 +260,9 @@ public class Constants
   public static final int    SHIP_STARTING_SUPER_SHIELD                     = 2;                                                       // Was 2
   public static final int    SHIP_STARTING_THE_BOMBS                        = 1;                                                       // Was O
   public static final int    SHIP_DEFAULT_ACCELERATION                      = 1;                                                       // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
-  public static final int    SHIP_INCREASED_ACCELERATION                    = 2;
+  public static final int    SHIP_INCREASED_ACCELERATION_2                  = 2;
+  public static final int    SHIP_INCREASED_ACCELERATION_3                  = 3;
+  
   public static final double SHIP_MAX_VELOCITY                              = 200;                                                     // Was originally 5
   public static final double SHIP_MIN_VELOCITY                              = -SHIP_MAX_VELOCITY;
   public static final int    PLAYER_ROTATION_RATE                           = 200;
@@ -288,6 +291,9 @@ public class Constants
   public static final int    POWERUP_SUPER_SHIELD_VALUE                     = 1;
   public static final int    POWERUP_THE_BOMB_VALUE                         = 1;
 
+  public static final int    POWERUP_THRUST_2_MIN_LEVEL                     = 5;
+  public static final int    POWERUP_THRUST_3_MIN_LEVEL                     = 10;
+  
   public static final int    HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT      = 1500;    // Was 15000
   public static final int    HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT      = 7500;    // Was 75000
 

@@ -96,6 +96,7 @@ public class PlayerEntity extends EntityImage
   public void setValue(Constants.AttributeType powerupType, int value)
   {
     attributes.setValue(powerupType, value);
+    attributes.displayAttributes();
   }
 
   public int getValue(Constants.AttributeType powerupType)
@@ -182,13 +183,18 @@ public class PlayerEntity extends EntityImage
       // If the player is applying thrust, draw the respective thrust image 
       if (drawThrust)
       {
-        if (this.getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
+        switch(this.getValue(AttributeType.ATTRIBUTE_THRUST))
         {
-          g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST2_INDEX].getImage(), at, imageObserver);
-        }
-        else
-        {
-          g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST1_INDEX].getImage(), at, imageObserver);
+          case Constants.SHIP_INCREASED_ACCELERATION_2:
+            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST2_INDEX].getImage(), at, imageObserver);
+            break;
+            
+          case Constants.SHIP_INCREASED_ACCELERATION_3:
+            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST3_INDEX].getImage(), at, imageObserver);
+            break;
+          
+          default:
+            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST1_INDEX].getImage(), at, imageObserver);
         }
       }
     }

@@ -103,7 +103,7 @@ public class Asteroids extends GameEngine
   EntityImage[]               tinyAsteroids;
   EntityImage[]               barImage                         = new EntityImage[2];
   EntityImage[]               barFrame                         = new EntityImage[3];
-  EntityImage[]               shipImage                        = new EntityImage[4];
+  EntityImage[]               shipImage                        = new EntityImage[5];
 
   EntityImage[]               powerupGun                       = new EntityImage[5];
   EntityImage                 powerupShield;
@@ -115,8 +115,8 @@ public class Asteroids extends GameEngine
   EntityImage                 powerupTheBomb;
   EntityImage                 powerupFullHealth;
   EntityImage                 powerupFullShield;
-  EntityImage                 powerupAutoShield;
-  EntityImage                 powerupThrust;
+  //EntityImage                 powerupAutoShield;
+  EntityImage[]                 powerupThrust = new EntityImage[2];
 
   EntityImage                 powerupIncreaseHealthCapacity20;
   EntityImage                 powerupIncreaseHealthCapacity40;
@@ -243,14 +243,16 @@ public class Asteroids extends GameEngine
     powerup500 = loadImage(Constants.FILENAME_POWERUP_500);
     powerup1000 = loadImage(Constants.FILENAME_POWERUP_1000);
     powerupSuperShield = loadImage(Constants.FILENAME_POWERUP_SUPER_SHIELD);
-    powerupThrust = loadImage(Constants.FILENAME_POWERUP_ENGINE_2);
+    powerupThrust[0] = loadImage(Constants.FILENAME_POWERUP_ENGINE_2);
+    powerupThrust[1] = loadImage(Constants.FILENAME_POWERUP_ENGINE_3);
+
     superShield = loadImage(Constants.FILENAME_SUPER_SHIELD);
     hudSuperShield = loadImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON);
     powerupTheBomb = loadImage(Constants.FILENAME_POWERUP_THE_BOMB);
     hudTheBomb = loadImage(Constants.FILENAME_HUD_THE_BOMB_ICON);
     powerupFullHealth = loadImage(Constants.FILENAME_POWERUP_FULL_HEALTH);
     powerupFullShield = loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
-    powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
+    //powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
 
     powerupIncreaseHealthCapacity20 = loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20);
     powerupIncreaseHealthCapacity40 = loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40);
@@ -270,6 +272,7 @@ public class Asteroids extends GameEngine
     shipImage[Constants.IMAGE_SPACESHIP_SHIELD_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD);
     shipImage[Constants.IMAGE_SPACESHIP_THRUST1_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST1);
     shipImage[Constants.IMAGE_SPACESHIP_THRUST2_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST2);
+    shipImage[Constants.IMAGE_SPACESHIP_THRUST3_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST3);
 
     fireShot = false;
 
@@ -885,16 +888,14 @@ public class Asteroids extends GameEngine
         // Draw the auto shield icon along with amount
         //g.drawImage(powerupAutoShield.getImage(), 20, 145, this.imageObserver);
 
-        if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION)
+        if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION_2)
         {
-          g.drawImage(powerupThrust.getImage(), 20, 185, this.imageObserver);
+          g.drawImage(powerupThrust[0].getImage(), 20, 185, this.imageObserver);
         }
-
-        //        g.drawImage(powerupGun[0].getImage(), 20, 225, this.imageObserver);
-        //        g.drawImage(powerupGun[1].getImage(), 60, 225, this.imageObserver);
-        //        g.drawImage(powerupGun[2].getImage(), 100, 225, this.imageObserver);
-        //        g.drawImage(powerupGun[3].getImage(), 140, 225, this.imageObserver);
-        //        g.drawImage(powerupGun[4].getImage(), 180, 225, this.imageObserver);
+        else if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION_3)
+        {
+          g.drawImage(powerupThrust[1].getImage(), 20, 185, this.imageObserver);
+        }
 
         if (prepareTheBomb)
         {
@@ -1111,19 +1112,50 @@ public class Asteroids extends GameEngine
         break;
 
       case POWERUP_THRUST:
-        
-        // Only spawn thrust increase power-up if the player does not already have increased thrust.
-        if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_DEFAULT_ACCELERATION)
+
+        // If the player is not equipped with the best thruster so far, check if the player is eligible for a thruster power-up increase 
+        if (!((PlayerEntity) getPlayer()).isEquipped(AttributeType.ATTRIBUTE_THRUST))
         {
-          if (currentLevel > 5)
+          boolean spawnThrusterPowerup = false;
+          int thrusterLevel = 1;
+          int thrusterImageIndex = 1;
+          // Only spawn thrust increase power-up if the player does not already have increased thrust.
+          if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_DEFAULT_ACCELERATION)
           {
-            powerup = createPowerup(randomPowerupType, null, position, -1);            
+            // If the level is available for the thruster 2 increase, set flags and vars to spawn thruster 2 powerup
+            if (currentLevel >= Constants.POWERUP_THRUST_2_MIN_LEVEL)
+            {
+              //System.out.println("Player is eligible for thruster 2 powerup.");
+              spawnThrusterPowerup = true;
+              thrusterLevel = Constants.SHIP_INCREASED_ACCELERATION_2;
+              thrusterImageIndex = 0; //Constants.IMAGE_SPACESHIP_THRUST2_INDEX;
+            }
+          }
+          else if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST) == Constants.SHIP_INCREASED_ACCELERATION_2)
+          {
+            // If the level is available for the thruster 2 increase, set flags and vars to spawn thruster 2 powerup
+            if (currentLevel >= Constants.POWERUP_THRUST_3_MIN_LEVEL)
+            {
+              //System.out.println("Player is eligible for thruster 3 powerup.");
+              spawnThrusterPowerup = true;
+              thrusterLevel = Constants.SHIP_INCREASED_ACCELERATION_3;
+              thrusterImageIndex = 1; //Constants.IMAGE_SPACESHIP_THRUST3_INDEX;
+            }
+          }
+
+          if (spawnThrusterPowerup)
+          {
+            powerup = createPowerup(Constants.PowerUpType.POWERUP_THRUST, powerupThrust[thrusterImageIndex].getImage(), position, thrusterLevel);
             break;
           }
         }
-        
+//        else
+//        {
+//          System.out.println("Player has most powerful thruster.");
+//        }
+
         // Otherwise, spawn a different power-up
-        powerup = createPowerup(Constants.PowerUpType.POWERUP_1000, null, position, -1);
+        powerup = createPowerup(Constants.PowerUpType.POWERUP_HEALTH, null, position, -1);
         break;
 
       case POWERUP_FIREPOWER:
@@ -1253,7 +1285,11 @@ public class Asteroids extends GameEngine
 
       case POWERUP_THRUST:
         powerup = new PowerupThrust(this.imageObserver);
-        powerup.setImage(this.powerupThrust.getImage());
+        powerup.setValue(value);        
+        if (image != null)
+        {
+          powerup.setImage(image);
+        }
         break;
 
       case POWERUP_INCREASE_HEALTH_CAPACITY:
@@ -1313,37 +1349,6 @@ public class Asteroids extends GameEngine
     
     // Set the lifespan
     powerup.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.POWERUP_LIFE_SPAN_IN_SECS));
-
-    return powerup;
-  }
-
-  private PowerupEntity spawnCommonPowerups()
-  {
-    PowerupEntity powerup = null;
-    int n = GameUtility.random.nextInt(5); // 5 is the number of common pwerups
-
-    switch (n)
-    {
-    // Shield powerup
-      case 0:
-        powerup = new PowerupShield(this.imageObserver);
-        powerup.setImage(powerupShield.getImage());
-        break;
-
-      case 1:
-        break;
-
-      case 2:
-        break;
-
-      case 3:
-        break;
-
-      case 4:
-        break;
-
-      default:
-    }
 
     return powerup;
   }

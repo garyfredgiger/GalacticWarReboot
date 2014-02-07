@@ -13,7 +13,6 @@ public class PowerupThrust extends PowerupEntity
 
     this.setPowerupType(Constants.PowerUpType.POWERUP_THRUST);
     this.setAttributeType(Constants.AttributeType.ATTRIBUTE_THRUST);
-    this.setValue(Constants.SHIP_INCREASED_ACCELERATION);
-    //System.out.println("POWERUP Increased Thrust Spawned");
+    this.setValue(Constants.SHIP_DEFAULT_ACCELERATION);
   }
 }
