@@ -1,33 +1,37 @@
 package galacticwarreboot.attributes;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.interfaces.IAttribute;
 
-public class AttributeHealth extends AttributeBase
+public class AttributeHealth implements IAttribute
 {
-  private int health;
+  private int currentHealth;
+  private int healthCapacity;
   
   public AttributeHealth()
   {
-    setValue(0);
-  }
-
-  public AttributeHealth(int level)
-  {
-    setValue(level);
+    initialize();
   }
   
   @Override
+  public void initialize()
+  {
+    setLimit(Constants.SHIP_INITIAL_HEALTH);
+    setValue(Constants.SHIP_INITIAL_HEALTH);
+  }
+
+  @Override
   public int getValue()
   {
-    return health;
+    return currentHealth;
   }
 
   @Override
   public void setValue(int value)
   {
-    if (value > Constants.SHIP_STARTING_HEALTH)
+    if (value > healthCapacity)
     {
-      value = Constants.SHIP_STARTING_HEALTH;
+      value = healthCapacity;
     }
     
     if (value < 0)
@@ -35,7 +39,7 @@ public class AttributeHealth extends AttributeBase
       value = 0;
     }
     
-    health = value;
+    currentHealth = value;
   }
 
   @Override
@@ -46,11 +50,11 @@ public class AttributeHealth extends AttributeBase
       return;
     }
     
-    health += amount;
+    currentHealth += amount;
     
-    if (health > Constants.SHIP_STARTING_HEALTH)
+    if (currentHealth > healthCapacity)
     {
-      health = Constants.SHIP_STARTING_HEALTH;
+      currentHealth = healthCapacity;
     }
   }
 
@@ -62,11 +66,11 @@ public class AttributeHealth extends AttributeBase
       return;
     }
     
-    health -= amount;
+    currentHealth -= amount;
     
-    if (health < 0)
+    if (currentHealth < 0)
     {
-      health = 0;
+      currentHealth = 0;
     }
   }
 
@@ -79,6 +83,23 @@ public class AttributeHealth extends AttributeBase
   @Override
   public boolean isEquipped()
   {
-    return (health > 0 ? true : false);
+    return (currentHealth > 0 ? true : false);
+  }
+
+  @Override
+  public void setLimit(int limit)
+  {
+    if (limit < 0)
+    {
+      healthCapacity = 0;
+    }
+    
+    healthCapacity = limit;
+  }
+
+  @Override
+  public int getLimit()
+  {
+    return healthCapacity;
   }
 }

@@ -1,5 +1,10 @@
-package galacticwarreboot;
+package galacticwarreboot.entities;
 
+import galacticwarreboot.Constants;
+import galacticwarreboot.ScoreManager;
+import galacticwarreboot.UFOEntityManager;
+import galacticwarreboot.Constants.EnemyTypes;
+import game.framework.primitives.Vector2D;
 import game.framework.utilities.GameUtility;
 
 import java.awt.Image;
@@ -7,19 +12,19 @@ import java.awt.image.ImageObserver;
 
 public class UFOEntity extends EnemyEntity
 {
-  private int              endingXPosition;
-  private int              upperHorizontalLimit;
-  private int              lowerHorizontalLimit;
-  private int              leftVerticalLimit;
-  private int              rightVerticalLimit;
-  private boolean          movingRight;
-  private long             lastShotTime;
+  protected int            endingXPosition;
+  protected int            upperHorizontalLimit;
+  protected int            lowerHorizontalLimit;
+  protected int            leftVerticalLimit;
+  protected int            rightVerticalLimit;
+  protected boolean        movingRight;
+  protected long           lastShotTime;
+  protected boolean        ufoWentOffScreen;
 
   // TODO: Is this only needed in the constructor?
   private UFOEntityManager manager;
 
   public UFOEntity(ImageObserver observer, Image ufoImage, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
-  //public EntityUFO(ImageObserver observer, Image ufoImage, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
     super(observer);
 
@@ -41,6 +46,8 @@ public class UFOEntity extends EnemyEntity
     this.setEnemyType(Constants.EnemyTypes.UFO);
     this.setPointValue((GameUtility.random.nextInt(10) + 1) * 100);
 
+    ufoWentOffScreen = false;
+    
     lastShotTime = System.currentTimeMillis();
   }
 
@@ -96,6 +103,8 @@ public class UFOEntity extends EnemyEntity
       {
         if (this.position.x > endingXPosition)
         {
+          //System.out.println("updatePosition - UFO Entity::UFO Just went off RIGHT side of screen. Ready to Kill it off.");
+          ufoWentOffScreen = true;
           this.kill();
         }
       }
@@ -105,6 +114,8 @@ public class UFOEntity extends EnemyEntity
         // If the entity is moving left, check the case where it moves off the right side of the screen, when it does kill it off
         if ((this.position.x + this.getWidth()) < endingXPosition)
         {
+          //System.out.println("updatePosition - UFO Entity::UFO Just went off LEFT side of screen. Ready to Kill it off.");
+          ufoWentOffScreen = true;
           this.kill();
         }
       }
@@ -133,10 +144,17 @@ public class UFOEntity extends EnemyEntity
   @Override
   public void kill()
   {
+    //System.out.println("UFO Entity Kill. Resetting manager.");
     if (manager != null)
     {
       manager.reset();
     }
+    
+    if (!ufoWentOffScreen)
+    {
+      ScoreManager.incrementScore(this.getPointValue());
+    }
+    
     super.kill();
   }
 }

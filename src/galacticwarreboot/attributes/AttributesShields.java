@@ -1,39 +1,37 @@
 package galacticwarreboot.attributes;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.interfaces.IAttribute;
 
-public class AttributesShields extends AttributeBase
+public class AttributesShields implements IAttribute
 {
-  private int shield;
+  private int currentShield;
+  private int shieldCapacity;
 
   public AttributesShields()
   {
-    setValue(0);
+    initialize();
   }
 
-  public AttributesShields(int level)
+  @Override
+  public void initialize()
   {
-    setValue(level);
+    setLimit(Constants.SHIP_INITIAL_SHIELD);
+    setValue(Constants.SHIP_INITIAL_SHIELD);
   }
   
-//  @Override
-//  public void add(PowerupBase powerup)
-//  {
-//    
-//  }
-
   @Override
   public int getValue()
   {
-    return shield;
+    return currentShield;
   }
 
   @Override
   public void setValue(int value)
   {
-    if (value > Constants.SHIP_STARTING_SHIELD)
+    if (value > shieldCapacity)
     {
-      value = Constants.SHIP_STARTING_SHIELD;
+      value = shieldCapacity;
     }
     
     if (value < 0)
@@ -41,7 +39,7 @@ public class AttributesShields extends AttributeBase
       value = 0;
     }
     
-    shield = value;
+    currentShield = value;
   }
 
   @Override
@@ -52,11 +50,11 @@ public class AttributesShields extends AttributeBase
       return;
     }
     
-    shield += amount;
+    currentShield += amount;
     
-    if (shield > Constants.SHIP_STARTING_SHIELD)
+    if (currentShield > shieldCapacity)
     {
-      shield = Constants.SHIP_STARTING_SHIELD;
+      currentShield = shieldCapacity;
     }
   }
 
@@ -68,11 +66,11 @@ public class AttributesShields extends AttributeBase
       return;
     }
 
-    shield -= amount;
+    currentShield -= amount;
     
-    if (shield < 0)
+    if (currentShield < 0)
     {
-      shield = 0;
+      currentShield = 0;
     }
   }
   
@@ -85,6 +83,23 @@ public class AttributesShields extends AttributeBase
   @Override
   public boolean isEquipped()
   {
-    return (shield > 0 ? true : false);
+    return (currentShield > 0 ? true : false);
+  }
+
+  @Override
+  public void setLimit(int limit)
+  {
+    if (limit < 0)
+    {
+      shieldCapacity = 0;
+    }
+  
+    shieldCapacity = limit;
+  }
+
+  @Override
+  public int getLimit()
+  {
+    return shieldCapacity;
   }
 }

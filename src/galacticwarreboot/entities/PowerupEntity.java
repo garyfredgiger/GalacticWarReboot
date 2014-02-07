@@ -20,7 +20,7 @@ public class PowerupEntity extends EntityImage
   {
     super(imageObserver, EntityTypes.POWER_UP);
 
-    powerupType = Constants.PowerUpType.UNDEFINED;
+    //powerupType = Constants.PowerUpType.UNDEFINED;
     correspondingAttributeMapping = Constants.AttributeType.UNDEFINED;
   }
 
@@ -48,8 +48,8 @@ public class PowerupEntity extends EntityImage
   {
     powerupType = type;
   }
-  
-  protected void setValue(int value)
+
+  public void setValue(int value)
   {
     this.value = value;
   }

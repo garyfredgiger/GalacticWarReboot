@@ -1,18 +1,20 @@
-package galacticwarreboot;
+package galacticwarreboot.entities;
 
 import java.awt.image.ImageObserver;
 
+import galacticwarreboot.Constants;
+import galacticwarreboot.Constants.EnemyTypes;
 import game.framework.entities.EntityImage;
-import game.framework.utilities.GameEngineConstants;
+import game.framework.utilities.GameEngineConstants.EntityTypes;
 
 public class EnemyEntity extends EntityImage
 {
   private int pointValue;
-  private Constants.EnemyTypes enemyType;
+  private EnemyTypes enemyType;
 
   public EnemyEntity(ImageObserver observer)
   {
-    super(observer, GameEngineConstants.EntityTypes.ENEMY);
+    super(observer, EntityTypes.ENEMY);
   }
 
   public void doLogic()
@@ -28,7 +30,7 @@ public class EnemyEntity extends EntityImage
     return pointValue;
   }
 
-  public void setEnemyType(Constants.EnemyTypes type)
+  public void setEnemyType(EnemyTypes type)
   {
     enemyType = type;
   }

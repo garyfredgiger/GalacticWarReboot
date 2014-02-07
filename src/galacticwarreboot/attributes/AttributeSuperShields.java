@@ -1,17 +1,21 @@
 package galacticwarreboot.attributes;
 
-public class AttributeSuperShields extends AttributeBase
+import galacticwarreboot.Constants;
+import galacticwarreboot.interfaces.IAttribute;
+
+public class AttributeSuperShields implements IAttribute
 {
   private int superShield;
 
   public AttributeSuperShields()
   {
-    setValue(0);
+    initialize();
   }
 
-  public AttributeSuperShields(int level)
+  @Override
+  public void initialize()
   {
-    setValue(level);
+    setValue(Constants.SHIP_STARTING_SUPER_SHIELD);    
   }
   
   @Override
@@ -69,5 +73,19 @@ public class AttributeSuperShields extends AttributeBase
   public boolean isEquipped()
   {
     return (superShield > 0 ? true : false);
+  }
+
+  @Override
+  public void setLimit(int limit)
+  {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public int getLimit()
+  {
+    // TODO Auto-generated method stub
+    return 0;
   }
 }

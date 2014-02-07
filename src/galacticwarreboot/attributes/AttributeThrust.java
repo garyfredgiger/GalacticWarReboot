@@ -9,13 +9,13 @@ public class AttributeThrust implements IAttribute
   
   public AttributeThrust()
   {
-    setValue(0);
+    initialize();
   }
-
-  public AttributeThrust(int level)
+  
+  @Override
+  public void initialize()
   {
-    //System.out.println("AttributeThrust Constructor called with a value of " + level +" added to Ship");
-    setValue(level);
+    setValue(Constants.SHIP_DEFAULT_ACCELERATION);
   }
   
   @Override
@@ -27,17 +27,17 @@ public class AttributeThrust implements IAttribute
   @Override
   public void setValue(int value)
   {
-    //System.out.println("setValue Called with value of Increased Thrust of " + value + "");
-
     switch(value)
     {
-      case Constants.SHIP_INCREASED_ACCELERATION:
-        //System.out.println("Increased Thrust of " + Constants.SHIP_INCREASED_ACCELERATION +" added to Ship");
-        thrust = Constants.SHIP_INCREASED_ACCELERATION;
+      case Constants.SHIP_INCREASED_ACCELERATION_2:
+        thrust = Constants.SHIP_INCREASED_ACCELERATION_2;
+        break;
+        
+      case Constants.SHIP_INCREASED_ACCELERATION_3:
+        thrust = Constants.SHIP_INCREASED_ACCELERATION_3;
         break;
         
       default:
-        //System.out.println("Increased Thrust of " + Constants.SHIP_DEFAULT_ACCELERATION +" added to Ship");
         thrust = Constants.SHIP_DEFAULT_ACCELERATION;
     }
   }
@@ -63,8 +63,18 @@ public class AttributeThrust implements IAttribute
   @Override
   public boolean isEquipped()
   {
-    // NOTE: The ship always has a thruster. The issue is what is the power of the thruster
-    return true;
+    // If the player is equipped with the best thruster, return true...otherwise, return false. 
+    return (thrust == Constants.SHIP_INCREASED_ACCELERATION_3 ? true : false);    
+  }
+
+  @Override
+  public void setLimit(int limit)
+  {}
+
+  @Override
+  public int getLimit()
+  {
+    return 0;
   }
 
 }

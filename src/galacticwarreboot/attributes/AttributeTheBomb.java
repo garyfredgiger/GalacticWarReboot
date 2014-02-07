@@ -1,21 +1,23 @@
 package galacticwarreboot.attributes;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.interfaces.IAttribute;
 
-public class AttributeTheBomb extends AttributeBase
+public class AttributeTheBomb implements IAttribute
 {
   private int theBomb;
   
   public AttributeTheBomb()
   {
-    setValue(0);
+    initialize();
   }
 
-  public AttributeTheBomb(int level)
+  @Override
+  public void initialize()
   {
-    setValue(level);
+    setValue(Constants.SHIP_STARTING_THE_BOMBS);
   }
-  
+
   @Override
   public int getValue()
   {
@@ -57,7 +59,8 @@ public class AttributeTheBomb extends AttributeBase
     
     if (theBomb < 0)
     {
-      theBomb = Constants.SHIP_STARTING_THE_BOMBS;
+      //theBomb = Constants.SHIP_STARTING_THE_BOMBS;
+      theBomb = 0;
     }
   }
 
@@ -71,5 +74,19 @@ public class AttributeTheBomb extends AttributeBase
   public boolean isEquipped()
   {
     return ((theBomb > 0) ? true : false);
+  }
+
+  @Override
+  public void setLimit(int limit)
+  {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public int getLimit()
+  {
+    // TODO Auto-generated method stub
+    return 0;
   }
 }

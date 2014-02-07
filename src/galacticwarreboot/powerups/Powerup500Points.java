@@ -3,6 +3,7 @@ package galacticwarreboot.powerups;
 import java.awt.image.ImageObserver;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.ScoreManager;
 import galacticwarreboot.entities.PowerupEntity;
 
 public class Powerup500Points extends PowerupEntity
@@ -13,6 +14,12 @@ public class Powerup500Points extends PowerupEntity
     
     this.setPowerupType(Constants.PowerUpType.POWERUP_500);
     this.setValue(Constants.POWERUP_500_VALUE);
-    //System.out.println("POWERUP 500 Points Spawned");
+  }
+  
+  @Override
+  public void kill()
+  {
+    ScoreManager.incrementScore(this.getValue());
+    super.kill();
   }
 }

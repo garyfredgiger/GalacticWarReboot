@@ -1,6 +1,6 @@
 package galacticwarreboot.entities;
 
-import galacticwarreboot.EnemyEntity;
+import galacticwarreboot.ScoreManager;
 
 import java.awt.image.ImageObserver;
 
@@ -11,5 +11,12 @@ public class AsteroidEntity extends EnemyEntity
   public AsteroidEntity(ImageObserver observer)
   {
     super(observer);
+  }
+  
+  @Override
+  public void kill()
+  {
+    ScoreManager.incrementScore(this.getPointValue());
+    super.kill();
   }
 }
