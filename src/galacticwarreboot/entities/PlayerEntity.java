@@ -96,7 +96,7 @@ public class PlayerEntity extends EntityImage
   public void setValue(Constants.AttributeType powerupType, int value)
   {
     attributes.setValue(powerupType, value);
-    attributes.displayAttributes();
+    //attributes.displayAttributes();
   }
 
   public int getValue(Constants.AttributeType powerupType)
