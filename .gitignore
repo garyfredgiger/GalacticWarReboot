@@ -49,6 +49,8 @@ bin
 *.au
 *.mid
 *.wav
+*.ogg
+*.mp3
 
 ######################################
 # Ignore Logs and databases
