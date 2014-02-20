@@ -143,13 +143,6 @@ public class Asteroids extends GameEngine
   // Other vars. Not sure how to classify them.
   boolean playCountdownTimerSound;
   
-//  URL url1;
-//  URL url2;
-//  Clip clip1;
-//  Clip clip2;
-//  AudioInputStream ais1;
-//  AudioInputStream ais2;
-  
   /*
    *  Game state management variables
    */
@@ -1415,7 +1408,7 @@ public class Asteroids extends GameEngine
 
         switch (((PlayerEntity) getPlayer()).getHealthCapacity())
         {
-        // If players current health capacity is the initial value, spawn the next level. 
+          // If players current health capacity is the initial value, spawn the next level. 
           case Constants.SHIP_INITIAL_HEALTH:
 
             if (ScoreManager.getScore() > Constants.HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT)
@@ -1442,7 +1435,7 @@ public class Asteroids extends GameEngine
 
         switch (((PlayerEntity) getPlayer()).getShieldCapacity())
         {
-        // If players current shield capacity is the initial value, increase to the next level. 
+          // If players current shield capacity is the initial value, increase to the next level. 
           case Constants.SHIP_INITIAL_SHIELD:
 
             if (ScoreManager.getScore() > Constants.SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT)
