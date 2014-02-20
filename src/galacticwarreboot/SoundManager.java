@@ -236,7 +236,7 @@ public class SoundManager
 
   public void quickPlay(String soundFilename, boolean priority)
   {
-    mySoundSystem.quickPlay(NO_PRIORITY, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
+    mySoundSystem.quickPlay(priority, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
   }
 
   public void playSound(String sourceName)

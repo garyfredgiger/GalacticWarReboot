@@ -752,6 +752,9 @@ public class Asteroids extends GameEngine
             break;
 
           case UFO_SHORTY:
+            // TODO: Add sound here for when the player shot hits the shorty UFO 
+            break;
+            
           case UFO_STRONG:
 
             if (((UFOStrongEntity) entity2).getUfoStrength() > 0)
