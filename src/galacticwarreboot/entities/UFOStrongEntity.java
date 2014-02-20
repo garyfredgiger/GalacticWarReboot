@@ -17,6 +17,8 @@ public class UFOStrongEntity extends UFOEntity
   private Image shieldImage;
   private boolean ufoWentOffScreen;
   
+  private boolean ufoHullHit;
+  
   public UFOStrongEntity(ImageObserver observer, EntityImage[] ufoImages, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
     super(observer, ufoImages[0].getImage(), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
@@ -24,8 +26,25 @@ public class UFOStrongEntity extends UFOEntity
     ufoStrength = 3;
     this.shieldImage = ufoImages[ufoStrength].getImage();
     lastHitTime = System.currentTimeMillis();
+    this.setEnemyType(Constants.EnemyTypes.UFO_STRONG);
+    ufoHullHit = false;
+  }
+
+  public int getUfoStrength()
+  {
+    return ufoStrength;
+  }
+
+  public void ufoHullWasHit()
+  {
+    ufoHullHit = true;
   }
   
+  public boolean wasUfoHullHit()
+  {
+    return ufoHullHit;
+  }
+
   @Override
   public boolean shouldFireShot()
   {
@@ -37,7 +56,7 @@ public class UFOStrongEntity extends UFOEntity
     lastShotTime = System.currentTimeMillis();
     return true;
   }
-  
+
   @Override
   public void updatePosition(double delta)
   {
@@ -69,6 +88,7 @@ public class UFOStrongEntity extends UFOEntity
   {
     if (ufoWentOffScreen)
     {
+      System.out.println("UFOStrongEntity::lkill() - UFO Went Off Screen.");
       super.kill();
     }
 
@@ -77,8 +97,8 @@ public class UFOStrongEntity extends UFOEntity
     {
       return;
     }
-    
-    ufoStrength--;  
+
+    ufoStrength--;
     lastHitTime = System.currentTimeMillis();
     switch(ufoStrength)
     {
@@ -87,12 +107,12 @@ public class UFOStrongEntity extends UFOEntity
       case 2:
       case 1:
         this.shieldImage = ufoImages[ufoStrength].getImage();
-        break;        
+        break;
       // Shields gone, ufo gets hit one more time and it will be dead 
       case 0:
         this.shieldImage = null;
         break;
-        
+
       default:
         super.kill();
     }
@@ -106,7 +126,7 @@ public class UFOStrongEntity extends UFOEntity
     {
       if (this.shieldImage != null)
       {
-        // The transform was already applied to the call to the parent draw mwthod.
+        // The transform was already applied to the call to the parent draw method.
         //this.transform();
         g.drawImage(this.shieldImage, at, imageObserver);
       }

@@ -66,7 +66,7 @@ public class UFOEntityManager
       return false;
     }
 
-    if (level < Constants.UFO_MIN_UFO_LAUNCH_LEVEL)
+    if (level < Constants.GAME_UFO_MIN_UFO_LAUNCH_LEVEL)
     {
       return false;
     }

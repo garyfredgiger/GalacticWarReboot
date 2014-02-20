@@ -34,45 +34,32 @@ public class Main extends JApplet
 
   private Asteroids         galacticWarReboot;
   private GameScreen        gameScreen;
-
-  public Main()
+  
+  @Override
+  public void init()
   {
+    System.out.println("init() Called!");
+
     // Setup the JFrame and panel used in this game
     gameScreen = new GameScreen();
     gameScreen.setPreferredSize(gameScreen.getPreferredSize());
 
-    //    this.setContentPane(gameScreen);
-    //    this.pack();
-    //    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    //    this.setTitle(Constants.GAME_NAME);
-    //    this.setResizable(false);
-    //    this.setVisible(true);
-
     this.setContentPane(gameScreen);
     this.setVisible(true);
 
-    //    gameDemo = new GameDemo(gameScreen);
-    //    gameDemo.gameInit();
-    //    gameDemo.gameStart();
-
     galacticWarReboot = new Asteroids(gameScreen, this.gameScreen, GameEngineConstants.DEFAULT_CANVAS_WIDTH, GameEngineConstants.DEFAULT_CANVAS_HEIGHT);
     galacticWarReboot.gameInit();
-    galacticWarReboot.gameStart();
-  }
-
-  @Override
-  public void init()
-  {
+    
     try
     {
-
       // Use the event dispatch thread to build the UI for thread-safety.
       SwingUtilities.invokeLater(new Runnable()
       {
         @Override
         public void run()
         {
-          new Main();
+          // This contains the thread that runds the game loop
+          galacticWarReboot.gameStart();
         }
       });
     }
@@ -82,6 +69,12 @@ public class Main extends JApplet
     }
   }
 
+  @Override
+  public void start()
+  {
+    System.out.println("start() Called!");
+  }
+  
   //  public static void main(String[] args)
   //  {
   //    // Use the event dispatch thread to build the UI for thread-safety.
