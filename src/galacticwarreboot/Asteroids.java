@@ -53,10 +53,6 @@ public class Asteroids extends GameEngine
   private static final double DEGREES_IN_A_CIRCLE              = 360;
 
   // Constants used for enemy entities
-  private static final int    NUMBER_OF_BIG_ASTEROID_IMAGES    = 5;
-  private static final int    NUMBER_OF_MEDIUM_ASTEROID_IMAGES = 2;
-  private static final int    NUMBER_OF_SMALL_ASTEROID_IMAGES  = 3;
-  private static final int    NUMBER_OF_TINY_ASTEROID_IMAGES   = 4;
 
   private static final int    ASTEROID_DIMENSIONS              = 128;
   private static final int    ASTEROID_MIN_ROTATION_RATE       = 5;
@@ -95,31 +91,12 @@ public class Asteroids extends GameEngine
   // Variables used for enemy entities
   // TODO: Rather than having a bunch of image variables, possibly have an image store that stores the variables. It may not 
   //       reduce the amount of space, but it will definitely reduce the number of variables requried to manage the images.
-  EntityImage[]               bigAsteroids;
-  EntityImage[]               mediumAsteroids;
-  EntityImage[]               smallAsteroids;
-  EntityImage[]               tinyAsteroids;
   EntityImage[]               barImage                         = new EntityImage[2];
   EntityImage[]               barFrame                         = new EntityImage[3];
   EntityImage[]               shipImage                        = new EntityImage[5];
 
   EntityImage[]               powerupGun                       = new EntityImage[5];
-  EntityImage                 powerupShield;
-  EntityImage                 powerupHealth;
-  EntityImage                 powerup250;
-  EntityImage                 powerup500;
-  EntityImage                 powerup1000;
-  EntityImage                 powerupSuperShield;
-  EntityImage                 powerupTheBomb;
-  EntityImage                 powerupFullHealth;
-  EntityImage                 powerupFullShield;
-  //EntityImage                 powerupAutoShield;
   EntityImage[]               powerupThrust                    = new EntityImage[2];
-
-  EntityImage                 powerupIncreaseHealthCapacity20;
-  EntityImage                 powerupIncreaseHealthCapacity40;
-  EntityImage                 powerupIncreaseShieldCapacity20;
-  EntityImage                 powerupIncreaseShieldCapacity40;
 
   EntityImage[]               ufo                              = new EntityImage[4];
   EntityImage                 ufoShorty;
@@ -179,6 +156,9 @@ public class Asteroids extends GameEngine
   private Rectangle2D         boundsNextLevelMsg;
 
   private StaticText          msgGameStartScreen;
+  private StaticText          msgGameOverScreen;
+  private StaticText          msgNextLevelScreen;
+  private StaticText          msgPlayerDeadScreen;
 
   // Game Power-up Flags
   private boolean             firstIncreasedHealthPointMark;                                              // When user's score reaches above a certain score, he/she will get an increased health bonus from 10 to 20
@@ -190,6 +170,11 @@ public class Asteroids extends GameEngine
    * Sound variables
    */  
   SoundManager soundManager;
+  
+  /*
+   * Managers
+   */
+  ImageManager imageManager;
   
   public Asteroids(IRender renderer, ImageObserver imageObserver)
   {
@@ -218,28 +203,44 @@ public class Asteroids extends GameEngine
     increaseGunRequest = false;
     decreaseGunRequest = false;    
 
-    bigAsteroids = new EntityImage[NUMBER_OF_BIG_ASTEROID_IMAGES];
-    mediumAsteroids = new EntityImage[NUMBER_OF_MEDIUM_ASTEROID_IMAGES];
-    smallAsteroids = new EntityImage[NUMBER_OF_SMALL_ASTEROID_IMAGES];
-    tinyAsteroids = new EntityImage[NUMBER_OF_TINY_ASTEROID_IMAGES];
+    ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_1);
+    ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_2);
+    ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_3);
+    ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_4);
+    ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_5);
+    
+    ImageManager.loadImage(Constants.FILENAME_MEDIUM_ASTEROID_1);
+    ImageManager.loadImage(Constants.FILENAME_MEDIUM_ASTEROID_2);
+    
+    ImageManager.loadImage(Constants.FILENAME_SMALL_ASTEROID_1);
+    ImageManager.loadImage(Constants.FILENAME_SMALL_ASTEROID_2);
+    ImageManager.loadImage(Constants.FILENAME_SMALL_ASTEROID_3);
+    
+    ImageManager.loadImage(Constants.FILENAME_TINY_ASTEROID_1);
+    ImageManager.loadImage(Constants.FILENAME_TINY_ASTEROID_2);
+    ImageManager.loadImage(Constants.FILENAME_TINY_ASTEROID_3);
+    ImageManager.loadImage(Constants.FILENAME_TINY_ASTEROID_4);
+    
+    ImageManager.loadImage(Constants.FILENAME_BACKGROUND);
+    
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_SHIELD);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_HEALTH);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_250);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_500);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_1000);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_SUPER_SHIELD);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_FULL_HEALTH);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_THE_BOMB);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
 
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_20);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_40);
+    
     playerMovement = new GameInputMovement();
 
     // Load the image into their respective image containers for use in the game.
-    bigAsteroids[0] = loadImage(Constants.FILENAME_BIG_ASTEROID_1);
-    bigAsteroids[1] = loadImage(Constants.FILENAME_BIG_ASTEROID_2);
-    bigAsteroids[2] = loadImage(Constants.FILENAME_BIG_ASTEROID_3);
-    bigAsteroids[3] = loadImage(Constants.FILENAME_BIG_ASTEROID_4);
-    bigAsteroids[4] = loadImage(Constants.FILENAME_BIG_ASTEROID_5);
-    mediumAsteroids[0] = loadImage(Constants.FILENAME_MEDIUM_ASTEROID_1);
-    mediumAsteroids[1] = loadImage(Constants.FILENAME_MEDIUM_ASTEROID_2);
-    smallAsteroids[0] = loadImage(Constants.FILENAME_SMALL_ASTEROID_1);
-    smallAsteroids[1] = loadImage(Constants.FILENAME_SMALL_ASTEROID_2);
-    smallAsteroids[2] = loadImage(Constants.FILENAME_SMALL_ASTEROID_3);
-    tinyAsteroids[0] = loadImage(Constants.FILENAME_TINY_ASTEROID_1);
-    tinyAsteroids[1] = loadImage(Constants.FILENAME_TINY_ASTEROID_2);
-    tinyAsteroids[2] = loadImage(Constants.FILENAME_TINY_ASTEROID_3);
-    tinyAsteroids[3] = loadImage(Constants.FILENAME_TINY_ASTEROID_4);
     background = loadImage(Constants.FILENAME_BACKGROUND);
 
     barFrame[0] = loadImage(Constants.FILENAME_BAR_FRAME_10);
@@ -255,27 +256,15 @@ public class Asteroids extends GameEngine
     powerupGun[3] = loadImage(Constants.FILENAME_POWERUP_GUN_4);
     powerupGun[4] = loadImage(Constants.FILENAME_POWERUP_GUN_5);
 
-    powerupShield = loadImage(Constants.FILENAME_POWERUP_SHIELD);
-    powerupHealth = loadImage(Constants.FILENAME_POWERUP_HEALTH);
-    powerup250 = loadImage(Constants.FILENAME_POWERUP_250);
-    powerup500 = loadImage(Constants.FILENAME_POWERUP_500);
-    powerup1000 = loadImage(Constants.FILENAME_POWERUP_1000);
-    powerupSuperShield = loadImage(Constants.FILENAME_POWERUP_SUPER_SHIELD);
     powerupThrust[0] = loadImage(Constants.FILENAME_POWERUP_ENGINE_2);
     powerupThrust[1] = loadImage(Constants.FILENAME_POWERUP_ENGINE_3);
-
     superShield = loadImage(Constants.FILENAME_SUPER_SHIELD);
     hudSuperShield = loadImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON);
-    powerupTheBomb = loadImage(Constants.FILENAME_POWERUP_THE_BOMB);
     hudTheBomb = loadImage(Constants.FILENAME_HUD_THE_BOMB_ICON);
-    powerupFullHealth = loadImage(Constants.FILENAME_POWERUP_FULL_HEALTH);
-    powerupFullShield = loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
+    
     //powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
 
-    powerupIncreaseHealthCapacity20 = loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20);
-    powerupIncreaseHealthCapacity40 = loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40);
-    powerupIncreaseShieldCapacity20 = loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_20);
-    powerupIncreaseShieldCapacity40 = loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_40);
+    
 
     ufo[0] = loadImage(Constants.FILENAME_UFO);
     ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_WEAK);
@@ -325,7 +314,16 @@ public class Asteroids extends GameEngine
     ufoTypeToLaunch = 0;
 
     msgGameStartScreen = new StaticText(Constants.MSG_GAME_START, Color.YELLOW, Constants.FONT_GAME_START_SCREEN, screenWidth, screenHeight);
-
+    msgGameOverScreen = new StaticText(Constants.MSG_GAMEOVER_SCREEN_GAMEOVER, Color.YELLOW, Constants.FONT_GAME_OVER_SCREEN, screenWidth, screenHeight);
+    msgNextLevelScreen = new StaticText("", Color.YELLOW, Constants.FONT_GAME_OVER_SCREEN, screenWidth, screenHeight);
+    msgPlayerDeadScreen = new StaticText(Constants.MSG_PLAYER_DEAD, Color.WHITE, Constants.FONT_PLAYER_DEAD_SCREEN, screenWidth, screenHeight);    
+    
+//        g.setFont(Constants.FONT_NEXT_LEVEL_SCREEN);
+//    String msg = Constants.MSG_NEXT_LEVEL + GameUtility.lPadZero((currentLevel + 1), 2);
+//    boundsNextLevelMsg = g.getFontMetrics().getStringBounds(msg, g);
+//    g.setColor(Color.YELLOW);
+//    g.drawString(msg, (int) ((screenWidth - boundsNextLevelMsg.getWidth()) / 2), (int) ((screenHeight - boundsNextLevelMsg.getHeight()) / 2));
+    
     firstIncreasedHealthPointMark = false;
     secondIncreasedHealthPointMark = false;
   }
@@ -959,6 +957,7 @@ public class Asteroids extends GameEngine
   {
     // Draw the background. Note that the background image will be displayed for all game states
     g.drawImage(background.getImage(), 0, 0, screenWidth - 1, screenHeight - 1, this.imageObserver);
+    //g.drawImage(imageManager.getImage(Constants.FILENAME_BACKGROUND), 0, 0, screenWidth - 1, screenHeight - 1, this.imageObserver);
 
     switch (this.state)
     {
@@ -1416,7 +1415,7 @@ public class Asteroids extends GameEngine
 
             if (ScoreManager.getScore() > Constants.HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT)
             {
-              powerup = createPowerup(randomPowerupType, this.powerupIncreaseHealthCapacity20.getImage(), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
+              powerup = createPowerup(randomPowerupType, ImageManager.getImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
               break;
             }
 
@@ -1424,7 +1423,7 @@ public class Asteroids extends GameEngine
 
             if (ScoreManager.getScore() > Constants.HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT)
             {
-              powerup = createPowerup(randomPowerupType, this.powerupIncreaseHealthCapacity40.getImage(), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40);
+              powerup = createPowerup(randomPowerupType, ImageManager.getImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
               break;
             }
 
@@ -1443,7 +1442,7 @@ public class Asteroids extends GameEngine
 
             if (ScoreManager.getScore() > Constants.SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT)
             {
-              powerup = createPowerup(randomPowerupType, this.powerupIncreaseShieldCapacity20.getImage(), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
+              powerup = createPowerup(randomPowerupType, ImageManager.getImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_20), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
               break;
             }
 
@@ -1453,7 +1452,7 @@ public class Asteroids extends GameEngine
             // Only increase it if the respective score level is reached 
             if (ScoreManager.getScore() > Constants.SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT)
             {
-              powerup = createPowerup(randomPowerupType, this.powerupIncreaseShieldCapacity40.getImage(), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40);
+              powerup = createPowerup(randomPowerupType, ImageManager.getImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_40), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
               break;
             }
 
@@ -1492,7 +1491,8 @@ public class Asteroids extends GameEngine
     {
       case POWERUP_SHIELD:
         powerup = new PowerupShield(this.imageObserver);
-        powerup.setImage(powerupShield.getImage());
+        //powerup.setImage(powerupShield.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD));
         break;
 
       case POWERUP_FIREPOWER:
@@ -1502,22 +1502,26 @@ public class Asteroids extends GameEngine
 
       case POWERUP_SUPER_SHIELD:
         powerup = new PowerupSuperShield(this.imageObserver);
-        powerup.setImage(this.powerupSuperShield.getImage());
+        //powerup.setImage(this.powerupSuperShield.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD));
         break;
 
       case POWERUP_FULL_HEALTH:
         powerup = new PowerupFullHealth(this.imageObserver);
-        powerup.setImage(this.powerupFullHealth.getImage());
+        //powerup.setImage(this.powerupFullHealth.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_FULL_HEALTH));
         break;
 
       case POWERUP_FULL_SHIELD:
         powerup = new PowerupFullShield(this.imageObserver);
-        powerup.setImage(this.powerupFullShield.getImage());
+        //powerup.setImage(this.powerupFullShield.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE));
         break;
 
       case POWERUP_THE_BOMB:
         powerup = new PowerupTheBomb(this.imageObserver);
-        powerup.setImage(this.powerupTheBomb.getImage());
+        //powerup.setImage(this.powerupTheBomb.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB));
         break;
 
       case POWERUP_THRUST:
@@ -1549,24 +1553,28 @@ public class Asteroids extends GameEngine
 
       case POWERUP_250:
         powerup = new Powerup250Points(this.imageObserver);
-        powerup.setImage(powerup250.getImage());
+        //powerup.setImage(powerup250.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_250));
         break;
 
       case POWERUP_500:
         powerup = new Powerup500Points(this.imageObserver);
-        powerup.setImage(powerup500.getImage());
+        //powerup.setImage(powerup500.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_500));
         break;
 
       case POWERUP_1000:
         powerup = new Powerup1000Points(this.imageObserver);
-        powerup.setImage(powerup1000.getImage());
+        //powerup.setImage(powerup1000.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_1000));
         break;
 
       // Spawning a health power-up is the default case
       default:
 
         powerup = new PowerupHealth(this.imageObserver);
-        powerup.setImage(powerupHealth.getImage());
+        //powerup.setImage(powerupHealth.getImage());
+        powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_HEALTH));
     }
 
     // Make the power-up have the same position as the entity
@@ -1601,8 +1609,7 @@ public class Asteroids extends GameEngine
     asteroid.setPointValue(Constants.SCORE_BIG_ASTEROIDS);
 
     // Pick one of the random asteroid images
-    int randomAsteroidImageIndex = GameUtility.random.nextInt(NUMBER_OF_BIG_ASTEROID_IMAGES);
-    asteroid.setImage(bigAsteroids[randomAsteroidImageIndex].getImage());
+    asteroid.setImage(ImageManager.getRandomBigAsteroidImage());
 
     // Set to a random position on the screen and prevent asteroids from
     // starting on the players position
@@ -1634,6 +1641,7 @@ public class Asteroids extends GameEngine
   }
 
   // Fire a bullet from the ship's position and orientation
+  // TODO: Should this be moved to the player entity?
   public void fireBullet()
   {
     PlasmaShotEntity bullets[] = new PlasmaShotEntity[6];
@@ -2013,6 +2021,7 @@ public class Asteroids extends GameEngine
   /*
    * Spawn a smaller asteroid based on passed sprite
    */
+  // TODO: Should this go into an AsteroidsManager?
   private AsteroidEntity spawnSmallerAsteroid(EntityImage entity)
   {
     // Create a new asteroid Entity
@@ -2038,8 +2047,8 @@ public class Asteroids extends GameEngine
         asteroid.setEnemyType(Constants.EnemyTypes.ASTEROID_MEDIUM);
 
         // Pick one of the random asteroid images
-        int i = GameUtility.random.nextInt(NUMBER_OF_MEDIUM_ASTEROID_IMAGES);
-        asteroid.setImage(mediumAsteroids[i].getImage());
+        asteroid.setImage(ImageManager.getRandomMediumAsteroidImage());
+        
         asteroid.getVelocity().scaleThisVector(MEDIUM_ASTEROID_VELOCITY_SCALE[GameUtility.random.nextInt(MEDIUM_ASTEROID_VELOCITY_SCALE.length)]);
         asteroid.setPointValue(Constants.SCORE_MEDIUM_ASTEROIDS);
         break;
@@ -2048,8 +2057,8 @@ public class Asteroids extends GameEngine
         asteroid.setEnemyType(Constants.EnemyTypes.ASTEROID_SMALL);
 
         // Pick one of the random asteroid images
-        i = GameUtility.random.nextInt(NUMBER_OF_SMALL_ASTEROID_IMAGES);
-        asteroid.setImage(smallAsteroids[i].getImage());
+        asteroid.setImage(ImageManager.getRandomSmallAsteroidImage());
+
         asteroid.getVelocity().scaleThisVector(SMALL_ASTEROID_VELOCITY_SCALE[GameUtility.random.nextInt(SMALL_ASTEROID_VELOCITY_SCALE.length)]);
         asteroid.setPointValue(Constants.SCORE_SMALL_ASTEROIDS);
         break;
@@ -2058,8 +2067,8 @@ public class Asteroids extends GameEngine
         asteroid.setEnemyType(Constants.EnemyTypes.ASTEROID_TINY);
 
         // Pick one of the random asteroid images
-        i = GameUtility.random.nextInt(NUMBER_OF_TINY_ASTEROID_IMAGES);
-        asteroid.setImage(tinyAsteroids[i].getImage());
+        asteroid.setImage(ImageManager.getRandomTinyAsteroidImage());
+        
         asteroid.getVelocity().scaleThisVector(TINY_ASTEROID_VELOCITY_SCALE[GameUtility.random.nextInt(TINY_ASTEROID_VELOCITY_SCALE.length)]);
         asteroid.setPointValue(Constants.SCORE_TINY_ASTEROIDS);
         break;
@@ -2180,6 +2189,7 @@ public class Asteroids extends GameEngine
     ufoManager.reset(); // Possibly needed for the UFO that will appear in this game
   }
 
+  // TODO: Should this go into an AsteroidsManager?
   private void initializeAsteroidsForCurrentLevel(int currentLevel)
   {
     int numberOfAsteroids = currentLevel + Constants.GAME_STARTING_NUMBER_OF_ASTEROIDS;
@@ -2232,35 +2242,23 @@ public class Asteroids extends GameEngine
   private void displayGameStartScreen(Graphics2D g)
   {
     msgGameStartScreen.draw(g);
-
-    //    g.setFont(Constants.FONT_GAME_START_SCREEN);
-    //    boundsGameStartMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_START, g);
-    //    g.setColor(Color.YELLOW);
-    //    g.drawString(Constants.MSG_GAME_START, (int) ((screenWidth - boundsGameStartMsg.getWidth()) / 2), (int) ((screenHeight - boundsGameStartMsg.getHeight()) / 2));
   }
 
   private void displayNextLevelScreen(Graphics2D g)
   {
-    g.setFont(Constants.FONT_NEXT_LEVEL_SCREEN);
-    String msg = Constants.MSG_NEXT_LEVEL + GameUtility.lPadZero((currentLevel + 1), 2);
-    boundsNextLevelMsg = g.getFontMetrics().getStringBounds(msg, g);
-    g.setColor(Color.YELLOW);
-    g.drawString(msg, (int) ((screenWidth - boundsNextLevelMsg.getWidth()) / 2), (int) ((screenHeight - boundsNextLevelMsg.getHeight()) / 2));
+    msgNextLevelScreen.setText(Constants.MSG_NEXT_LEVEL + GameUtility.lPadZero((currentLevel + 1), 2));
+    msgNextLevelScreen.draw(g);
   }
 
   private void displayPlayerDeadScreen(Graphics2D g)
   {
-    g.setFont(Constants.FONT_PLAYER_DEAD_SCREEN);
-    boundsPlayerDeadMsg = g.getFontMetrics().getStringBounds(Constants.MSG_PLAYER_DEAD, g);
-    g.setColor(Color.WHITE);
-    g.drawString(Constants.MSG_PLAYER_DEAD, (int) ((screenWidth - boundsPlayerDeadMsg.getWidth()) / 2), (int) ((screenHeight - boundsPlayerDeadMsg.getHeight()) / 2));
+    msgPlayerDeadScreen.draw(g);    
   }
 
   private void displayGameOverScreen(Graphics2D g)
   {
-    g.setFont(Constants.FONT_GAME_OVER_SCREEN);
-    boundsGameOverMsg = g.getFontMetrics().getStringBounds(Constants.MSG_GAMEOVER_SCREEN_GAMEOVER, g);
-    g.setColor(Color.WHITE);
-    g.drawString(Constants.MSG_GAMEOVER_SCREEN_GAMEOVER, (int) ((screenWidth - boundsGameOverMsg.getWidth()) / 2), (int) ((screenHeight - boundsGameOverMsg.getHeight()) / 2));
+    msgGameOverScreen.draw(g);
   }
+  
+  // TODO: Add a method to display the instructions screen
 }

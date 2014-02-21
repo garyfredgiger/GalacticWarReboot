@@ -84,6 +84,11 @@ public class Constants
   // Game name
   public static final String GAME_NAME                                        = "Galactic War Reboot";
 
+  public static final int    NUMBER_OF_BIG_ASTEROID_IMAGES    = 5;
+  public static final int    NUMBER_OF_MEDIUM_ASTEROID_IMAGES = 2;
+  public static final int    NUMBER_OF_SMALL_ASTEROID_IMAGES  = 3;
+  public static final int   NUMBER_OF_TINY_ASTEROID_IMAGES   = 4;
+  
   // Filenames of images used in the game
   public static final String FILENAME_BACKGROUND                              = "bluespace.png";
 
