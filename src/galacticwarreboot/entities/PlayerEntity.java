@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.ImageObserver;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.ImageManager;
 import galacticwarreboot.Constants.AttributeType;
 import galacticwarreboot.attributes.PlayerAttributes;
 import game.framework.entities.EntityImage;
@@ -22,10 +23,8 @@ public class PlayerEntity extends EntityImage
   private int              shieldCapacityLevel;
   private int              healthCapacityLevel;
 
-  EntityImage[]            spaceshipImages;
-
   // TODO: Add the image array to the 
-  public PlayerEntity(ImageObserver imageObserver, EntityImage[] spaceshipImages)
+  public PlayerEntity(ImageObserver imageObserver)
   {
     super(imageObserver, GameEngineConstants.EntityTypes.PLAYER);
     homePosition = new Position2D();
@@ -34,8 +33,6 @@ public class PlayerEntity extends EntityImage
 
     shieldCapacityLevel = 0;
     healthCapacityLevel = 0;
-
-    this.spaceshipImages = spaceshipImages;
   }
 
   public void defineHomePosition(double homePositionX, double homePositionY)
@@ -165,7 +162,7 @@ public class PlayerEntity extends EntityImage
 
   @Override
   public void draw(Graphics2D g)
-  {
+  {    
     // Draw the player ship
     super.draw(g);
 
@@ -176,7 +173,8 @@ public class PlayerEntity extends EntityImage
       {
         if (this.isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
         {
-          g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_SHIELD_INDEX].getImage(), at, imageObserver);
+          //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_SHIELD_INDEX].getImage(), at, imageObserver);
+          g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_SHIELD), at, imageObserver);
         }
       }
 
@@ -186,15 +184,18 @@ public class PlayerEntity extends EntityImage
         switch(this.getValue(AttributeType.ATTRIBUTE_THRUST))
         {
           case Constants.SHIP_INCREASED_ACCELERATION_2:
-            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST2_INDEX].getImage(), at, imageObserver);
+            //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST2_INDEX].getImage(), at, imageObserver);
+            g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST2), at, imageObserver);
             break;
             
           case Constants.SHIP_INCREASED_ACCELERATION_3:
-            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST3_INDEX].getImage(), at, imageObserver);
+            //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST3_INDEX].getImage(), at, imageObserver);
+            g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST3), at, imageObserver);
             break;
           
           default:
-            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST1_INDEX].getImage(), at, imageObserver);
+            //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST1_INDEX].getImage(), at, imageObserver);
+            g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST1), at, imageObserver);
         }
       }
     }

@@ -1,6 +1,7 @@
 package galacticwarreboot.entities;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.ImageManager;
 import galacticwarreboot.ScoreManager;
 import galacticwarreboot.UFOEntityManager;
 import game.framework.entities.EntityImage;
@@ -14,9 +15,10 @@ public class UFOShorty extends UFOEntity
   private long     ufoHealth;
   private long    lastHitTime;
 
-  public UFOShorty(ImageObserver observer, EntityImage ufoShortyImage, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
+  //public UFOShorty(ImageObserver observer, EntityImage ufoShortyImage, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
+  public UFOShorty(ImageObserver observer, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
-    super(observer, ufoShortyImage.getImage(), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
+    super(observer, ImageManager.getImage(Constants.FILENAME_UFO_SHORTY), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
     this.setEnemyType(Constants.EnemyTypes.UFO_SHORTY);
     ufoHealth = Constants.UFO_SHORTY_HIT_POINTS;
     lastHitTime = System.currentTimeMillis();

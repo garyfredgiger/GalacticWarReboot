@@ -70,7 +70,7 @@ public class Asteroids extends GameEngine
    */
 
   // Variables used to control player entity
-  EntityImage                 bulletImage;
+  
   private GameInputMovement   playerMovement;
   private boolean             fireShot;
   private boolean             keyShield;
@@ -93,22 +93,12 @@ public class Asteroids extends GameEngine
   //       reduce the amount of space, but it will definitely reduce the number of variables requried to manage the images.
   EntityImage[]               barImage                         = new EntityImage[2];
   EntityImage[]               barFrame                         = new EntityImage[3];
-  EntityImage[]               shipImage                        = new EntityImage[5];
 
   EntityImage[]               powerupGun                       = new EntityImage[5];
   EntityImage[]               powerupThrust                    = new EntityImage[2];
 
-  EntityImage[]               ufo                              = new EntityImage[4];
-  EntityImage                 ufoShorty;
-  EntityImage                 ufoShot;
-  EntityImage                 ufoShortyShot;
-  EntityImage                 superShield;
-  EntityImage                 hudSuperShield;
-  EntityImage                 hudTheBomb;
-
   // Variables used for game
   private int                 currentLevel;
-  EntityImage                 background;
 
   //boolean launchStrongUFO = false;
   private int                 ufoTypeToLaunch;
@@ -198,31 +188,26 @@ public class Asteroids extends GameEngine
   public void userGameInit()
   {
     soundManager = new SoundManager();
-    
+
     // Debugging vars to be removed when the final game is released
     increaseGunRequest = false;
-    decreaseGunRequest = false;    
+    decreaseGunRequest = false;
 
     ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_1);
     ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_2);
     ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_3);
     ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_4);
     ImageManager.loadImage(Constants.FILENAME_BIG_ASTEROID_5);
-    
     ImageManager.loadImage(Constants.FILENAME_MEDIUM_ASTEROID_1);
     ImageManager.loadImage(Constants.FILENAME_MEDIUM_ASTEROID_2);
-    
     ImageManager.loadImage(Constants.FILENAME_SMALL_ASTEROID_1);
     ImageManager.loadImage(Constants.FILENAME_SMALL_ASTEROID_2);
     ImageManager.loadImage(Constants.FILENAME_SMALL_ASTEROID_3);
-    
     ImageManager.loadImage(Constants.FILENAME_TINY_ASTEROID_1);
     ImageManager.loadImage(Constants.FILENAME_TINY_ASTEROID_2);
     ImageManager.loadImage(Constants.FILENAME_TINY_ASTEROID_3);
     ImageManager.loadImage(Constants.FILENAME_TINY_ASTEROID_4);
-    
     ImageManager.loadImage(Constants.FILENAME_BACKGROUND);
-    
     ImageManager.loadImage(Constants.FILENAME_POWERUP_SHIELD);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_HEALTH);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_250);
@@ -232,16 +217,21 @@ public class Asteroids extends GameEngine
     ImageManager.loadImage(Constants.FILENAME_POWERUP_FULL_HEALTH);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_THE_BOMB);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE);
-
     ImageManager.loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_20);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_40);
+    ImageManager.loadImage(Constants.FILENAME_SUPER_SHIELD);
+    ImageManager.loadImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON);
+    ImageManager.loadImage(Constants.FILENAME_HUD_THE_BOMB_ICON);
+    ImageManager.loadImage(Constants.FILENAME_UFO_SHORTY);
+    ImageManager.loadImage(Constants.FILENAME_UFO_SHOT);
+    ImageManager.loadImage(Constants.FILENAME_UFO_SHORTY_SHOT);
+    ImageManager.loadImage(Constants.FILENAME_PLASMA_SHOT);
     
     playerMovement = new GameInputMovement();
 
     // Load the image into their respective image containers for use in the game.
-    background = loadImage(Constants.FILENAME_BACKGROUND);
 
     barFrame[0] = loadImage(Constants.FILENAME_BAR_FRAME_10);
     barFrame[1] = loadImage(Constants.FILENAME_BAR_FRAME_20);
@@ -258,34 +248,12 @@ public class Asteroids extends GameEngine
 
     powerupThrust[0] = loadImage(Constants.FILENAME_POWERUP_ENGINE_2);
     powerupThrust[1] = loadImage(Constants.FILENAME_POWERUP_ENGINE_3);
-    superShield = loadImage(Constants.FILENAME_SUPER_SHIELD);
-    hudSuperShield = loadImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON);
-    hudTheBomb = loadImage(Constants.FILENAME_HUD_THE_BOMB_ICON);
-    
-    //powerupAutoShield = loadImage(Constants.FILENAME_POWERUP_AUTO_SHIELD);
-
-    
-
-    ufo[0] = loadImage(Constants.FILENAME_UFO);
-    ufo[1] = loadImage(Constants.FILENAME_UFO_SHIELD_WEAK);
-    ufo[2] = loadImage(Constants.FILENAME_UFO_SHIELD_OK);
-    ufo[3] = loadImage(Constants.FILENAME_UFO_SHIELD_STRONG);
-    ufoShorty = loadImage(Constants.FILENAME_UFO_SHORTY);
-    ufoShot = loadImage(Constants.FILENAME_UFO_SHOT);
-    ufoShortyShot = loadImage(Constants.FILENAME_UFO_SHORTY_SHOT);
-    bulletImage = loadImage(Constants.FILENAME_PLASMA_SHOT);
-
-    shipImage[Constants.IMAGE_SPACESHIP_INDEX] = loadImage(Constants.FILENAME_SPACESHIP);
-    shipImage[Constants.IMAGE_SPACESHIP_SHIELD_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_SHIELD);
-    shipImage[Constants.IMAGE_SPACESHIP_THRUST1_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST1);
-    shipImage[Constants.IMAGE_SPACESHIP_THRUST2_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST2);
-    shipImage[Constants.IMAGE_SPACESHIP_THRUST3_INDEX] = loadImage(Constants.FILENAME_SPACESHIP_THRUST3);
 
     fireShot = false;
 
     // Add the player entity
-    PlayerEntity ship = new PlayerEntity(this.imageObserver, shipImage);
-    ship.setImage(shipImage[0].getImage());
+    PlayerEntity ship = new PlayerEntity(this.imageObserver);
+    ship.setImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP));
     ship.setRotationRate(0.0);
     ship.setFaceAngle(0);
     ship.setMoveAngle(ship.getFaceAngle() - 90);
@@ -317,12 +285,6 @@ public class Asteroids extends GameEngine
     msgGameOverScreen = new StaticText(Constants.MSG_GAMEOVER_SCREEN_GAMEOVER, Color.YELLOW, Constants.FONT_GAME_OVER_SCREEN, screenWidth, screenHeight);
     msgNextLevelScreen = new StaticText("", Color.YELLOW, Constants.FONT_GAME_OVER_SCREEN, screenWidth, screenHeight);
     msgPlayerDeadScreen = new StaticText(Constants.MSG_PLAYER_DEAD, Color.WHITE, Constants.FONT_PLAYER_DEAD_SCREEN, screenWidth, screenHeight);    
-    
-//        g.setFont(Constants.FONT_NEXT_LEVEL_SCREEN);
-//    String msg = Constants.MSG_NEXT_LEVEL + GameUtility.lPadZero((currentLevel + 1), 2);
-//    boundsNextLevelMsg = g.getFontMetrics().getStringBounds(msg, g);
-//    g.setColor(Color.YELLOW);
-//    g.drawString(msg, (int) ((screenWidth - boundsNextLevelMsg.getWidth()) / 2), (int) ((screenHeight - boundsNextLevelMsg.getHeight()) / 2));
     
     firstIncreasedHealthPointMark = false;
     secondIncreasedHealthPointMark = false;
@@ -448,18 +410,17 @@ public class Asteroids extends GameEngine
           switch (ufoTypeToLaunch)
           {
             case 1:
-              UFOStrongEntity newStrongUfo = new UFOStrongEntity(this.imageObserver, ufo, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+              UFOStrongEntity newStrongUfo = new UFOStrongEntity(this.imageObserver, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);              
               addEnemy(newStrongUfo);
               break;
 
             case 2:
-              UFOShorty newShortyUfo = new UFOShorty(this.imageObserver, ufoShorty, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), ufoShorty.getWidth(), screenWidth + ufoShorty.getWidth());
+              UFOShorty newShortyUfo = new UFOShorty(this.imageObserver, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), ImageManager.getImage(Constants.FILENAME_UFO_SHORTY).getWidth(imageObserver), screenWidth + ImageManager.getImage(Constants.FILENAME_UFO_SHORTY).getWidth(imageObserver));
               addEnemy(newShortyUfo);
               break;
 
             default:
-
-              UFOEntity newUfo = new UFOEntity(this.imageObserver, ufo[0].getImage(), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+              UFOEntity newUfo = new UFOEntity(this.imageObserver, ImageManager.getImage(Constants.FILENAME_UFO), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
               addEnemy(newUfo);
           }
         }
@@ -956,8 +917,7 @@ public class Asteroids extends GameEngine
   public void userGamePreDraw(Graphics2D g)
   {
     // Draw the background. Note that the background image will be displayed for all game states
-    g.drawImage(background.getImage(), 0, 0, screenWidth - 1, screenHeight - 1, this.imageObserver);
-    //g.drawImage(imageManager.getImage(Constants.FILENAME_BACKGROUND), 0, 0, screenWidth - 1, screenHeight - 1, this.imageObserver);
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_BACKGROUND), 0, 0, screenWidth - 1, screenHeight - 1, this.imageObserver);
 
     switch (this.state)
     {
@@ -1056,13 +1016,13 @@ public class Asteroids extends GameEngine
         g.drawString(waveMsg, 20, 65);
 
         // Draw the super shield icon along with amount
-        g.drawImage(hudSuperShield.getImage(), 20, 85, this.imageObserver);
+        g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON), 20, 85, this.imageObserver);
         g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
         g.setColor(Color.WHITE);
         g.drawString(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SUPER_SHIELD) + "", 50, 103);
 
         // Draw the bomb icon along with amount
-        g.drawImage(hudTheBomb.getImage(), 20, 115, this.imageObserver);
+        g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_THE_BOMB_ICON), 20, 115, this.imageObserver);
         g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
         g.setColor(Color.WHITE);
         g.drawString(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_THE_BOMB) + "", 50, 133);
@@ -1423,7 +1383,7 @@ public class Asteroids extends GameEngine
 
             if (ScoreManager.getScore() > Constants.HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT)
             {
-              powerup = createPowerup(randomPowerupType, ImageManager.getImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
+              powerup = createPowerup(randomPowerupType, ImageManager.getImage(Constants.FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_40), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40);
               break;
             }
 
@@ -1452,7 +1412,7 @@ public class Asteroids extends GameEngine
             // Only increase it if the respective score level is reached 
             if (ScoreManager.getScore() > Constants.SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT)
             {
-              powerup = createPowerup(randomPowerupType, ImageManager.getImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_40), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20);
+              powerup = createPowerup(randomPowerupType, ImageManager.getImage(Constants.FILENAME_POWERUP_INCREASE_SHIELD_CAPACITY_40), position, Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40);
               break;
             }
 
@@ -1491,7 +1451,6 @@ public class Asteroids extends GameEngine
     {
       case POWERUP_SHIELD:
         powerup = new PowerupShield(this.imageObserver);
-        //powerup.setImage(powerupShield.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD));
         break;
 
@@ -1502,25 +1461,21 @@ public class Asteroids extends GameEngine
 
       case POWERUP_SUPER_SHIELD:
         powerup = new PowerupSuperShield(this.imageObserver);
-        //powerup.setImage(this.powerupSuperShield.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD));
         break;
 
       case POWERUP_FULL_HEALTH:
         powerup = new PowerupFullHealth(this.imageObserver);
-        //powerup.setImage(this.powerupFullHealth.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_FULL_HEALTH));
         break;
 
       case POWERUP_FULL_SHIELD:
         powerup = new PowerupFullShield(this.imageObserver);
-        //powerup.setImage(this.powerupFullShield.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE));
         break;
 
       case POWERUP_THE_BOMB:
         powerup = new PowerupTheBomb(this.imageObserver);
-        //powerup.setImage(this.powerupTheBomb.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB));
         break;
 
@@ -1553,19 +1508,16 @@ public class Asteroids extends GameEngine
 
       case POWERUP_250:
         powerup = new Powerup250Points(this.imageObserver);
-        //powerup.setImage(powerup250.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_250));
         break;
 
       case POWERUP_500:
         powerup = new Powerup500Points(this.imageObserver);
-        //powerup.setImage(powerup500.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_500));
         break;
 
       case POWERUP_1000:
         powerup = new Powerup1000Points(this.imageObserver);
-        //powerup.setImage(powerup1000.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_1000));
         break;
 
@@ -1573,7 +1525,6 @@ public class Asteroids extends GameEngine
       default:
 
         powerup = new PowerupHealth(this.imageObserver);
-        //powerup.setImage(powerupHealth.getImage());
         powerup.setImage(ImageManager.getImage(Constants.FILENAME_POWERUP_HEALTH));
     }
 
@@ -1834,7 +1785,7 @@ public class Asteroids extends GameEngine
     for (int i = 0; i < Constants.PLAYER_NUMBER_SUPER_SHIELD_BALLS; i++)
     {
       SuperShieldEntity ss = new SuperShieldEntity(this.imageObserver);
-      ss.setImage(superShield.getImage());
+      ss.setImage(ImageManager.getImage(Constants.FILENAME_SUPER_SHIELD));
       ss.setFaceAngle(faceAngle);
       ss.setMoveAngle(faceAngle - 90);
 
@@ -1865,7 +1816,8 @@ public class Asteroids extends GameEngine
 
     PlasmaShotEntity bullet = new PlasmaShotEntity(this.imageObserver);
 
-    bullet.setImage(bulletImage.getImage());
+    //bullet.setImage(bulletImage.getImage());
+    bullet.setImage(ImageManager.getImage(Constants.FILENAME_PLASMA_SHOT));
     bullet.setFaceAngle(faceAngle);
     bullet.setMoveAngle(faceAngle - 90);
 
@@ -1891,7 +1843,7 @@ public class Asteroids extends GameEngine
   private EntityImage stockUFOBullet(Position2D ufoPos, Position2D playerPos)
   {
     EntityImage bullet = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.ENEMY_SHOT);
-    bullet.setImage(ufoShot.getImage());
+    bullet.setImage(ImageManager.getImage(Constants.FILENAME_UFO_SHOT));
 
     // Compute bullet heading given current position of player and this ufo entity     
     bullet.setVelocity(GameUtility.computeUnitVectorBetweenTwoPositions(ufoPos, playerPos).createScaledVector(Constants.UFO_SHOT_SPEED));
@@ -1911,7 +1863,7 @@ public class Asteroids extends GameEngine
   private EntityImage stockUFOShortyBullet(Position2D ufoPos, Position2D playerPos)
   {
     EntityImage bullet = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.ENEMY_SHOT);
-    bullet.setImage(ufoShortyShot.getImage());
+    bullet.setImage(ImageManager.getImage(Constants.FILENAME_UFO_SHORTY_SHOT));
 
     // Compute bullet heading given current position of player and this ufo entity     
     bullet.setVelocity(GameUtility.computeUnitVectorBetweenTwoPositions(ufoPos, playerPos).createScaledVector(Constants.UFO_SHORTY_SHOT_SPEED));

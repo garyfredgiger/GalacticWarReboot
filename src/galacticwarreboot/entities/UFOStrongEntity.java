@@ -1,6 +1,7 @@
 package galacticwarreboot.entities;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.ImageManager;
 import galacticwarreboot.ScoreManager;
 import galacticwarreboot.UFOEntityManager;
 import game.framework.entities.EntityImage;
@@ -11,7 +12,6 @@ import java.awt.image.ImageObserver;
 
 public class UFOStrongEntity extends UFOEntity
 {
-  private EntityImage[] ufoImages;
   private int ufoStrength;
   private long lastHitTime;
   private Image shieldImage;
@@ -19,12 +19,13 @@ public class UFOStrongEntity extends UFOEntity
   
   private boolean ufoHullHit;
   
-  public UFOStrongEntity(ImageObserver observer, EntityImage[] ufoImages, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
+  // TODO: Since there is an image manager, the parameter ufoImages may go away
+  //public UFOStrongEntity(ImageObserver observer, EntityImage[] ufoImages, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
+  public UFOStrongEntity(ImageObserver observer, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
-    super(observer, ufoImages[0].getImage(), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
-    this.ufoImages = ufoImages;
+    super(observer, ImageManager.getImage(Constants.FILENAME_UFO), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
     ufoStrength = 3;
-    this.shieldImage = ufoImages[ufoStrength].getImage();
+    this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_STRONG);
     lastHitTime = System.currentTimeMillis();
     this.setEnemyType(Constants.EnemyTypes.UFO_STRONG);
     ufoHullHit = false;
@@ -104,9 +105,13 @@ public class UFOStrongEntity extends UFOEntity
     {
       // Choose the proper shield to draw
       case 3:
+        this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_STRONG);
+        break;
       case 2:
+        this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_OK);
+        break;
       case 1:
-        this.shieldImage = ufoImages[ufoStrength].getImage();
+        this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_WEAK);
         break;
       // Shields gone, ufo gets hit one more time and it will be dead 
       case 0:
