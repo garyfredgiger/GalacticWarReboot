@@ -20,9 +20,6 @@ public class PlayerEntity extends EntityImage
   private boolean          drawShield;
   private boolean          drawThrust;
 
-  private int              shieldCapacityLevel;
-  private int              healthCapacityLevel;
-
   // TODO: Add the image array to the 
   public PlayerEntity(ImageObserver imageObserver)
   {
@@ -30,9 +27,6 @@ public class PlayerEntity extends EntityImage
     homePosition = new Position2D();
 
     attributes = new PlayerAttributes();
-
-    shieldCapacityLevel = 0;
-    healthCapacityLevel = 0;
   }
 
   public void defineHomePosition(double homePositionX, double homePositionY)
@@ -51,8 +45,6 @@ public class PlayerEntity extends EntityImage
   {
     attributes.initialize();
     moveToHomePosition();
-    shieldCapacityLevel = 0;
-    healthCapacityLevel = 0;
     super.reset();
   }
 
@@ -61,33 +53,15 @@ public class PlayerEntity extends EntityImage
     position.set(homePosition);
   }
 
-  public void setLimit(Constants.AttributeType powerupType, int value)
+  public void setLimit(Constants.AttributeType attributeType, int value)
   {
-    attributes.setLimit(powerupType, value);
+    attributes.setLimit(attributeType, value);
     //attributes.displayAttributes();
-
-    if (getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) == Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20)
-    {
-      healthCapacityLevel = 1;
-    }
-    else if (getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) == Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40)
-    {
-      healthCapacityLevel = 2;
-    }
-
-    if (getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD) == Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_20)
-    {
-      shieldCapacityLevel = 1;
-    }
-    else if (getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD) == Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_40)
-    {
-      shieldCapacityLevel = 2;
-    }
   }
 
-  public int getLimit(Constants.AttributeType powerupType)
+  public int getLimit(Constants.AttributeType attributeType)
   {
-    return attributes.getLimit(powerupType);
+    return attributes.getLimit(attributeType);
   }
 
   public void setValue(Constants.AttributeType powerupType, int value)
@@ -135,16 +109,6 @@ public class PlayerEntity extends EntityImage
   public int getHealthCapacity()
   {
     return getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH);
-  }
-
-  public int getShieldContainerIndex()
-  {
-    return shieldCapacityLevel;
-  }
-
-  public int getHealthContainerIndex()
-  {
-    return healthCapacityLevel;
   }
 
   @Override

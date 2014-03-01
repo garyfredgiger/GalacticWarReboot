@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class ImageManager
 {
   private static ImageObserver imageObserver;
-  private static HashMap<String, Image> imageStore = new HashMap<String, Image>();
+  private static HashMap<String, Image> imageStore = new HashMap<String, Image>(75);
 
   public static void setImageObserver(ImageObserver io)
   {
@@ -60,6 +60,20 @@ public class ImageManager
     //System.out.println("ImageManager::loadImage() Image '" + filename + "' loaded with dimensions " + image.getWidth(imageObserver) + " by " + image.getHeight(imageObserver) + ".");
 
     imageStore.put(filename, image);
+  }
+
+  public static int getWidth(String filename)
+  {
+    Image image = getImage(filename);
+
+    return (image != null ? image.getWidth(imageObserver) : 0);
+  }
+
+  public static int getHeight(String filename)
+  {
+    Image image = getImage(filename);
+
+    return (image != null ? image.getHeight(imageObserver) : 0);
   }
 
   private static URL getURL(String filename)

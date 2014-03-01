@@ -41,6 +41,12 @@ public class SoundManager
   public static final String   SOUND_RESOURCE_POWERUP_FULL_SHIELD        = "powerup_full_shield";
   public static final String   SOUND_RESOURCE_POWERUP_FULL_HEALH         = "powerup_full_health";
 
+  public static final String   SOUND_RESOURCE_PLAYER_SHIP_EXPLOSION          = "player_ship_explosion";
+  public static final String   SOUND_RESOURCE_UFO_EXPLOSION                  = "ufo_explosion";
+  public static final String   SOUND_RESOURCE_PLAYER_SHIELDS_DEPLETED        = "player_shields_depleted";
+  public static final String   SOUND_RESOURCE_PLAYER_WEAPON_ATTRIBUTE_EMPTY  = "player_weapon_attribute_empty";
+  public static final String   SOUND_RESOURCE_NEXT_WAVE                      = "next_wave";
+  
   /*
    * Sounds that will be created a sources  
    */
@@ -59,7 +65,7 @@ public class SoundManager
   
   public static final String   SOUND_FILE_ASTEROID_INITIAL_EXPLOSION     = "explosion53.ogg";              // Final sound added to code // Played when the initial asteroid is shot/hit and breaks apart
   public static final String   SOUND_FILE_ASTEROID_SMALLER_EXPLOSION     = "explosion61.ogg";              // Final sound added to code // Played when the smaller pieces are shot/hit and break apart  
-  public static final String   SOUND_FILE_ASTEROID_TINY_EXPLOSION        = "explosion63.ogg";              // Final sound added to code // Played when the tiniest asteroid piece is hit
+  public static final String   SOUND_FILE_ASTEROID_TINY_EXPLOSION        = "explosion63modified3.ogg";//"explosion63.ogg";              // Final sound added to code // Played when the tiniest asteroid piece is hit
 
   public static final String   SOUND_FILE_UFO_SHIELDS_HIT                = "misc87.ogg";                   // Final sound added to code
   public static final String   SOUND_FILE_UFO_SHIELDS_FAIL               = "misc25.ogg";                   // Final sound added to code
@@ -71,15 +77,16 @@ public class SoundManager
   public static final String   SOUND_FILE_POWERUP_FULL_SHIELD            = "misc53.ogg";                   // Final sound added to code
   public static final String   SOUND_FILE_POWERUP_FULL_HEALH             = "powerup37.ogg";                // Final sound added to code
 
-  /*
-   *  Sounds that will be played using quick play
-   */
   public static final String   SOUND_FILE_PLAYER_SHIP_EXPLOSION          = "explosion2.ogg";               // // Final sound added to code
   public static final String   SOUND_FILE_UFO_EXPLOSION                  = "explosion12.ogg";              // Final sound added to code
   public static final String   SOUND_FILE_PLAYER_SHIELDS_DEPLETED        = "misc31.ogg";                   // Final sound added to code
   public static final String   SOUND_FILE_PLAYER_WEAPON_ATTRIBUTE_EMPTY  = "misc92.ogg";                   // Sound added to code but could have a better sound
   public static final String   SOUND_FILE_NEXT_WAVE                      = "misc17Modified.ogg";           // Sound added to code, but may need to be changed
 
+  /*
+   *  Sounds that will be played using quick play
+   */
+  
   //////
   // TODO: Add sound for player ship's hull getting hit
   // TODO: Add sound for player picking up health/shield increase
@@ -171,6 +178,12 @@ public class SoundManager
       mySoundSystem.loadSound(SOUND_FILE_POWERUP_POINT_BONUS);
       mySoundSystem.loadSound(SOUND_FILE_POWERUP_FULL_SHIELD);
       mySoundSystem.loadSound(SOUND_FILE_POWERUP_FULL_HEALH);
+      
+      mySoundSystem.loadSound(SOUND_FILE_PLAYER_SHIP_EXPLOSION);
+      mySoundSystem.loadSound(SOUND_FILE_UFO_EXPLOSION);
+      mySoundSystem.loadSound(SOUND_FILE_PLAYER_SHIELDS_DEPLETED);
+      mySoundSystem.loadSound(SOUND_FILE_PLAYER_WEAPON_ATTRIBUTE_EMPTY);
+      mySoundSystem.loadSound(SOUND_FILE_NEXT_WAVE);
 
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_PLAYER_1_SHOOTING, SOUND_FILE_PLAYER_1_SHOT, DO_NOT_LOOP);
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_PLAYER_2_SHOOTING, SOUND_FILE_PLAYER_2_SHOT, DO_NOT_LOOP);
@@ -198,6 +211,13 @@ public class SoundManager
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_POWERUP_POINT_BONUS, SOUND_FILE_POWERUP_POINT_BONUS, DO_NOT_LOOP);
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_POWERUP_FULL_SHIELD, SOUND_FILE_POWERUP_FULL_SHIELD, DO_NOT_LOOP);
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_POWERUP_FULL_HEALH, SOUND_FILE_POWERUP_FULL_HEALH, DO_NOT_LOOP);
+      
+      createNewSource(PRIORITY, SOUND_RESOURCE_PLAYER_SHIP_EXPLOSION, SOUND_FILE_PLAYER_SHIP_EXPLOSION, DO_NOT_LOOP);
+      createNewSource(PRIORITY, SOUND_RESOURCE_UFO_EXPLOSION, SOUND_FILE_UFO_EXPLOSION, DO_NOT_LOOP);
+      createNewSource(PRIORITY, SOUND_RESOURCE_PLAYER_SHIELDS_DEPLETED, SOUND_FILE_PLAYER_SHIELDS_DEPLETED, DO_NOT_LOOP);
+      createNewSource(PRIORITY, SOUND_RESOURCE_PLAYER_WEAPON_ATTRIBUTE_EMPTY, SOUND_FILE_PLAYER_WEAPON_ATTRIBUTE_EMPTY, DO_NOT_LOOP);
+      createNewSource(PRIORITY, SOUND_RESOURCE_NEXT_WAVE, SOUND_FILE_NEXT_WAVE, DO_NOT_LOOP);
+      
     }
     catch (SoundSystemException e)
     {
@@ -228,16 +248,19 @@ public class SoundManager
 
   }
 
-  public void quickPlay(String soundFilename)
-  {
-    //mySoundSystem.quickPlay(NO_PRIORITY, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
-    quickPlay(soundFilename, NO_PRIORITY);
-  }
-
-  public void quickPlay(String soundFilename, boolean priority)
-  {
-    mySoundSystem.quickPlay(priority, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
-  }
+//  public void quickPlay(String soundFilename)
+//  {
+//    //mySoundSystem.quickPlay(NO_PRIORITY, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
+//    
+//    // TODO: Turned off for now
+//    quickPlay(soundFilename, NO_PRIORITY);
+//  }
+//
+//  public void quickPlay(String soundFilename, boolean priority)
+//  {
+//    // TODO: Turned off for now
+//    mySoundSystem.quickPlay(priority, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
+//  }
 
   public void playSound(String sourceName)
   {
@@ -248,6 +271,7 @@ public class SoundManager
     //    mySoundSystem.rewind(sourceName);
     //    mySoundSystem.play(sourceName);
 
+    // TODO: Turned off for now
     if (!mySoundSystem.playing(sourceName))
     {
       mySoundSystem.play(sourceName);

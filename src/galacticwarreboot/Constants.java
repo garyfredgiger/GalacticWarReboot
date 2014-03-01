@@ -84,11 +84,11 @@ public class Constants
   // Game name
   public static final String GAME_NAME                                        = "Galactic War Reboot";
 
-  public static final int    NUMBER_OF_BIG_ASTEROID_IMAGES    = 5;
-  public static final int    NUMBER_OF_MEDIUM_ASTEROID_IMAGES = 2;
-  public static final int    NUMBER_OF_SMALL_ASTEROID_IMAGES  = 3;
-  public static final int   NUMBER_OF_TINY_ASTEROID_IMAGES   = 4;
-  
+  public static final int    NUMBER_OF_BIG_ASTEROID_IMAGES                    = 5;
+  public static final int    NUMBER_OF_MEDIUM_ASTEROID_IMAGES                 = 2;
+  public static final int    NUMBER_OF_SMALL_ASTEROID_IMAGES                  = 3;
+  public static final int    NUMBER_OF_TINY_ASTEROID_IMAGES                   = 4;
+
   // Filenames of images used in the game
   public static final String FILENAME_BACKGROUND                              = "bluespace.png";
 
@@ -162,11 +162,11 @@ public class Constants
   public static final String FILENAME_UFO_SHORTY_SHOT                         = "ufoshot2.png";
 
   // Indices for the spaceship image array
-  public static final int    IMAGE_SPACESHIP_INDEX                            = 0;
-  public static final int    IMAGE_SPACESHIP_SHIELD_INDEX                     = 1;
-  public static final int    IMAGE_SPACESHIP_THRUST1_INDEX                    = 2;
-  public static final int    IMAGE_SPACESHIP_THRUST2_INDEX                    = 3;
-  public static final int    IMAGE_SPACESHIP_THRUST3_INDEX                    = 4;
+//  public static final int    IMAGE_SPACESHIP_INDEX                            = 0;
+//  public static final int    IMAGE_SPACESHIP_SHIELD_INDEX                     = 1;
+//  public static final int    IMAGE_SPACESHIP_THRUST1_INDEX                    = 2;
+//  public static final int    IMAGE_SPACESHIP_THRUST2_INDEX                    = 3;
+//  public static final int    IMAGE_SPACESHIP_THRUST3_INDEX                    = 4;
 
   // Fonts used in the Introduction screen
   public static final Font   FONT_INTRO_SCREEN_MAIN_TITLE                     = new Font("Verdana", Font.BOLD, 36);
@@ -226,7 +226,7 @@ public class Constants
   public static final int    GAME_STARTING_NUMBER_OF_ASTEROIDS                = 1;
   public static final int    GAME_MAX_NUMBER_ASTEROIDS_ON_SCREEN              = 40;
   public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 5;                                                       // Was 5
-  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                       // Was 10
+  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                      // Was 10
   public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 15;                                                      // Was 15
 
   public static final String DOT_DOT_DOT                                      = "...";
@@ -251,7 +251,7 @@ public class Constants
   public static final int    SHIP_SHIELD_CAPACITY_INCREASE_TO_40              = 40;
 
   public static final int    SHIP_STARTING_SUPER_SHIELD                       = 2;                                                       // Was 2
-  public static final int    SHIP_STARTING_THE_BOMBS                          = 1;                                                      // Was 1
+  public static final int    SHIP_STARTING_THE_BOMBS                          = 1;                                                       // Was 1
   public static final int    SHIP_DEFAULT_ACCELERATION                        = 1;                                                       // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
   public static final int    SHIP_INCREASED_ACCELERATION_2                    = 2;
   public static final int    SHIP_INCREASED_ACCELERATION_3                    = 3;
@@ -333,4 +333,6 @@ public class Constants
   public static final String DEBUG_MSG_UFO_PROB                               = "UFO Prob: ";
   public static final String DEBUG_MSG_THRUST_VALUE                           = "Thrust Value: ";
   public static final String DEBUG_MSG_SPAWN_PROBABILITY                      = "Spawn Probability: ";
+  public static final String DEBUG_MSG_PLAYER_HEALTH_CAPACITY                 = "Health Capacity: ";
+  public static final String DEBUG_MSG_PLAYER_SHIELD_CAPACITY                 = "Shield Capacity: ";
 }
