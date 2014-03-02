@@ -9,9 +9,9 @@ public class UFOShorty extends UFOEntity
 {
   public UFOShorty(ImageObserver observer, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
-    super(observer, manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
+    super(observer, ImageManager.getImage(Constants.FILENAME_UFO_SHORTY), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
     this.setEnemyType(Constants.EnemyTypes.UFO_SHORTY);
-    this.setImage(ImageManager.getImage(Constants.FILENAME_UFO_SHORTY));
+
     ufoHealth = Constants.UFO_SHORTY_HIT_POINTS;
     lastHitTime = System.currentTimeMillis();
   }

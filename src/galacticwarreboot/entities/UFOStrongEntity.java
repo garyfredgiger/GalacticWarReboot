@@ -2,10 +2,7 @@ package galacticwarreboot.entities;
 
 import galacticwarreboot.Constants;
 import galacticwarreboot.ImageManager;
-import galacticwarreboot.ScoreManager;
 import galacticwarreboot.UFOEntityManager;
-import game.framework.entities.EntityImage;
-
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.ImageObserver;
@@ -18,12 +15,12 @@ public class UFOStrongEntity extends UFOEntity
   // TODO: Since there is an image manager, the parameter ufoImages may go away
   public UFOStrongEntity(ImageObserver observer, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
-    super(observer, manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
+    super(observer, ImageManager.getImage(Constants.FILENAME_UFO), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
+    setEnemyType(Constants.EnemyTypes.UFO_STRONG);
+
     ufoHealth = 3;
     shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_STRONG);
     lastHitTime = System.currentTimeMillis();
-    setEnemyType(Constants.EnemyTypes.UFO_STRONG);
-    setImage(ImageManager.getImage(Constants.FILENAME_UFO));
     ufoHullHit = false;
   }
 

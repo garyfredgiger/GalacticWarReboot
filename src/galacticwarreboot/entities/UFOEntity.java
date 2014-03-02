@@ -4,29 +4,37 @@ import galacticwarreboot.Constants;
 import galacticwarreboot.ImageManager;
 import galacticwarreboot.ScoreManager;
 import galacticwarreboot.UFOEntityManager;
+import game.framework.primitives.Vector2D;
 import game.framework.utilities.GameUtility;
 
+import java.awt.Image;
 import java.awt.image.ImageObserver;
 
 public class UFOEntity extends EnemyEntity
 {
   protected int            endingXPosition;
-  protected int            upperHorizontalLimit;
-  protected int            lowerHorizontalLimit;
+  protected int            topOfScreenVerticalLimit;
+  protected int            bottomOfScreenVerticalLimit;
   protected int            leftVerticalLimit;
   protected int            rightVerticalLimit;
   protected boolean        movingRight;
+  int                      initialHeadingAngle;
 
   protected long           lastShotTime;
   protected long           lastHitTime;
   protected boolean        ufoWentOffScreen;
 
   protected int            ufoHealth;
-  
+
   // TODO: Is this only needed in the constructor?
   private UFOEntityManager manager;
 
-  public UFOEntity(ImageObserver observer, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
+  public UFOEntity(ImageObserver observer, UFOEntityManager manager, int topOfScreenVerticalLimit, int bottomOfScreenVerticalLimit, int leftVerticalLimit, int rightVerticalLimit)
+  {
+    this(observer, ImageManager.getImage(Constants.FILENAME_UFO), manager, topOfScreenVerticalLimit, bottomOfScreenVerticalLimit, leftVerticalLimit, rightVerticalLimit);
+  }
+
+  public UFOEntity(ImageObserver observer, Image ufoImage, UFOEntityManager manager, int topOfScreenVerticalLimit, int bottomOfScreenVerticalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
     super(observer);
 
@@ -36,10 +44,10 @@ public class UFOEntity extends EnemyEntity
     }
 
     this.manager = manager;
-    this.setImage(ImageManager.getImage(Constants.FILENAME_UFO));
+    this.setImage(ufoImage);
 
-    this.upperHorizontalLimit = upperHorizontalLimit;
-    this.lowerHorizontalLimit = lowerHorizontalLimit;
+    this.topOfScreenVerticalLimit = topOfScreenVerticalLimit;
+    this.bottomOfScreenVerticalLimit = bottomOfScreenVerticalLimit;
     this.leftVerticalLimit = leftVerticalLimit;
     this.rightVerticalLimit = rightVerticalLimit;
     ufoWentOffScreen = false;
@@ -50,7 +58,10 @@ public class UFOEntity extends EnemyEntity
     this.setEnemyType(Constants.EnemyTypes.UFO);
     this.setPointValue((GameUtility.random.nextInt(10) + 1) * 100);
 
-    lastShotTime = System.currentTimeMillis();    
+    lastShotTime = System.currentTimeMillis();
+
+    System.out.println("Spawning a UFO of Type: " + this.getEnemyType().toString());
+    System.out.println(toString());
   }
 
   public int getUfoHealth()
@@ -100,8 +111,8 @@ public class UFOEntity extends EnemyEntity
         }
       }
 
-      // Check if the UFO has reached either of its horizontal limits, if it has change the direction
-      if ((this.position.y < lowerHorizontalLimit) || ((this.position.y + this.getHeight()) > upperHorizontalLimit))
+      // Check if the UFO has reached either of its vertical limits, if it has change the direction
+      if ((this.position.y < topOfScreenVerticalLimit) || ((this.position.y + this.getHeight()) > bottomOfScreenVerticalLimit))
       {
         velocity.y = -velocity.y;
       }
@@ -118,50 +129,68 @@ public class UFOEntity extends EnemyEntity
     {
       manager.reset();
     }
-    
+
     if (!ufoWentOffScreen)
     {
       ScoreManager.incrementScore(this.getPointValue());
     }
-    
+
     super.kill();
   }
-  
+
   /*
    * Private methods
    */
   private void assignUFOInitialVelocityAndStartingPosition()
   {
-    // Assign this entity a random velocity
-    this.velocity = GameUtility.computeRandomVelocity();
-    velocity.scaleThisVector(Constants.UFO_SPEED);
+    // First, pick a direction. The UFO will either move from left to right or right to left
+    movingRight = GameUtility.random.nextBoolean();
 
-    // If the x component of the velocity is positive, the UFO will move from left to right (i.e., moving left)
-    if (velocity.x > 0)
+    if (movingRight)
     {
-      // Therefore the ending limit will be right side of the screen.
+      // If the UFO will be moving right, its ending x position will be the right side of the screen 
       endingXPosition = rightVerticalLimit;
-      movingRight = true;
-    }
-    // If the x component of the velocity is negative, the UFO will move from right to left
-    else
-    {
-      // Therefore the ending limit will be left side of the screen.
-      endingXPosition = leftVerticalLimit;
-      movingRight = false;
-    }
 
-    // Start the UFO off the right side of the screen
-    if (endingXPosition == rightVerticalLimit)
-    {
+      // Make the starting x position off the left side of the screen
       this.position.x = leftVerticalLimit - this.getWidth();
+
+      // Since UFO is moving right, we want it to move at a vector between UFO_MOVING_RIGHT_MIN_ANGLE_IN_DEGREES degrees and UFO_MOVING_RIGHT_MAX_ANGLE_IN_DEGREES degrees 
+      initialHeadingAngle = (int) ((Math.random() * (Constants.UFO_MOVING_RIGHT_MAX_ANGLE_IN_DEGREES - Constants.UFO_MOVING_RIGHT_MIN_ANGLE_IN_DEGREES)) + Constants.UFO_MOVING_RIGHT_MIN_ANGLE_IN_DEGREES);
     }
-    // Start the UFO off the left side of the screen
     else
     {
+      // If the UFO will be moving left, its ending x position will be the left side of the screen 
+      endingXPosition = leftVerticalLimit;
+
+      // Make the starting x position off the right side of the screen
       this.position.x = rightVerticalLimit + this.getWidth();
+
+      // Since UFO is moving left, we want it to move at a vector between UFO_MOVING_LEFT_MIN_ANGLE_IN_DEGREES degrees and UFO_MOVING_LEFT_MAX_ANGLE_IN_DEGREES degrees 
+      initialHeadingAngle = (int) ((Math.random() * (Constants.UFO_MOVING_LEFT_MAX_ANGLE_IN_DEGREES - Constants.UFO_MOVING_LEFT_MIN_ANGLE_IN_DEGREES)) + Constants.UFO_MOVING_LEFT_MIN_ANGLE_IN_DEGREES);
     }
 
-    this.position.y = lowerHorizontalLimit + (int) (GameUtility.random.nextDouble() * ((upperHorizontalLimit - lowerHorizontalLimit) + 1));
+    // Create the unit vector given the heading angle. Note that since in the game world, unit vector 
+    // [0, 1] is facing 3 O'Clock rather than noon, we must rotate CCW by 90 degrees to get the movement 
+    // in the right orientation. 
+    this.velocity = GameUtility.computeUnitVector(initialHeadingAngle);
+    this.velocity.rotateThisVector(-90);
+    this.velocity.scaleThisVector(Constants.UFO_SPEED);
+
+    // Make the y position between the defined vertical bounds.
+    this.position.y = topOfScreenVerticalLimit + (int) (GameUtility.random.nextDouble() * ((bottomOfScreenVerticalLimit - topOfScreenVerticalLimit) + 1));
+  }
+
+  // Debugging
+  @Override
+  public String toString()
+  {
+    String entitySnapshot = super.toString();
+
+    entitySnapshot += "Vertical Bounds: [" + topOfScreenVerticalLimit + ", " + bottomOfScreenVerticalLimit + "]\n";
+    entitySnapshot += "Horizontal Direction: " + (movingRight ? "Right" : "Left") + "\n";
+    entitySnapshot += "Heading Angle: " + initialHeadingAngle + "\n";
+    entitySnapshot += "Ending X Position: " + endingXPosition + "\n";
+
+    return entitySnapshot;
   }
 }

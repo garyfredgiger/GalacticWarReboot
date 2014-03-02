@@ -133,14 +133,13 @@ public class UFOEntityManager
       switch (ufoTypeToLaunch)
       {
         case UFO_STRONG:
-          return new UFOStrongEntity(imageObserver, this, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+          return new UFOStrongEntity(imageObserver, this, (int) (screenHeight * 0.10), (int) (screenHeight * 0.90), 0, screenWidth);
 
         case UFO_SHORTY:
-          //return new UFOShorty(imageObserver, this, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), ImageManager.getImage(Constants.FILENAME_UFO_SHORTY).getWidth(imageObserver), screenWidth + ImageManager.getImage(Constants.FILENAME_UFO_SHORTY).getWidth(imageObserver));
-          return new UFOShorty(imageObserver, this, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+          return new UFOShorty(imageObserver, this, (int) (screenHeight * 0.10), (int) (screenHeight * 0.90), 0, screenWidth);
           
         default:
-          return new UFOEntity(imageObserver, this, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
+          return new UFOEntity(imageObserver, this, (int) (screenHeight * 0.10), (int) (screenHeight * 0.90), 0, screenWidth);
       }
     }
 

@@ -1,6 +1,7 @@
 package galacticwarreboot;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
@@ -17,7 +18,6 @@ import galacticwarreboot.entities.PlayerShotEntity;
 import galacticwarreboot.entities.PowerupEntity;
 import galacticwarreboot.entities.SuperShieldEntity;
 import galacticwarreboot.entities.UFOEntity;
-import galacticwarreboot.entities.UFOShorty;
 import galacticwarreboot.entities.UFOStrongEntity;
 import game.framework.GameEngine;
 import game.framework.entities.Entity2D;
@@ -124,6 +124,14 @@ public class Asteroids extends GameEngine
   private StaticText          msgGameOverScreen;
   private StaticText          msgNextLevelScreen;
   private StaticText          msgPlayerDeadScreen;
+  private StaticText          msgHUDHealthBar;
+  private StaticText          msgHUDShieldBar;
+  private StaticText          msgHUDFirepower;
+  private StaticText          msgHUDCurrentLevel;
+  private StaticText          msgHUDScore;
+  private StaticText          msgHUDNumberOfSuperShields;
+  private StaticText          msgHUDNumberOfTheBombs;
+  private StaticText          msgHUDTheBombCoundown;
 
   // Game Power-up Flags
   private boolean             firstIncreasedHealthPointMark;                                            // When user's score reaches above a certain score, he/she will get an increased health bonus from 10 to 20
@@ -197,7 +205,7 @@ public class Asteroids extends GameEngine
     prepareTheBomb = false;
     executeTheBomb = false;
     //invokePlayerDeadState = false;
-    
+
     lastUFOCollisionTime = System.currentTimeMillis();
     //launchStrongUFO = false;
     ufoTypeToLaunch = 0;
@@ -206,6 +214,18 @@ public class Asteroids extends GameEngine
     msgGameOverScreen = new StaticText(Constants.MSG_GAMEOVER_SCREEN_GAMEOVER, Color.YELLOW, Constants.FONT_GAME_OVER_SCREEN, screenWidth, screenHeight);
     msgNextLevelScreen = new StaticText("", Color.YELLOW, Constants.FONT_GAME_OVER_SCREEN, screenWidth, screenHeight);
     msgPlayerDeadScreen = new StaticText(Constants.MSG_PLAYER_DEAD, Color.WHITE, Constants.FONT_PLAYER_DEAD_SCREEN, screenWidth, screenHeight);
+    msgHUDHealthBar = new StaticText(Constants.MSG_GAME_PLAYING_HEALTH, (screenWidth - 284), 30, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_SMALL, screenWidth, screenHeight);
+    msgHUDShieldBar = new StaticText(Constants.MSG_GAME_PLAYING_SHIELD, (screenWidth - 282), 47, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_SMALL, screenWidth, screenHeight);
+    msgHUDFirepower = new StaticText(Constants.MSG_GAME_PLAYING_FIREPOWER, 20, 40, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
+    msgHUDCurrentLevel = new StaticText("", 20, 65, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
+    msgHUDNumberOfSuperShields = new StaticText("", 50, 103, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
+    msgHUDNumberOfTheBombs = new StaticText("", 50, 133, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
+    msgHUDTheBombCoundown = new StaticText("", Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_LARGE1, screenWidth, screenHeight);
+
+    // NOTE: We will center the score horizontally, this is why there is a -1 for the x value
+    msgHUDScore = new StaticText(Constants.MSG_GAME_PLAYING_SCORE, -1, 40, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
+    msgHUDScore.setAdditionalOffsetHorizontal(-40);
+    msgHUDScore.centerHorizontally();    
 
     firstIncreasedHealthPointMark = false;
     secondIncreasedHealthPointMark = false;
@@ -321,38 +341,6 @@ public class Asteroids extends GameEngine
         {
           addEnemy(ufoEntity);
         }
-        
-//        if (ufoManager.ufoShouldBeLaunched(currentLevel))
-//        {
-//          if ((currentLevel >= Constants.GAME_LAUNCH_SUPER_UFO_LEVEL) && (currentLevel < Constants.GAME_LAUNCH_SHORTY_UFO_LEVEL))
-//          {
-//            ufoTypeToLaunch = GameUtility.random.nextInt(2);
-//          }
-//          else if (currentLevel >= Constants.GAME_LAUNCH_SHORTY_UFO_LEVEL)
-//          {
-//            // Starting with level GAME_LAUNCH_SHORTY_UFO_LEVEL we only want to launch strong or shorty UFOs
-//            ufoTypeToLaunch = GameUtility.random.nextInt(2);
-//            ufoTypeToLaunch = ufoTypeToLaunch + 1;
-//          }
-//
-//          // TODO: Possibly use a factory pattern here to create a new UFO
-//          switch (ufoTypeToLaunch)
-//          {
-//            case 1:
-//              UFOStrongEntity newStrongUfo = new UFOStrongEntity(this.imageObserver, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
-//              addEnemy(newStrongUfo);
-//              break;
-//
-//            case 2:
-//              UFOShorty newShortyUfo = new UFOShorty(this.imageObserver, ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), ImageManager.getImage(Constants.FILENAME_UFO_SHORTY).getWidth(imageObserver), screenWidth + ImageManager.getImage(Constants.FILENAME_UFO_SHORTY).getWidth(imageObserver));
-//              addEnemy(newShortyUfo);
-//              break;
-//
-//            default:
-//              UFOEntity newUfo = new UFOEntity(this.imageObserver, ImageManager.getImage(Constants.FILENAME_UFO), ufoManager, (int) (screenHeight * 0.90), (int) (screenHeight * 0.10), 0, screenWidth);
-//              addEnemy(newUfo);
-//          }
-//        }
 
         // This will simulate a 3 second counter before detonating the bomb
         if (prepareTheBomb)
@@ -905,9 +893,6 @@ public class Asteroids extends GameEngine
   @Override
   public void userGamePostDraw(Graphics2D g)
   {
-    // For debugging purposes
-    int line = 300;
-
     switch (this.state)
     {
       case INTRODUCTION:
@@ -921,178 +906,7 @@ public class Asteroids extends GameEngine
       case PLAYING:
 
         displayHUD(g);
-        
-//        // Draw player health bar
-//        String barFrameImageName = "";
-//        switch(((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH))
-//        {
-//          case Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20:
-//            barFrameImageName = Constants.FILENAME_BAR_FRAME_20;
-//            break;
-//          case Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40:
-//            barFrameImageName = Constants.FILENAME_BAR_FRAME_40;
-//            break;
-//          default:
-//            barFrameImageName = Constants.FILENAME_BAR_FRAME_10;
-//        }
-//        g.drawImage(ImageManager.getImage(barFrameImageName), screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 20, 18, this.imageObserver);
-//
-//        // Draw the label for the health bar
-//        g.setFont(Constants.FONT_GAME_PLAYING_HUD_SMALL);
-//        boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_HEALTH, g);
-//        g.setColor(Color.WHITE);
-//        g.drawString(Constants.MSG_GAME_PLAYING_HEALTH, (int) (screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 20 - boundsGamePlayingHUDMsgs.getWidth()), 30);
-//
-//        // Draw player shield bar
-//        switch(((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD))
-//        {
-//          case Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_20:
-//            barFrameImageName = Constants.FILENAME_BAR_FRAME_20;
-//            break;
-//          case Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_40:
-//            barFrameImageName = Constants.FILENAME_BAR_FRAME_40;
-//            break;
-//          default:
-//            barFrameImageName = Constants.FILENAME_BAR_FRAME_10;
-//        }
-//        g.drawImage(ImageManager.getImage(barFrameImageName), screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 20, 33, this.imageObserver);
-//
-//        // Draw the health level
-//        for (int n = 0; n < ((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_HEALTH); n++)
-//        {
-//          int dx = (screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 18) + n * 5;
-//          g.drawImage(ImageManager.getImage(Constants.FILENAME_BAR_HEALTH), dx, 20, this.imageObserver);
-//        }
-//
-//        // Draw the shield level
-//        for (int n = 0; n < ((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SHIELD); n++)
-//        {
-//          int dx = (screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 18) + n * 5;
-//          g.drawImage(ImageManager.getImage(Constants.FILENAME_BAR_SHIELD), dx, 35, this.imageObserver);
-//        }
-//
-//        // Draw the label for the shield bar
-//        g.setFont(Constants.FONT_GAME_PLAYING_HUD_SMALL);
-//        boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_SHIELD, g);
-//        g.setColor(Color.WHITE);
-//        g.drawString(Constants.MSG_GAME_PLAYING_SHIELD, (int) (screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 20 - boundsGamePlayingHUDMsgs.getWidth()), 47);
-//
-//        // Draw label next to bullet upgrades
-//        g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-//        boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_FIREPOWER, g);
-//        g.setColor(Color.WHITE);
-//        g.drawString(Constants.MSG_GAME_PLAYING_FIREPOWER, (int) 20, 40);
-//
-//        // Draw the bullet upgrades
-//        String playerFirepowerImageName = "";
-//        switch (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_FIREPOWER))
-//        {
-//          case 2:
-//            playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN_2;
-//            break;
-//          case 3:
-//            playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN_3;
-//            break;
-//          case 4:
-//            playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN_4;
-//            break;
-//          case 5:
-//            playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN_5;
-//            break;
-//          default:
-//            playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN;
-//        }
-//        g.drawImage(ImageManager.getImage(playerFirepowerImageName), 130, 17, this.imageObserver);
-//
-//        // Draw the score
-//        g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-//        g.setColor(Color.WHITE);
-//        String scoreMsg = Constants.MSG_GAME_PLAYING_SCORE + GameUtility.lPadZero(ScoreManager.getScore(), 6);
-//        Rectangle2D boundsScore = g.getFontMetrics().getStringBounds(scoreMsg, g);
-//        g.drawString(scoreMsg, (int) (((screenWidth - boundsScore.getWidth()) / 2) - 40), 40);
-//
-//        // Draw the current level
-//        g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-//        g.setColor(Color.WHITE);
-//        String waveMsg = Constants.MSG_GAME_PLAYING_WAVE + GameUtility.lPadZero(currentLevel, 2);
-//        g.drawString(waveMsg, 20, 65);
-//
-//        // Draw the super shield icon along with amount
-//        g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON), 20, 85, this.imageObserver);
-//        g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-//        g.setColor(Color.WHITE);
-//        g.drawString(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SUPER_SHIELD) + "", 50, 103);
-//
-//        // Draw the bomb icon along with amount
-//        g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_THE_BOMB_ICON), 20, 115, this.imageObserver);
-//        g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-//        g.setColor(Color.WHITE);
-//        g.drawString(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_THE_BOMB) + "", 50, 133);
-//
-//        // Draw the auto shield icon along with amount
-//        //g.drawImage(powerupAutoShield.getImage(), 20, 145, this.imageObserver);
-//        switch(((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST))
-//        {
-//          case 2:
-//            g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), 20, 185, this.imageObserver);
-//            break;
-//            
-//          case 3:
-//            g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), 20, 185, this.imageObserver);
-//            break;
-//            
-//          default:
-//        }
-//
-//        if (prepareTheBomb)
-//        {
-//          g.setFont(Constants.FONT_GAME_PLAYING_HUD_LARGE1);
-//          g.setColor(Color.WHITE);
-//
-//          if (playCountdownTimerSound)
-//          {
-//            switch ((int) prepareBombTimerSecondCount)
-//            {
-//              case 3:
-//              case 2:
-//              case 1:
-//                soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_BOMB_COUNTDOWN_3);
-//                this.playCountdownTimerSound = false;
-//                break;
-//              default:
-//                soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_BOMB_COUNTDOWN_2);
-//                this.playCountdownTimerSound = false;
-//            }
-//          }
-//
-//          String countDownMsg = Constants.DOT_DOT_DOT + prepareBombTimerSecondCount + Constants.DOT_DOT_DOT;
-//          boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(countDownMsg, g);
-//          g.drawString(countDownMsg, (int) ((screenWidth - boundsGamePlayingHUDMsgs.getWidth()) / 2), (int) ((screenHeight - boundsGamePlayingHUDMsgs.getHeight()) / 2));
-//        }
-
-        if (displayDebugInfo)
-        {
-          g.setFont(Constants.FONT_DEBUG);
-          g.setColor(Color.WHITE);
-
-          g.drawString(Constants.DEBUG_MSG_THRUST_ON + thrust, 560, line);
-          line += 16;
-
-          g.drawString(Constants.DEBUG_MSG_SHIELD + keyShield, 560, line);
-          line += 16;
-    
-          g.drawString(Constants.DEBUG_MSG_UFO_PROB + ufoManager.getProbability(), 560, line);
-          line += 16;
-          g.drawString(Constants.DEBUG_MSG_THRUST_VALUE + ((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST), 560, line);
-          line += 16;
-          g.drawString(Constants.DEBUG_MSG_SPAWN_PROBABILITY + powerupManager.getProbability(), 560, line);
-          line += 16;
-          g.drawString(Constants.DEBUG_MSG_PLAYER_HEALTH_CAPACITY + ((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) , 560, line);
-          line += 16;
-          g.drawString(Constants.DEBUG_MSG_PLAYER_SHIELD_CAPACITY + ((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD), 560, line);
-          line += 16;
-        }
-
+        displayDebugInfo(g);
         break;
 
       case PLAYER_DEAD:
@@ -1930,13 +1744,7 @@ public class Asteroids extends GameEngine
         barFrameImageName = Constants.FILENAME_BAR_FRAME_10;
     }
     g.drawImage(ImageManager.getImage(barFrameImageName), screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 20, 18, this.imageObserver);
-
-    // Draw the label for the health bar
-    g.setFont(Constants.FONT_GAME_PLAYING_HUD_SMALL);
-    boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_HEALTH, g);
-    g.setColor(Color.WHITE);
-    g.drawString(Constants.MSG_GAME_PLAYING_HEALTH, (int) (screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 20 - boundsGamePlayingHUDMsgs.getWidth()), 30);
-
+    
     // Draw player shield bar
     switch(((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD))
     {
@@ -1965,17 +1773,23 @@ public class Asteroids extends GameEngine
       g.drawImage(ImageManager.getImage(Constants.FILENAME_BAR_SHIELD), dx, 35, this.imageObserver);
     }
 
-    // Draw the label for the shield bar
-    g.setFont(Constants.FONT_GAME_PLAYING_HUD_SMALL);
-    boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_SHIELD, g);
-    g.setColor(Color.WHITE);
-    g.drawString(Constants.MSG_GAME_PLAYING_SHIELD, (int) (screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 20 - boundsGamePlayingHUDMsgs.getWidth()), 47);
+    msgHUDHealthBar.draw(g);  // Draw the label for the health bar    
+    msgHUDShieldBar.draw(g);  // Draw the label for the shield bar
+    msgHUDFirepower.draw(g);  // Draw label next to bullet upgrades
 
-    // Draw label next to bullet upgrades
-    g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-    boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PLAYING_FIREPOWER, g);
-    g.setColor(Color.WHITE);
-    g.drawString(Constants.MSG_GAME_PLAYING_FIREPOWER, (int) 20, 40);
+    // Draw the current level
+    msgHUDCurrentLevel.setText(Constants.MSG_GAME_PLAYING_WAVE + GameUtility.lPadZero(currentLevel, 2));
+    msgHUDCurrentLevel.draw(g);
+
+    // Draw the score
+    msgHUDScore.setText(Constants.MSG_GAME_PLAYING_SCORE + GameUtility.lPadZero(ScoreManager.getScore(), 6));
+    msgHUDScore.draw(g);
+
+    // Draw the amounts for Super Shields and for The Bomb 
+    msgHUDNumberOfSuperShields.setText(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SUPER_SHIELD) + "");
+    msgHUDNumberOfTheBombs.setText(((PlayerEntity)getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_THE_BOMB) + "");
+    msgHUDNumberOfSuperShields.draw(g);
+    msgHUDNumberOfTheBombs.draw(g);
 
     // Draw the bullet upgrades
     String playerFirepowerImageName = "";
@@ -1984,47 +1798,34 @@ public class Asteroids extends GameEngine
       case 2:
         playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN_2;
         break;
+
       case 3:
         playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN_3;
         break;
+
       case 4:
         playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN_4;
         break;
+
       case 5:
         playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN_5;
         break;
+
       default:
         playerFirepowerImageName = Constants.FILENAME_POWERUP_GUN;
     }
     g.drawImage(ImageManager.getImage(playerFirepowerImageName), 130, 17, this.imageObserver);
 
-    // Draw the score
-    g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-    g.setColor(Color.WHITE);
-    String scoreMsg = Constants.MSG_GAME_PLAYING_SCORE + GameUtility.lPadZero(ScoreManager.getScore(), 6);
-    Rectangle2D boundsScore = g.getFontMetrics().getStringBounds(scoreMsg, g);
-    g.drawString(scoreMsg, (int) (((screenWidth - boundsScore.getWidth()) / 2) - 40), 40);
-
-    // Draw the current level
-    g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-    g.setColor(Color.WHITE);
-    String waveMsg = Constants.MSG_GAME_PLAYING_WAVE + GameUtility.lPadZero(currentLevel, 2);
-    g.drawString(waveMsg, 20, 65);
-
-    // Draw the super shield icon along with amount
+    // Draw the super shield icon
     g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON), 20, 85, this.imageObserver);
-    g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-    g.setColor(Color.WHITE);
-    g.drawString(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SUPER_SHIELD) + "", 50, 103);
-
-    // Draw the bomb icon along with amount
+    
+    // Draw the bomb icon
     g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_THE_BOMB_ICON), 20, 115, this.imageObserver);
-    g.setFont(Constants.FONT_GAME_PLAYING_HUD_MEDIUM);
-    g.setColor(Color.WHITE);
-    g.drawString(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_THE_BOMB) + "", 50, 133);
-
+    
     // Draw the auto shield icon along with amount
     //g.drawImage(powerupAutoShield.getImage(), 20, 145, this.imageObserver);
+    
+    // Draw the respective thrust icon given the players current thrust level
     switch(((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST))
     {
       case 2:
@@ -2041,9 +1842,6 @@ public class Asteroids extends GameEngine
     // TODO: This might go into a separate method since it might not be part of the HUD 
     if (prepareTheBomb)
     {
-      g.setFont(Constants.FONT_GAME_PLAYING_HUD_LARGE1);
-      g.setColor(Color.WHITE);
-
       if (playCountdownTimerSound)
       {
         switch ((int) prepareBombTimerSecondCount)
@@ -2059,13 +1857,12 @@ public class Asteroids extends GameEngine
             this.playCountdownTimerSound = false;
         }
       }
-
-      String countDownMsg = Constants.DOT_DOT_DOT + prepareBombTimerSecondCount + Constants.DOT_DOT_DOT;
-      boundsGamePlayingHUDMsgs = g.getFontMetrics().getStringBounds(countDownMsg, g);
-      g.drawString(countDownMsg, (int) ((screenWidth - boundsGamePlayingHUDMsgs.getWidth()) / 2), (int) ((screenHeight - boundsGamePlayingHUDMsgs.getHeight()) / 2));
+      
+      msgHUDTheBombCoundown.setText(Constants.DOT_DOT_DOT + prepareBombTimerSecondCount + Constants.DOT_DOT_DOT);
+      msgHUDTheBombCoundown.draw(g);
     }
   }
-  
+
   private void displayGameStartScreen(Graphics2D g)
   {
     msgGameStartScreen.draw(g);
@@ -2088,4 +1885,32 @@ public class Asteroids extends GameEngine
   }
 
   // TODO: Add a method to display the instructions screen
+  
+  public void displayDebugInfo(Graphics2D g)
+  {
+    // For debugging purposes
+    int line = 300;
+    
+    if (displayDebugInfo)
+    {
+      g.setFont(Constants.FONT_DEBUG);
+      g.setColor(Color.WHITE);
+
+      g.drawString(Constants.DEBUG_MSG_THRUST_ON + thrust, 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_SHIELD + keyShield, 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_UFO_PROB + ufoManager.getProbability(), 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_THRUST_VALUE + ((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST), 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_SPAWN_PROBABILITY + powerupManager.getProbability(), 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_PLAYER_HEALTH_CAPACITY + ((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) , 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_PLAYER_SHIELD_CAPACITY + ((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD), 560, line);
+      line += 16;
+    }
+  }
+  
 }

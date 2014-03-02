@@ -162,11 +162,11 @@ public class Constants
   public static final String FILENAME_UFO_SHORTY_SHOT                         = "ufoshot2.png";
 
   // Indices for the spaceship image array
-//  public static final int    IMAGE_SPACESHIP_INDEX                            = 0;
-//  public static final int    IMAGE_SPACESHIP_SHIELD_INDEX                     = 1;
-//  public static final int    IMAGE_SPACESHIP_THRUST1_INDEX                    = 2;
-//  public static final int    IMAGE_SPACESHIP_THRUST2_INDEX                    = 3;
-//  public static final int    IMAGE_SPACESHIP_THRUST3_INDEX                    = 4;
+  //  public static final int    IMAGE_SPACESHIP_INDEX                            = 0;
+  //  public static final int    IMAGE_SPACESHIP_SHIELD_INDEX                     = 1;
+  //  public static final int    IMAGE_SPACESHIP_THRUST1_INDEX                    = 2;
+  //  public static final int    IMAGE_SPACESHIP_THRUST2_INDEX                    = 3;
+  //  public static final int    IMAGE_SPACESHIP_THRUST3_INDEX                    = 4;
 
   // Fonts used in the Introduction screen
   public static final Font   FONT_INTRO_SCREEN_MAIN_TITLE                     = new Font("Verdana", Font.BOLD, 36);
@@ -226,7 +226,7 @@ public class Constants
   public static final int    GAME_STARTING_NUMBER_OF_ASTEROIDS                = 1;
   public static final int    GAME_MAX_NUMBER_ASTEROIDS_ON_SCREEN              = 40;
   public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 5;                                                       // Was 5
-  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                      // Was 10
+  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                       // Was 10
   public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 15;                                                      // Was 15
 
   public static final String DOT_DOT_DOT                                      = "...";
@@ -298,7 +298,7 @@ public class Constants
   public static final int    SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT       = 75000;                                                   // Was 50000
 
   // UFO Constants
-  public static final int    UFO_SPEED                                        = 150;
+  public static final int    UFO_SPEED                                        = 150;                                                      // Was 150
   public static final int    UFO_SHOT_INTERVAL                                = 750;
   public static final int    UFO_SUPER_SHOT_INTERVAL                          = 500;
   public static final int    UFO_SHORTY_SHOT_INTERVAL                         = 250;
@@ -308,11 +308,16 @@ public class Constants
   public static final double UFO_SHORTY_BULLET_LIFE_SPAN_IN_SECS              = 1.5;
   public static final int    UFO_SPAWN_PROBABILITY                            = 50;
   public static final int    UFO_TOTAL_EVENTS_TO_SPAWN                        = 10000;
-  public static final long   UFO_MIN_TIME_BETWEEN_LAUNCHES                    = 10000;
+  public static final long   UFO_MIN_TIME_BETWEEN_LAUNCHES                    = 5000;                                                    // Was 10000
   public static final long   UFO_TIME_BETWEEN_SHIELD_HITS                     = 750;
 
   public static final long   UFO_SHORTY_TIME_BETWEEN_HITS                     = 50;
-  public static final int   UFO_SHORTY_HIT_POINTS                            = 10;
+  public static final int    UFO_SHORTY_HIT_POINTS                            = 10;
+
+  public static final int    UFO_MOVING_RIGHT_MIN_ANGLE_IN_DEGREES            = 25;
+  public static final int    UFO_MOVING_RIGHT_MAX_ANGLE_IN_DEGREES            = 155;
+  public static final int    UFO_MOVING_LEFT_MIN_ANGLE_IN_DEGREES             = 205;
+  public static final int    UFO_MOVING_LEFT_MAX_ANGLE_IN_DEGREES             = 335;
 
   public static final int    SHIP_STARTING_FIREPOWER                          = 2;
   public static final int    SHIP_MAX_FIREPOWER                               = 5;
