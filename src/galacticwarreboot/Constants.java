@@ -236,9 +236,9 @@ public class Constants
   public static final int    GAME_STARTING_LEVEL                              = 0;
   public static final int    GAME_STARTING_NUMBER_OF_ASTEROIDS                = 1;
   public static final int    GAME_MAX_NUMBER_ASTEROIDS_ON_SCREEN              = 40;
-  public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 1;                                                       // Was 5
-  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 1;                                                       // Was 10
-  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 1;                                                      // Was 15
+  public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 5;                                                       // Was 5
+  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                       // Was 10
+  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 15;                                                      // Was 15
 
   public static final String DOT_DOT_DOT                                      = "...";
 
