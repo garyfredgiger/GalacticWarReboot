@@ -115,6 +115,7 @@ public class Asteroids extends GameEngine
   private StaticText          msgHUDNumberOfSuperShields;
   private StaticText          msgHUDNumberOfTheBombs;
   private StaticText          msgHUDTheBombCoundown;
+  private StaticText          msgPaused;
 
   /*
    * Sound variables
@@ -197,7 +198,8 @@ public class Asteroids extends GameEngine
     msgHUDNumberOfSuperShields = new StaticText("", 50, 103, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
     msgHUDNumberOfTheBombs = new StaticText("", 50, 133, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
     msgHUDTheBombCoundown = new StaticText("", Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_LARGE1, screenWidth, screenHeight);
-
+    msgPaused = new StaticText(Constants.MSG_GAME_PAUSED, Color.WHITE, Constants.FONT_PAUSED_SCREEN, screenWidth, screenHeight);
+    
     // NOTE: We will center the score horizontally, this is why there is a -1 for the x value
     msgHUDScore = new StaticText(Constants.MSG_GAME_PLAYING_SCORE, -1, 40, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
     msgHUDScore.setAdditionalOffsetHorizontal(-40);
@@ -864,39 +866,28 @@ public class Asteroids extends GameEngine
     switch (this.state)
     {
       case INTRODUCTION:
-
         break;
 
       case GAME_START:
-
         break;
 
       case PAUSED:
-
-        // Draw the paused message
-        g.setFont(Constants.FONT_PAUSED_SCREEN);
-        g.setColor(Color.WHITE);
-        Rectangle2D boundsPaused = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PAUSED, g);
-        g.drawString(Constants.MSG_GAME_PAUSED, (int) ((screenWidth - boundsPaused.getWidth()) / 2), (int) ((screenHeight - boundsPaused.getHeight()) / 2));
+        msgPaused.draw(g);
         
       case PLAYING:
-
         displayHUD(g);
         displayDebugInfo(g);
         break;
 
       case PLAYER_DEAD:
-
         displayPlayerDeadScreen(g);
         break;
 
       case GAMEOVER:
-
         displayGameOverScreen(g);
         break;
         
       case LEVEL_NEXT:
-
         displayNextLevelScreen(g);
         break;
 
