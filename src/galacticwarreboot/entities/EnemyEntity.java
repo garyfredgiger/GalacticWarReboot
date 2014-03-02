@@ -20,6 +20,11 @@ public class EnemyEntity extends EntityImage
   public void doLogic()
   {}
 
+  public boolean shouldFireShot()
+  {
+    return false;
+  }
+
   public void setPointValue(int value)
   {
     pointValue = value;

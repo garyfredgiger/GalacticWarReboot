@@ -69,6 +69,7 @@ public class UFOEntity extends EnemyEntity
     return ufoHealth;
   }
 
+  @Override
   public boolean shouldFireShot()
   {
     if (System.currentTimeMillis() < (lastShotTime + Constants.UFO_SHOT_INTERVAL))

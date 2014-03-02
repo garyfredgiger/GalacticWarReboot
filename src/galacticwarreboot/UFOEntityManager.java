@@ -5,6 +5,9 @@ import java.awt.image.ImageObserver;
 import galacticwarreboot.entities.UFOEntity;
 import galacticwarreboot.entities.UFOShorty;
 import galacticwarreboot.entities.UFOStrongEntity;
+import game.framework.entities.EntityImage;
+import game.framework.primitives.Position2D;
+import game.framework.utilities.GameEngineConstants;
 import game.framework.utilities.GameUtility;
 
 public class UFOEntityManager
@@ -57,38 +60,6 @@ public class UFOEntityManager
   /*
    * Determine if a UFO should be launched
    */
-//  public boolean ufoShouldBeLaunched(int level)
-//  {
-//    // Check that there is no current UFO in flight. If there is, simply exit this method
-//    if (ufoInFlight)
-//    {
-//      return false;
-//    }
-//
-//    // Check if the minimum time has elapsed for launching a UFO.
-//    if (System.currentTimeMillis() < (lastUFOKilledTime + minTimeBetweenUFOLaunches))
-//    {
-//      return false;
-//    }
-//
-//    if (level < Constants.GAME_UFO_MIN_UFO_LAUNCH_LEVEL)
-//    {
-//      return false;
-//    }
-//
-//    // If there is no current UFO in flight, determine if a new UFO should be launched.
-//    randomProbability = GameUtility.random.nextInt(Constants.UFO_TOTAL_EVENTS_TO_SPAWN);
-//    if (randomProbability < currentProbabilityTolaunchANewUFO)
-//    {
-//      // Set the flag that indicates a new UFO is in flight
-//      ufoInFlight = true;
-//      //lastUFOKilledTime = System.currentTimeMillis();
-//      return true;
-//    }
-//
-//    return false;
-//  }
-
   public UFOEntity ufoShouldBeLaunched(int level, ImageObserver imageObserver, int screenWidth, int screenHeight)
   {
     // Check that there is no current UFO in flight. If there is, simply exit this method
@@ -145,6 +116,35 @@ public class UFOEntityManager
 
     // The probability to launch a UFO was not satisfied, do nothing.
     return null;
+  }
+
+  // Fire a shot at the player ship
+  public EntityImage stockUFOBullet(Position2D ufoPos, Position2D playerPos, Constants.EnemyTypes ufoType, ImageObserver imageObserver)
+  {
+    EntityImage bullet = new EntityImage(imageObserver, GameEngineConstants.EntityTypes.ENEMY_SHOT);
+    
+    switch(ufoType)
+    {
+      case UFO_SHORTY:
+        // Compute bullet heading given current position of player and this ufo entity
+        bullet.setVelocity(GameUtility.computeUnitVectorBetweenTwoPositions(ufoPos, playerPos).createScaledVector(Constants.UFO_SHORTY_SHOT_SPEED));
+        bullet.setImage(ImageManager.getImage(Constants.FILENAME_UFO_SHORTY_SHOT));
+        bullet.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.UFO_SHORTY_BULLET_LIFE_SPAN_IN_SECS));
+        break;
+
+      default:
+        // Compute bullet heading given current position of player and this ufo entity
+        bullet.setVelocity(GameUtility.computeUnitVectorBetweenTwoPositions(ufoPos, playerPos).createScaledVector(Constants.UFO_SHOT_SPEED));
+        bullet.setImage(ImageManager.getImage(Constants.FILENAME_UFO_SHOT));
+        bullet.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.UFO_BULLET_LIFE_SPAN_IN_SECS));
+    }
+
+    // Set the bullet's starting position
+    double x = ufoPos.x - bullet.getWidth() / 2;
+    double y = ufoPos.y - bullet.getHeight() / 2;
+    bullet.setPosition(x, y);
+    
+    return bullet;
   }
 
   /*

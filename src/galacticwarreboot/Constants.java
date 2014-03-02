@@ -186,7 +186,7 @@ public class Constants
   public static final Font   FONT_PLAYER_DEAD_SCREEN                          = new Font("Verdana", Font.BOLD, 40);
 
   // Fonts used in the Game Over screen
-  public static final Font   FONT_GAME_OVER_SCREEN                            = new Font("Verdana", Font.BOLD, 40);
+  public static final Font   FONT_GAME_OVER_SCREEN                            = new Font("Verdana", Font.BOLD, 64);
 
   // Fonts used in Next Level Screen
   public static final Font   FONT_NEXT_LEVEL_SCREEN                           = new Font("Verdana", Font.BOLD, 40);
@@ -221,13 +221,24 @@ public class Constants
   public static final String MSG_GAMEOVER_SCREEN_GAMEOVER                     = "GAME OVER";
   //public static final String MSG_GAMEOVER_SCREEN_RESTART     = "Press ENTER to Restart Game";
 
+  public static final int    ASTEROID_DIMENSIONS            = 128;
+  public static final int    ASTEROID_MIN_ROTATION_RATE     = 5;
+  public static final int    ASTEROID_MAX_ROTATION_RATE     = 50;
+
+  // TODO: Given different difficulty levels, it may be a good idea to have
+  // separate velocity scales
+  public static final int[]  BIG_ASTEROID_VELOCITY_SCALE    = new int[] { 10, 15, 25, 35, 50 };
+  public static final int[]  MEDIUM_ASTEROID_VELOCITY_SCALE = new int[] { 10, 25, 50, 60, 75, 90 };
+  public static final int[]  SMALL_ASTEROID_VELOCITY_SCALE  = new int[] { 50, 75, 100, 110, 115, 125 };
+  public static final int[]  TINY_ASTEROID_VELOCITY_SCALE   = new int[] { 50, 75, 125, 150, 175, 200 };
+
   // General Game Constants
   public static final int    GAME_STARTING_LEVEL                              = 0;
   public static final int    GAME_STARTING_NUMBER_OF_ASTEROIDS                = 1;
   public static final int    GAME_MAX_NUMBER_ASTEROIDS_ON_SCREEN              = 40;
-  public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 5;                                                       // Was 5
-  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                       // Was 10
-  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 15;                                                      // Was 15
+  public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 1;                                                       // Was 5
+  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 1;                                                       // Was 10
+  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 1;                                                      // Was 15
 
   public static final String DOT_DOT_DOT                                      = "...";
 
