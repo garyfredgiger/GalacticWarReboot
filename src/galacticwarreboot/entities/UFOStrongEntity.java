@@ -12,28 +12,19 @@ import java.awt.image.ImageObserver;
 
 public class UFOStrongEntity extends UFOEntity
 {
-  private int ufoStrength;
-  private long lastHitTime;
   private Image shieldImage;
-  private boolean ufoWentOffScreen;
-  
   private boolean ufoHullHit;
-  
+
   // TODO: Since there is an image manager, the parameter ufoImages may go away
-  //public UFOStrongEntity(ImageObserver observer, EntityImage[] ufoImages, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   public UFOStrongEntity(ImageObserver observer, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
-    super(observer, ImageManager.getImage(Constants.FILENAME_UFO), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
-    ufoStrength = 3;
-    this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_STRONG);
+    super(observer, manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
+    ufoHealth = 3;
+    shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_STRONG);
     lastHitTime = System.currentTimeMillis();
-    this.setEnemyType(Constants.EnemyTypes.UFO_STRONG);
+    setEnemyType(Constants.EnemyTypes.UFO_STRONG);
+    setImage(ImageManager.getImage(Constants.FILENAME_UFO));
     ufoHullHit = false;
-  }
-
-  public int getUfoStrength()
-  {
-    return ufoStrength;
   }
 
   public void ufoHullWasHit()
@@ -57,39 +48,13 @@ public class UFOStrongEntity extends UFOEntity
     lastShotTime = System.currentTimeMillis();
     return true;
   }
-
-  @Override
-  public void updatePosition(double delta)
-  {
-    if (isAlive())
-    {
-      if (movingRight)
-      {
-        if (this.position.x > endingXPosition)
-        {
-          ufoWentOffScreen = true;
-        }
-      }
-
-      if (!movingRight)
-      {
-        // If the entity is moving left, check the case where it moves off the right side of the screen, when it does kill it off
-        if ((this.position.x + this.getWidth()) < endingXPosition)
-        {
-          ufoWentOffScreen = true;
-        }
-      }
-    }
-
-    super.updatePosition(delta);
-  }
   
   @Override
   public void kill()
   {
     if (ufoWentOffScreen)
     {
-      System.out.println("UFOStrongEntity::lkill() - UFO Went Off Screen.");
+      //System.out.println("UFOStrongEntity::kill() - UFO Went Off Screen.");
       super.kill();
     }
 
@@ -99,9 +64,10 @@ public class UFOStrongEntity extends UFOEntity
       return;
     }
 
-    ufoStrength--;
+    // Each time the UFO gets hit
+    ufoHealth--;
     lastHitTime = System.currentTimeMillis();
-    switch(ufoStrength)
+    switch(ufoHealth)
     {
       // Choose the proper shield to draw
       case 3:

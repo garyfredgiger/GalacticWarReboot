@@ -166,7 +166,7 @@ public class PowerupManager
 
         switch (player.getShieldCapacity())
         {
-        // If players current shield capacity is the initial value, increase to the next level. 
+          // If players current shield capacity is the initial value, increase to the next level. 
           case Constants.SHIP_INITIAL_SHIELD:
 
             if (ScoreManager.getScore() > Constants.SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT)

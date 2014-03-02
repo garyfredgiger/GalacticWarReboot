@@ -312,7 +312,7 @@ public class Constants
   public static final long   UFO_TIME_BETWEEN_SHIELD_HITS                     = 750;
 
   public static final long   UFO_SHORTY_TIME_BETWEEN_HITS                     = 50;
-  public static final long   UFO_SHORTY_HIT_POINTS                            = 10;
+  public static final int   UFO_SHORTY_HIT_POINTS                            = 10;
 
   public static final int    SHIP_STARTING_FIREPOWER                          = 2;
   public static final int    SHIP_MAX_FIREPOWER                               = 5;
