@@ -47,7 +47,12 @@ public class Asteroids extends GameEngine
   private boolean             thrust;
   //private boolean             previousShieldState;
   private long                lastUFOCollisionTime;
+  
+  private boolean             gamePaused;
 
+  // When paused is activated, stores the previous state from which the paused state was entered so the previous state can be restored after paused is exited. 
+  private GameEngineConstants.GameState previousState;
+  
   private boolean             requestSuperShield;
   private boolean             requestTheBomb;
   private boolean             prepareTheBomb;
@@ -197,13 +202,6 @@ public class Asteroids extends GameEngine
     msgHUDScore = new StaticText(Constants.MSG_GAME_PLAYING_SCORE, -1, 40, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
     msgHUDScore.setAdditionalOffsetHorizontal(-40);
     msgHUDScore.centerHorizontally();    
-  }
-
-  private EntityImage loadImage(String imageFilename)
-  {
-    EntityImage imageEntity = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.UNDEFINED);
-    imageEntity.load(imageFilename);
-    return imageEntity;
   }
 
   @Override
@@ -755,6 +753,7 @@ public class Asteroids extends GameEngine
     {
       case LEVEL_NEXT:
       case PLAYING:
+
         if (playerMovement.keyLeft())
         {
           getPlayer().setRotationRate(-Constants.PLAYER_ROTATION_RATE);
@@ -808,6 +807,27 @@ public class Asteroids extends GameEngine
           prepareBombTimerSecondCount = 3;
           prepareBombTimer = System.currentTimeMillis();
         }
+        
+        if (gamePaused)
+        {
+          previousState = this.state;
+          state = GameEngineConstants.GameState.PAUSED;
+          this.pauseGame();
+        }
+
+        break;
+        
+      case PAUSED:
+
+        if (!gamePaused)
+        {
+          //state = GameEngineConstants.GameState.PLAYING;
+          state = previousState;          
+          unpauseGame();
+        }
+
+        break;
+        
       default:
     }
   }
@@ -851,6 +871,14 @@ public class Asteroids extends GameEngine
 
         break;
 
+      case PAUSED:
+
+        // Draw the paused message
+        g.setFont(Constants.FONT_PAUSED_SCREEN);
+        g.setColor(Color.WHITE);
+        Rectangle2D boundsPaused = g.getFontMetrics().getStringBounds(Constants.MSG_GAME_PAUSED, g);
+        g.drawString(Constants.MSG_GAME_PAUSED, (int) ((screenWidth - boundsPaused.getWidth()) / 2), (int) ((screenHeight - boundsPaused.getHeight()) / 2));
+        
       case PLAYING:
 
         displayHUD(g);
@@ -866,7 +894,7 @@ public class Asteroids extends GameEngine
 
         displayGameOverScreen(g);
         break;
-
+        
       case LEVEL_NEXT:
 
         displayNextLevelScreen(g);
@@ -997,8 +1025,23 @@ public class Asteroids extends GameEngine
             soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_WEAPON_ATTRIBUTE_EMPTY);
           }
         }
+        
+        if (keyCode == KeyEvent.VK_P)
+        {
+          gamePaused = true;
+        }
+        
         break;
 
+      case PAUSED:
+
+        if (keyCode == KeyEvent.VK_P)
+        {
+          gamePaused = false;
+        }
+
+        break;
+        
       default:
     }
   }
@@ -1526,7 +1569,7 @@ public class Asteroids extends GameEngine
     // Reset player variables
 
     // TODO: Consider creating a player manager to encapsulate these actions into a reset method
-    //gamePaused = false;
+    gamePaused = false;
     //unpauseGame();
     //requestToQuitPlayingGame = false;
     //quitPlayingGame = false;

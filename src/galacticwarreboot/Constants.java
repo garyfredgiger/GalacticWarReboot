@@ -161,13 +161,6 @@ public class Constants
   public static final String FILENAME_UFO_SHOT                                = "ufoshot.png";
   public static final String FILENAME_UFO_SHORTY_SHOT                         = "ufoshot2.png";
 
-  // Indices for the spaceship image array
-  //  public static final int    IMAGE_SPACESHIP_INDEX                            = 0;
-  //  public static final int    IMAGE_SPACESHIP_SHIELD_INDEX                     = 1;
-  //  public static final int    IMAGE_SPACESHIP_THRUST1_INDEX                    = 2;
-  //  public static final int    IMAGE_SPACESHIP_THRUST2_INDEX                    = 3;
-  //  public static final int    IMAGE_SPACESHIP_THRUST3_INDEX                    = 4;
-
   // Fonts used in the Introduction screen
   public static final Font   FONT_INTRO_SCREEN_MAIN_TITLE                     = new Font("Verdana", Font.BOLD, 36);
   public static final Font   FONT_INTRO_SCREEN_MAIN_CONTROLS                  = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 20);
@@ -191,6 +184,9 @@ public class Constants
   // Fonts used in Next Level Screen
   public static final Font   FONT_NEXT_LEVEL_SCREEN                           = new Font("Verdana", Font.BOLD, 40);
 
+  // Fonts used for Paused Screen
+  public static final Font   FONT_PAUSED_SCREEN                               = new Font("Verdana", Font.BOLD, 64);
+
   // String constants for Introduction screen
   public static final String INTRO_SCREEN_MAIN_TITLE_MSG                      = "GALACTIC WAR REBOOT";
   public static final String INTRO_SCREEN_MAIN_CONTROLS_MSG                   = "CONTROLS:";
@@ -211,6 +207,8 @@ public class Constants
   public static final String MSG_GAME_PLAYING_SCORE                           = "Score: ";
   public static final String MSG_GAME_PLAYING_WAVE                            = "Wave: ";
 
+  public static final String MSG_GAME_PAUSED                                  = "Paused";
+  
   // String constants used when the player is killed
   public static final String MSG_PLAYER_DEAD                                  = "Your Ship Was Destroyed!!!";
 
