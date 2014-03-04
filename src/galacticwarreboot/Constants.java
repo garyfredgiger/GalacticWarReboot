@@ -80,7 +80,11 @@ public class Constants
       return label;
     }
   }
-
+  public static enum IntroductionScreens
+  {
+    MAIN, POWERUPS, INSTRUCTIONS
+  }
+  
   // Game name
   public static final String GAME_NAME                                        = "Galactic War Reboot";
 
@@ -117,11 +121,11 @@ public class Constants
   public static final String FILENAME_HUD_THE_BOMB_ICON                       = "hud_radioactive.png";
   public static final String FILENAME_HUD_SUPERSHIELD_ICON                    = "hud_supershield.png";
   public static final String FILENAME_PLASMA_SHOT                             = "plasmashot.png";
-  public static final String FILENAME_POWERUP_1000                            = "powerup_1000.png";
-  public static final String FILENAME_POWERUP_500                             = "powerup_500.png";
-  public static final String FILENAME_POWERUP_250                             = "powerup_250.png";
+  public static final String FILENAME_POWERUP_1000                            = "powerup_1000_new.png";
+  public static final String FILENAME_POWERUP_500                             = "powerup_500_new.png";
+  public static final String FILENAME_POWERUP_250                             = "powerup_250_new.png";
   //public static final String FILENAME_POWERUP_AUTO_SHIELD                   = "powerup_auto_shield.png";
-  public static final String FILENAME_POWERUP_FULL_HEALTH                     = "powerup_cola_full_health_40x35.png";
+  public static final String FILENAME_POWERUP_FULL_HEALTH                     = "powerup_cola_full_health_32x28.png"; // "powerup_cola_full_health_40x35.png";
   public static final String FILENAME_POWERUP_HEALTH                          = "powerup_cola.png";
   public static final String FILENAME_POWERUP_GUN                             = "powerup_gun.png";
 
@@ -135,6 +139,7 @@ public class Constants
   public static final String FILENAME_POWERUP_SHIELD                          = "powerup_shield2.png";
   public static final String FILENAME_POWERUP_SUPER_SHIELD                    = "powerup_supershield.png";
 
+  public static final String FILENAME_POWERUP_ENGINE_1                        = "thrust1.png";
   public static final String FILENAME_POWERUP_ENGINE_2                        = "thrust2.png";
   public static final String FILENAME_POWERUP_ENGINE_3                        = "thrust3.png";
 
@@ -187,6 +192,12 @@ public class Constants
   // Fonts used for Paused Screen
   public static final Font   FONT_PAUSED_SCREEN                               = new Font("Verdana", Font.BOLD, 64);
 
+  // Fonts used for Paused Screen
+  public static final Font   FONT_INTRO_POWERUPS_SCREEN_SMALL                 = new Font("Verdana", Font.BOLD, 14);
+  public static final Font   FONT_INTRO_POWERUPS_SCREEN_REGULAR               = new Font("Verdana", Font.BOLD, 18);
+  public static final Font   FONT_INTRO_POWERUPS_SCREEN_MEDIUM                = new Font("Verdana", Font.BOLD, 24);
+  public static final Font   FONT_INTRO_POWERUPS_SCREEN_LARGE                 = new Font("Verdana", Font.BOLD, 32);
+
   // String constants for Introduction screen
   public static final String INTRO_SCREEN_MAIN_TITLE_MSG                      = "GALACTIC WAR REBOOT";
   public static final String INTRO_SCREEN_MAIN_CONTROLS_MSG                   = "CONTROLS:";
@@ -196,6 +207,27 @@ public class Constants
   public static final String INTRO_SCREEN_MAIN_FIRE_MSG                       = "FIRE - Ctrl Key";
   public static final String INTRO_SCREEN_MAIN_POWERUPS_MSG                   = "POWERUPS INCREASE FIREPOWER!";
   public static final String INTRO_SCREEN_MAIN_START_MSG                      = "Press ENTER to Start Game";
+
+  // String constants for power-ups screen
+  public static final String MSG_POWERUPS_POWERUP_TITLE = "Available Powerups";
+
+  public static final String MSG_POWERUPS_THRUSTERS                           = "Ship Thrusters";
+  public static final String MSG_POWERUPS_THURST1                             = "Dual Ion Drive"; // "(Level 1) Ion Drive";
+  public static final String MSG_POWERUPS_THURST2                             = "Fusion Pulse"; // "(Level 2) Fusion Pulse";
+  public static final String MSG_POWERUPS_THURST3                             = "Plasma Core"; // "(Level 3) Plasma Core";
+
+  public static final String MSG_POWERUPS_HEALTH_SHIELD                       = "Health and Shields";
+  public static final String MSG_POWERUPS_HEALTH                              = "Health";
+  public static final String MSG_POWERUPS_SHIELDS                             = "Shield";
+  public static final String MSG_POWERUPS_FULL_HEALTH                         = "Full Health";
+  public static final String MSG_POWERUPS_FULL_SHIELD                         = "Full Shield";
+  public static final String MSG_POWERUPS_SUPER_SHIELD                        = "Super Shield";
+
+  public static final String MSG_POWERUPS_WEAPONS                             = "Armament";
+  public static final String MSG_POWERUPS_FIREPOWER                           = "Firepower Upgrade";
+  public static final String MSG_POWERUPS_THE_BOMB                            = "Da Bomb";
+
+  public static final String MSG_POWERUPS_SCREEN_POINT_BONUSES                = "Point Bonuses:";
 
   // String Constants used while the game is starting
   public static final String MSG_GAME_START                                   = "Get Ready!!!";
@@ -208,7 +240,7 @@ public class Constants
   public static final String MSG_GAME_PLAYING_WAVE                            = "Wave: ";
 
   public static final String MSG_GAME_PAUSED                                  = "Paused";
-  
+
   // String constants used when the player is killed
   public static final String MSG_PLAYER_DEAD                                  = "Your Ship Was Destroyed!!!";
 
