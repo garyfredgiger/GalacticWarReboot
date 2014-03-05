@@ -80,11 +80,12 @@ public class Constants
       return label;
     }
   }
+
   public static enum IntroductionScreens
   {
-    MAIN, POWERUPS, INSTRUCTIONS
+    MAIN, POWERUPS, POWERUP_DETAILS, INSTRUCTIONS, ENEMIES
   }
-  
+
   // Game name
   public static final String GAME_NAME                                        = "Galactic War Reboot";
 
@@ -125,7 +126,7 @@ public class Constants
   public static final String FILENAME_POWERUP_500                             = "powerup_500_new.png";
   public static final String FILENAME_POWERUP_250                             = "powerup_250_new.png";
   //public static final String FILENAME_POWERUP_AUTO_SHIELD                   = "powerup_auto_shield.png";
-  public static final String FILENAME_POWERUP_FULL_HEALTH                     = "powerup_cola_full_health_32x28.png"; // "powerup_cola_full_health_40x35.png";
+  public static final String FILENAME_POWERUP_FULL_HEALTH                     = "powerup_cola_full_health_32x28.png";                      // "powerup_cola_full_health_40x35.png";
   public static final String FILENAME_POWERUP_HEALTH                          = "powerup_cola.png";
   public static final String FILENAME_POWERUP_GUN                             = "powerup_gun.png";
 
@@ -192,43 +193,79 @@ public class Constants
   // Fonts used for Paused Screen
   public static final Font   FONT_PAUSED_SCREEN                               = new Font("Verdana", Font.BOLD, 64);
 
-  // Fonts used for Paused Screen
+  // Fonts used for Powerups Screen
   public static final Font   FONT_INTRO_POWERUPS_SCREEN_SMALL                 = new Font("Verdana", Font.BOLD, 14);
   public static final Font   FONT_INTRO_POWERUPS_SCREEN_REGULAR               = new Font("Verdana", Font.BOLD, 18);
   public static final Font   FONT_INTRO_POWERUPS_SCREEN_MEDIUM                = new Font("Verdana", Font.BOLD, 24);
   public static final Font   FONT_INTRO_POWERUPS_SCREEN_LARGE                 = new Font("Verdana", Font.BOLD, 32);
 
+  // Fonts used for Powerups Screen
+  public static final Font   FONT_INTRO_INSTRUCTIONS_SCREEN_TINY             = new Font("Verdana", Font.BOLD, 12);
+  public static final Font   FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL             = new Font("Verdana", Font.BOLD, 14);
+  public static final Font   FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR           = new Font("Verdana", Font.ITALIC, 18);
+  public static final Font   FONT_INTRO_INSTRUCTIONS_SCREEN_MEDIUM            = new Font("Verdana", Font.BOLD, 24);
+  public static final Font   FONT_INTRO_INSTRUCTIONS_SCREEN_LARGE             = new Font("Verdana", Font.BOLD, 32);
+
   // String constants for Introduction screen
   public static final String INTRO_SCREEN_MAIN_TITLE_MSG                      = "GALACTIC WAR REBOOT";
-  public static final String INTRO_SCREEN_MAIN_CONTROLS_MSG                   = "CONTROLS:";
-  public static final String INTRO_SCREEN_MAIN_ROTATE_MSG                     = "ROTATE Left/Right Arrows Keys";
-  public static final String INTRO_SCREEN_MAIN_THRUST_MSG                     = "THRUST Up Arrow Key";
-  public static final String INTRO_SCREEN_MAIN_SHIELD_MSG                     = "SHIELD Shift Key";
-  public static final String INTRO_SCREEN_MAIN_FIRE_MSG                       = "FIRE - Ctrl Key";
-  public static final String INTRO_SCREEN_MAIN_POWERUPS_MSG                   = "POWERUPS INCREASE FIREPOWER!";
-  public static final String INTRO_SCREEN_MAIN_START_MSG                      = "Press ENTER to Start Game";
+
+  //  public static final String INTRO_SCREEN_MAIN_CONTROLS_MSG                   = "Player Controls";
+  //  public static final String INTRO_SCREEN_MAIN_ROTATE_MSG                     = "ROTATE Left/Right Arrows Keys";
+  //  public static final String INTRO_SCREEN_MAIN_THRUST_MSG                     = "THRUST Up Arrow Key";
+  //  public static final String INTRO_SCREEN_MAIN_SHIELD_MSG                     = "SHIELD Shift Key";
+  //  public static final String INTRO_SCREEN_MAIN_FIRE_MSG                       = "FIRE - Ctrl Key";
+  //  public static final String INTRO_SCREEN_MAIN_POWERUPS_MSG                   = "POWERUPS INCREASE FIREPOWER!";
+  //  public static final String INTRO_SCREEN_MAIN_START_MSG                      = "Press ENTER to Start Game";
 
   // String constants for power-ups screen
-  public static final String MSG_POWERUPS_POWERUP_TITLE = "Available Powerups";
-
-  public static final String MSG_POWERUPS_THRUSTERS                           = "Ship Thrusters";
-  public static final String MSG_POWERUPS_THURST1                             = "Dual Ion Drive"; // "(Level 1) Ion Drive";
-  public static final String MSG_POWERUPS_THURST2                             = "Fusion Pulse"; // "(Level 2) Fusion Pulse";
-  public static final String MSG_POWERUPS_THURST3                             = "Plasma Core"; // "(Level 3) Plasma Core";
-
+  public static final String MSG_POWERUPS_POWERUP_TITLE                       = "Available Powerups";
+  public static final String MSG_POWERUPS_THRUSTERS                           = "Thruster Upgrades"; //"Ship Thrusters";
+  public static final String MSG_POWERUPS_THURST1                             = "Dual Ion Drive";                                          // "(Level 1) Ion Drive";
+  public static final String MSG_POWERUPS_THURST2                             = "Fusion Pulse";                                            // "(Level 2) Fusion Pulse";
+  public static final String MSG_POWERUPS_THURST3                             = "Plasma Core";                                             // "(Level 3) Plasma Core";
   public static final String MSG_POWERUPS_HEALTH_SHIELD                       = "Health and Shields";
   public static final String MSG_POWERUPS_HEALTH                              = "Health";
   public static final String MSG_POWERUPS_SHIELDS                             = "Shield";
   public static final String MSG_POWERUPS_FULL_HEALTH                         = "Full Health";
   public static final String MSG_POWERUPS_FULL_SHIELD                         = "Full Shield";
   public static final String MSG_POWERUPS_SUPER_SHIELD                        = "Super Shield";
-
   public static final String MSG_POWERUPS_WEAPONS                             = "Armament";
   public static final String MSG_POWERUPS_FIREPOWER                           = "Firepower Upgrade";
   public static final String MSG_POWERUPS_THE_BOMB                            = "Da Bomb";
-
   public static final String MSG_POWERUPS_SCREEN_POINT_BONUSES                = "Point Bonuses:";
 
+  // String messages for Instructions Screen
+  public static final String MSG_INSTRUCTIONS_TITLE                           = "Game Instructions";
+  public static final String MSG_INSTRUCTIONS_CONTROLS                        = "Player Controls";
+
+  public static final String MSG_INSTRUCTIONS_ROTATE_CONTROL                  = "Rotate Ship";
+  public static final String MSG_INSTRUCTIONS_FIRE_CONTROL                    = "Fire Weapon";
+  public static final String MSG_INSTRUCTIONS_THRUST_CONTROL                  = "Ship Thrust";
+  public static final String MSG_INSTRUCTIONS_SHIELDS_CONTROL                 = "Enable Shields";
+  public static final String MSG_INSTRUCTIONS_SUPER_SHIELDS_CONTROL           = "Super Shields";
+  public static final String MSG_INSTRUCTIONS_THE_BOMB_CONTROL                = "Execute Da Bomb";
+  public static final String MSG_INSTRUCTIONS_PAUSE_CONTROL                   = "Pause Game";
+  public static final String MSG_INSTRUCTIONS_QUIT_PLAYING_CONTROL            = "Quit Playing";
+
+  public static final String MSG_INSTRUCTIONS_ROTATE_COMMAND                  = "LEFT/RIGHT Arrow Keys";
+  public static final String MSG_INSTRUCTIONS_FIRE_COMMAND                    = "CTRL Key";
+  public static final String MSG_INSTRUCTIONS_THRUST_COMMAND                  = "UP Arrow Key";
+  public static final String MSG_INSTRUCTIONS_SHIELDS_COMMAND                 = "SHIFT Key";
+  public static final String MSG_INSTRUCTIONS_SUPER_SHIELDS_COMMAND           = "Z Key";
+  public static final String MSG_INSTRUCTIONS_THE_BOMB_COMMAND                = "X Key";
+  public static final String MSG_INSTRUCTIONS_PAUSE_COMMAND                   = "P Key";
+  public static final String MSG_INSTRUCTIONS_QUIT_PLAYING_COMMAND            = "Esc Key";
+  
+  public static final String MSG_INSTRUCTIONS_POWERUP_DETAILS                 = "Powerup Details";
+  public static final String MSG_INSTRUCTIONS_FIREPOWER_UPGRADE_USE           = "Keep collecting in order to increase ship's firepower.";
+  public static final String MSG_INSTRUCTIONS_MAX_FIREPOWER                   = "A total of five firepower upgrades can be collected.";
+  public static final String MSG_INSTRUCTIONS_SUPER_SHIELDS_USE               = "Destroys all threats in immediate vicinity around ship.";
+  public static final String MSG_INSTRUCTIONS_THE_BOMB_USE                    = "Generates a shockwave that rips apart all Asteroids.";
+  public static final String MSG_INSTRUCTIONS_ION_THRUSTER                    = "The default thruster with which your ship is equipped.";
+  public static final String MSG_INSTRUCTIONS_THRUSTERS                       = "Advanced thrusters will become available in higher levels.";
+  
+  // TODO: Mention shield and health capacity increases too
+  
   // String Constants used while the game is starting
   public static final String MSG_GAME_START                                   = "Get Ready!!!";
 
@@ -251,24 +288,24 @@ public class Constants
   public static final String MSG_GAMEOVER_SCREEN_GAMEOVER                     = "GAME OVER";
   //public static final String MSG_GAMEOVER_SCREEN_RESTART     = "Press ENTER to Restart Game";
 
-  public static final int    ASTEROID_DIMENSIONS            = 128;
-  public static final int    ASTEROID_MIN_ROTATION_RATE     = 5;
-  public static final int    ASTEROID_MAX_ROTATION_RATE     = 50;
+  public static final int    ASTEROID_DIMENSIONS                              = 128;
+  public static final int    ASTEROID_MIN_ROTATION_RATE                       = 5;
+  public static final int    ASTEROID_MAX_ROTATION_RATE                       = 50;
 
   // TODO: Given different difficulty levels, it may be a good idea to have
   // separate velocity scales
-  public static final int[]  BIG_ASTEROID_VELOCITY_SCALE    = new int[] { 10, 15, 25, 35, 50 };
-  public static final int[]  MEDIUM_ASTEROID_VELOCITY_SCALE = new int[] { 10, 25, 50, 60, 75, 90 };
-  public static final int[]  SMALL_ASTEROID_VELOCITY_SCALE  = new int[] { 50, 75, 100, 110, 115, 125 };
-  public static final int[]  TINY_ASTEROID_VELOCITY_SCALE   = new int[] { 50, 75, 125, 150, 175, 200 };
+  public static final int[]  BIG_ASTEROID_VELOCITY_SCALE                      = new int[] { 10, 15, 25, 35, 50 };
+  public static final int[]  MEDIUM_ASTEROID_VELOCITY_SCALE                   = new int[] { 10, 25, 50, 60, 75, 90 };
+  public static final int[]  SMALL_ASTEROID_VELOCITY_SCALE                    = new int[] { 50, 75, 100, 110, 115, 125 };
+  public static final int[]  TINY_ASTEROID_VELOCITY_SCALE                     = new int[] { 50, 75, 125, 150, 175, 200 };
 
   // General Game Constants
   public static final int    GAME_STARTING_LEVEL                              = 0;
   public static final int    GAME_STARTING_NUMBER_OF_ASTEROIDS                = 1;
   public static final int    GAME_MAX_NUMBER_ASTEROIDS_ON_SCREEN              = 40;
-  public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 5;                                                       // Was 5
-  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                       // Was 10
-  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 15;                                                      // Was 15
+  public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 5;                                                         // Was 5
+  public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                        // Was 10
+  public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 15;                                                        // Was 15
 
   public static final String DOT_DOT_DOT                                      = "...";
 
@@ -291,13 +328,13 @@ public class Constants
   public static final int    SHIP_SHIELD_CAPACITY_INCREASE_TO_20              = 20;
   public static final int    SHIP_SHIELD_CAPACITY_INCREASE_TO_40              = 40;
 
-  public static final int    SHIP_STARTING_SUPER_SHIELD                       = 2;                                                       // Was 2
-  public static final int    SHIP_STARTING_THE_BOMBS                          = 1;                                                       // Was 1
-  public static final int    SHIP_DEFAULT_ACCELERATION                        = 1;                                                       // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
+  public static final int    SHIP_STARTING_SUPER_SHIELD                       = 2;                                                         // Was 2
+  public static final int    SHIP_STARTING_THE_BOMBS                          = 1;                                                         // Was 1
+  public static final int    SHIP_DEFAULT_ACCELERATION                        = 1;                                                         // Was originally 0.05, 1 seemed good. Maybe increase for better performance in the from of a powerup. 2 gives better respones and 4 provides even better stopping and starting
   public static final int    SHIP_INCREASED_ACCELERATION_2                    = 2;
   public static final int    SHIP_INCREASED_ACCELERATION_3                    = 3;
 
-  public static final double SHIP_MAX_VELOCITY                                = 200;                                                     // Was originally 5
+  public static final double SHIP_MAX_VELOCITY                                = 200;                                                       // Was originally 5
   public static final double SHIP_MIN_VELOCITY                                = -SHIP_MAX_VELOCITY;
   public static final int    PLAYER_ROTATION_RATE                             = 200;
   public static final int    PLAYER_BULLET_SPEED                              = 200;
@@ -306,7 +343,7 @@ public class Constants
   public static final int    PLAYER_SUPER_SHIELD_SPEED                        = 100;
   public static final double PLAYER_SUPER_SHIELD_LIFESPAN                     = 1.25;
   public static final int    PLAYER_DEFAULT_AUTO_SHIELD_SETTING               = 0;
-  public static final long   PLAYER_TIME_BETWEEN_REGISTERING_UFO_COLLISIONS   = 2500;                                                    // This constant will limit the number of collision detections that cause damage to the player when colliding with the super UFO.
+  public static final long   PLAYER_TIME_BETWEEN_REGISTERING_UFO_COLLISIONS   = 2500;                                                      // This constant will limit the number of collision detections that cause damage to the player when colliding with the super UFO.
 
   // Powerup constants
   public static final int    POWERUP_ROTAITON_RATE                            = 50;
@@ -314,7 +351,7 @@ public class Constants
 
   public static final int    LEVEL_TO_USE_SPAWN_PROBABILITY_FOR_HIGHER_LEVELS = 10;
   public static final int    POWERUP_SPAWN_PROBABILITY_FOR_LOWER_LEVELS       = 3;
-  public static final int    POWERUP_SPAWN_PROBABILITY_FOR_HIGHER_LEVELS      = 2;                                                       // Was 1
+  public static final int    POWERUP_SPAWN_PROBABILITY_FOR_HIGHER_LEVELS      = 2;                                                         // Was 1
 
   public static final int    POWERUP_TOTAL_EVENTS_TO_SPAWN                    = 100;
   public static final int    POWERUP_LIFE_SPAN_IN_SECS                        = 20;
@@ -332,14 +369,14 @@ public class Constants
   public static final int    POWERUP_THRUST_2_MIN_LEVEL                       = 5;
   public static final int    POWERUP_THRUST_3_MIN_LEVEL                       = 15;
 
-  public static final int    HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT       = 25000;                                                   // Was 15000
-  public static final int    HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT       = 100000;                                                  // Was 75000
+  public static final int    HEALTH_CAPACITY_INCREASE_TO_20_SCORE_LIMIT       = 25000;                                                     // Was 15000
+  public static final int    HEALTH_CAPACITY_INCREASE_TO_40_SCORE_LIMIT       = 100000;                                                    // Was 75000
 
-  public static final int    SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT       = 15000;                                                   // Was 10000 Possibly think about increasing this to 15K or 25K                           
-  public static final int    SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT       = 75000;                                                   // Was 50000
+  public static final int    SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT       = 15000;                                                     // Was 10000 Possibly think about increasing this to 15K or 25K                           
+  public static final int    SHIELD_CAPACITY_INCREASE_TO_40_SCORE_LIMIT       = 75000;                                                     // Was 50000
 
   // UFO Constants
-  public static final int    UFO_SPEED                                        = 150;                                                      // Was 150
+  public static final int    UFO_SPEED                                        = 150;                                                       // Was 150
   public static final int    UFO_SHOT_INTERVAL                                = 750;
   public static final int    UFO_SUPER_SHOT_INTERVAL                          = 500;
   public static final int    UFO_SHORTY_SHOT_INTERVAL                         = 250;
@@ -349,7 +386,7 @@ public class Constants
   public static final double UFO_SHORTY_BULLET_LIFE_SPAN_IN_SECS              = 1.5;
   public static final int    UFO_SPAWN_PROBABILITY                            = 50;
   public static final int    UFO_TOTAL_EVENTS_TO_SPAWN                        = 10000;
-  public static final long   UFO_MIN_TIME_BETWEEN_LAUNCHES                    = 5000;                                                    // Was 10000
+  public static final long   UFO_MIN_TIME_BETWEEN_LAUNCHES                    = 5000;                                                      // Was 10000
   public static final long   UFO_TIME_BETWEEN_SHIELD_HITS                     = 750;
 
   public static final long   UFO_SHORTY_TIME_BETWEEN_HITS                     = 50;
