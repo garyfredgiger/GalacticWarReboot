@@ -361,7 +361,7 @@ public class Constants
   public static final int    GAME_STARTING_LEVEL                              = 0;
   public static final int    GAME_STARTING_NUMBER_OF_ASTEROIDS                = 1;
   public static final int    GAME_MAX_NUMBER_ASTEROIDS_ON_SCREEN              = 40;
-  public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 5;                                                               // Was 5
+  public static final long   GAME_UFO_MIN_UFO_LAUNCH_LEVEL                    = 1;                                                               // Was 5
   public static final int    GAME_LAUNCH_SUPER_UFO_LEVEL                      = 10;                                                              // Was 10
   public static final int    GAME_LAUNCH_SHORTY_UFO_LEVEL                     = 15;                                                              // Was 15
 
@@ -396,7 +396,7 @@ public class Constants
   public static final double SHIP_MIN_VELOCITY                                = -SHIP_MAX_VELOCITY;
   public static final int    PLAYER_ROTATION_RATE                             = 200;
   public static final int    PLAYER_BULLET_SPEED                              = 200;
-  public static final double PLAYER_BULLET_LIFE_SPAN_IN_SECS                  = 2;
+  public static final double PLAYER_BULLET_LIFE_SPAN_IN_SECS                  = 1.25;  // Was 2
   public static final int    PLAYER_NUMBER_SUPER_SHIELD_BALLS                 = 18;
   public static final int    PLAYER_SUPER_SHIELD_SPEED                        = 100;
   public static final double PLAYER_SUPER_SHIELD_LIFESPAN                     = 1.25;

@@ -4,7 +4,6 @@ import galacticwarreboot.Constants;
 import galacticwarreboot.ImageManager;
 import galacticwarreboot.ScoreManager;
 import galacticwarreboot.UFOEntityManager;
-import game.framework.primitives.Vector2D;
 import game.framework.utilities.GameUtility;
 
 import java.awt.Image;
@@ -59,9 +58,6 @@ public class UFOEntity extends EnemyEntity
     this.setPointValue((GameUtility.random.nextInt(10) + 1) * 100);
 
     lastShotTime = System.currentTimeMillis();
-
-    System.out.println("Spawning a UFO of Type: " + this.getEnemyType().toString());
-    System.out.println(toString());
   }
 
   public int getUfoHealth()

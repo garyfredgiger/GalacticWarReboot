@@ -15,11 +15,11 @@ public class UFOEntityManager
   /*
    * Class instance variables
    */
-  private boolean             ufoInFlight;
-  private long                lastUFOKilledTime;
-  private long                minTimeBetweenUFOLaunches;
-  private double              currentProbabilityTolaunchANewUFO;
-  private int              randomProbability;
+  private boolean ufoInFlight;
+  private long    lastUFOKilledTime;
+  private long    minTimeBetweenUFOLaunches;
+  private double  currentProbabilityTolaunchANewUFO;
+  private int     randomProbability;
 
   public UFOEntityManager()
   {
@@ -108,7 +108,7 @@ public class UFOEntityManager
 
         case UFO_SHORTY:
           return new UFOShorty(imageObserver, this, (int) (screenHeight * 0.10), (int) (screenHeight * 0.90), 0, screenWidth);
-          
+
         default:
           return new UFOEntity(imageObserver, this, (int) (screenHeight * 0.10), (int) (screenHeight * 0.90), 0, screenWidth);
       }
@@ -122,8 +122,8 @@ public class UFOEntityManager
   public EntityImage stockUFOBullet(Position2D ufoPos, Position2D playerPos, Constants.EnemyTypes ufoType, ImageObserver imageObserver)
   {
     EntityImage bullet = new EntityImage(imageObserver, GameEngineConstants.EntityTypes.ENEMY_SHOT);
-    
-    switch(ufoType)
+
+    switch (ufoType)
     {
       case UFO_SHORTY:
         // Compute bullet heading given current position of player and this ufo entity
@@ -143,7 +143,7 @@ public class UFOEntityManager
     double x = ufoPos.x - bullet.getWidth() / 2;
     double y = ufoPos.y - bullet.getHeight() / 2;
     bullet.setPosition(x, y);
-    
+
     return bullet;
   }
 
