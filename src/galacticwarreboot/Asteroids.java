@@ -44,141 +44,186 @@ public class Asteroids extends GameEngine
 
   // Variables used to control player entity
 
-  private GameInputMovement   playerMovement;
-  private boolean             fireShot;
-  private boolean             keyShield;
-  private boolean             thrust;
+  private GameInputMovement             playerMovement;
+  private boolean                       fireShot;
+  private boolean                       keyShield;
+  private boolean                       thrust;
   //private boolean             previousShieldState;
-  private long                lastUFOCollisionTime;
+  private long                          lastUFOCollisionTime;
 
-  private boolean             gamePaused;
+  private boolean                       gamePaused;
 
   // When paused is activated, stores the previous state from which the paused state was entered so the previous state can be restored after paused is exited. 
   private GameEngineConstants.GameState previousState;
-  
-  private boolean             requestSuperShield;
-  private boolean             requestTheBomb;
-  private boolean             prepareTheBomb;
-  private boolean             executeTheBomb;
 
-  private long                prepareBombTimer;
-  private long                prepareBombTimerSecondCount;
+  private boolean                       requestSuperShield;
+  private boolean                       requestTheBomb;
+  private boolean                       prepareTheBomb;
+  private boolean                       executeTheBomb;
 
-  ImageObserver               imageObserver;
+  private long                          prepareBombTimer;
+  private long                          prepareBombTimerSecondCount;
+
+  ImageObserver                         imageObserver;
 
   // Variables used for game
-  private int                 currentLevel;
+  private int                           currentLevel;
 
   // DEBUG/CHEAT vars
-  private boolean             increaseGunRequest;
-  private boolean             decreaseGunRequest;
+  private boolean                       increaseGunRequest;
+  private boolean                       decreaseGunRequest;
 
   // Other vars. Not sure how to classify them.
-  boolean                     playCountdownTimerSound;
+  boolean                               playCountdownTimerSound;
 
-  Constants.IntroductionScreens currentIntroductionScreen;
-  
+  Constants.IntroductionScreens         currentIntroductionScreen;
+
   /*
    *  Game state management variables
    */
 
   // Flags that keep track of the user requests for game state transitions
-  private boolean             requestGameStart;
+  private boolean                       requestGameStart;
 
   // Variables used to keep track of game event state transitions
 
   // Timers used to control when state transitions are to occur 
-  private long                timerPlayerDeadState           = 0;
-  private long                timerGameStart                 = 0;
-  private long                timerGameOver                  = 0;
-  private long                timerNextLevel                 = 0;
+  private long                          timerPlayerDeadState  = 0;
+  private long                          timerGameStart        = 0;
+  private long                          timerGameOver         = 0;
+  private long                          timerNextLevel        = 0;
 
   /*
    * Bounding boxes used for messages displayed to the screen
    */
-  private Rectangle2D         boundsIntroductionTitleMsg;
-  private Rectangle2D         boundsIntroductionStateTitle;
-  private Rectangle2D         boundsIntroductionPowerupsMsg;
+  private Rectangle2D                   boundsIntroductionTitleMsg;
+  private Rectangle2D                   boundsIntroductionStateTitle;
+  private Rectangle2D                   boundsIntroductionPowerupsMsg;
 
-  private StaticText          msgGameStartScreen;
-  private StaticText          msgGameOverScreen;
-  private StaticText          msgNextLevelScreen;
-  private StaticText          msgPlayerDeadScreen;
-  private StaticText          msgHUDHealthBar;
-  private StaticText          msgHUDShieldBar;
-  private StaticText          msgHUDFirepower;
-  private StaticText          msgHUDCurrentLevel;
-  private StaticText          msgHUDScore;
-  private StaticText          msgHUDNumberOfSuperShields;
-  private StaticText          msgHUDNumberOfTheBombs;
-  private StaticText          msgHUDTheBombCoundown;
-  private StaticText          msgPaused;
-  private StaticText          msgGameTitle;
-  private StaticText          msgPowerupScreenTitle;
-  private StaticText          msgInstructionsScreenTitle;
-  private StaticText          msgInstructionsPlayerControls;
-  private StaticText          msgPowerupDetailsScreen;
-  private StaticText          msgEnemiesTitle;
-  private StaticText          msgCreditsTitle;  
-  private StaticText          msgEnemiesAsteroidLabel;
+  private StaticText                    msgGameStartScreen;
+  private StaticText                    msgGameOverScreen;
+  private StaticText                    msgNextLevelScreen;
+  private StaticText                    msgPlayerDeadScreen;
+  private StaticText                    msgHUDHealthBar;
+  private StaticText                    msgHUDShieldBar;
+  private StaticText                    msgHUDFirepower;
+  private StaticText                    msgHUDCurrentLevel;
+  private StaticText                    msgHUDScore;
+  private StaticText                    msgHUDNumberOfSuperShields;
+  private StaticText                    msgHUDNumberOfTheBombs;
+  private StaticText                    msgHUDTheBombCoundown;
+  private StaticText                    msgPaused;
+  private StaticText                    msgGameTitle;
+  private StaticText                    msgPowerupScreenTitle;
+  private StaticText                    msgInstructionsScreenTitle;
+  private StaticText                    msgInstructionsPlayerControls;
+  private StaticText                    msgPowerupDetailsScreen;
+  private StaticText                    msgEnemiesTitle;
+  private StaticText                    msgCreditsTitle;
+  private StaticText                    msgEnemiesAsteroidLabel;
+  private StaticText                    msgEnemiesUFOLabel;
 
   // Static text for the power-ups screen
-  private StaticText          msgIntroductionPowerupScreenThrusterLabel;
-  private StaticText          msgIntroductionPowerupScreenLabelThurster1;
-  private StaticText          msgIntroductionPowerupScreenLabelThruster2;
-  private StaticText          msgIntroductionPowerupScreenLabelThruster3;
+  private StaticText                    msgIntroductionPowerupScreenThrusterLabel;
+  private StaticText                    msgIntroductionPowerupScreenLabelThurster1;
+  private StaticText                    msgIntroductionPowerupScreenLabelThruster2;
+  private StaticText                    msgIntroductionPowerupScreenLabelThruster3;
+
+  private StaticText                    msgIntroductionPowerupScreenHealthAndShieldLabel;
+  private StaticText                    msgIntroductionPowerupScreenLabelHealth;
+  private StaticText                    msgIntroductionPowerupScreenLabelShield;
+  private StaticText                    msgIntroductionPowerupScreenLabelFullHealth;
+  private StaticText                    msgIntroductionPowerupScreenLabelFullShield;
+  private StaticText                    msgIntroductionPowerupScreenLabelSuperShield;
+
+  private StaticText                    msgIntroductionPowerupScreenArmamentsLabel;
+  private StaticText                    msgIntroductionPowerupScreenLabelFirepower;
+  private StaticText                    msgIntroductionPowerupScreenLabelTheBomb;
+
+  private StaticText                    msgIntroductionPowerupScreenLabel250Bonus;
+  private StaticText                    msgIntroductionPowerupScreenLabel500Bonus;
+  private StaticText                    msgIntroductionPowerupScreenLabel1000Bonus;
+
+  private StaticText                    msgInstructionsRotateControl;
+  private StaticText                    msgInstructionsThrustControl;
+  private StaticText                    msgInstructionsShieldsControl;
+  private StaticText                    msgInstructionsFireControl;
+  private StaticText                    msgInstructionsSuperShieldsControl;
+  private StaticText                    msgInstructionsTheBombControl;
+
+  private StaticText                    msgInstructionsRotateCommand;
+  private StaticText                    msgInstructionsThrustCommand;
+  private StaticText                    msgInstructionsShieldsCommand;
+  private StaticText                    msgInstructionsFireCommand;
+  private StaticText                    msgInstructionsSuperShieldsCommand;
+  private StaticText                    msgInstructionsTheBombCommand;
+
+  private StaticText                    msgGameDetailsFirepowerLabel;
+  private StaticText                    msgGameDetailsSuperShieldLabel;
+  private StaticText                    msgGameDetailsTheBombLabel;
+  private StaticText                    msgGameDetailsThrust1Label;
+
+  private StaticText                    msgGameDetailsFirepowerUse;
+  private StaticText                    msgGameDetailsMaxFirepower;
+  private StaticText                    msgGameDetailsSuperShieldUse;
+  private StaticText                    msgGameDetailsTheBombUse;
+  private StaticText                    msgGameDetailsIonThrusterUse;
+  private StaticText                    msgGameDetailsThrustersUse;
+
+  private StaticText                    msgCreditSoundLibrary;
+  private StaticText                    msgCreditSoundLibraryURL;
+  private StaticText                    msgCreditSoundLibraryBreadcrumb;
   
-  private StaticText          msgIntroductionPowerupScreenHealthAndShieldLabel;
-  private StaticText          msgIntroductionPowerupScreenLabelHealth;
-  private StaticText          msgIntroductionPowerupScreenLabelShield;
-  private StaticText          msgIntroductionPowerupScreenLabelFullHealth;
-  private StaticText          msgIntroductionPowerupScreenLabelFullShield;
-  private StaticText          msgIntroductionPowerupScreenLabelSuperShield;
+  private StaticText                    msgCreditSoundEffects;
+  private StaticText                    msgCreditSoundEffectsURL;
+  private StaticText                    msgCreditSoundEffectsBreadcrumb;
+  private StaticText                    msgCreditGoBack;
 
-  private StaticText          msgIntroductionPowerupScreenArmamentsLabel;
-  private StaticText          msgIntroductionPowerupScreenLabelFirepower;
-  private StaticText          msgIntroductionPowerupScreenLabelTheBomb;
-
-  private StaticText          msgIntroductionPowerupScreenLabel250Bonus;
-  private StaticText          msgIntroductionPowerupScreenLabel500Bonus;
-  private StaticText          msgIntroductionPowerupScreenLabel1000Bonus;
+//public static final String MSG_INSTRUCTIONS_GAME_OBJECTIVE_LABEL            = "Game Objective";
+//public static final String MSG_INSTRUCTIONS_GAME_OBJECTIVE                  = "Shoot Enemies, collect powerups and survive as long as you can.";
+private StaticText msgInstructionsGameObjectiveLabel;
+private StaticText msgInstructionsGameObjective;
   
   /*
    * Static Image Variables
    */
-  StaticImage imgIntroductionEnemiesScreenAsteroidLarge;
-  StaticImage imgIntroductionEnemiesScreenAsteroidMedium;
-  StaticImage imgIntroductionEnemiesScreenAsteroidSmall;
-  StaticImage imgIntroductionEnemiesScreenAsteroidTiny;
+  private StaticImage                   imgIntroductionEnemiesScreenAsteroidLarge;
+  private StaticImage                   imgIntroductionEnemiesScreenAsteroidMedium;
+  private StaticImage                   imgIntroductionEnemiesScreenAsteroidSmall;
+  private StaticImage                   imgIntroductionEnemiesScreenAsteroidTiny;
 
-  StaticImage imgIntroductionPowerupScreenThruster1;
-  StaticImage imgIntroductionPowerupScreenThruster2;
-  StaticImage imgIntroductionPowerupScreenThruster3;
+  private StaticImage                   imgIntroductionPowerupScreenThruster1;
+  private StaticImage                   imgIntroductionPowerupScreenThruster2;
+  private StaticImage                   imgIntroductionPowerupScreenThruster3;
 
-  StaticImage imgIntroductionPowerupScreenHealth;
-  StaticImage imgIntroductionPowerupScreenShield;
-  StaticImage imgIntroductionPowerupScreenFullHealth;
-  StaticImage imgIntroductionPowerupScreenFullShield;
-  StaticImage imgIntroductionPowerupScreenSuperShield;
+  private StaticImage                   imgIntroductionPowerupScreenHealth;
+  private StaticImage                   imgIntroductionPowerupScreenShield;
+  private StaticImage                   imgIntroductionPowerupScreenFullHealth;
+  private StaticImage                   imgIntroductionPowerupScreenFullShield;
+  private StaticImage                   imgIntroductionPowerupScreenSuperShield;
 
-  StaticImage imgIntroductionPowerupScreenFirepower;
-  StaticImage imgIntroductionPowerupScreenTheBomb;
+  private StaticImage                   imgIntroductionPowerupScreenFirepower;
+  private StaticImage                   imgIntroductionPowerupScreenTheBomb;
 
-  StaticImage imgIntroductionPowerupScreen250Bonus;
-  StaticImage imgIntroductionPowerupScreen500Bonus;
-  StaticImage imgIntroductionPowerupScreen1000Bonus;
+  private StaticImage                   imgIntroductionEnemiesScreenUFO;
+  private StaticImage                   imgIntroductionEnemiesScreenUFOShorty;
 
+  private StaticImage                   imgIntroductionPowerupScreen250Bonus;
+  private StaticImage                   imgIntroductionPowerupScreen500Bonus;
+  private StaticImage                   imgIntroductionPowerupScreen1000Bonus;
+  
   /*
    * Managers
    */
-  SoundManager                soundManager;
-  UFOEntityManager            ufoManager;
-  PowerupManager              powerupManager;
+  SoundManager                          soundManager;
+  UFOEntityManager                      ufoManager;
+  PowerupManager                        powerupManager;
 
   // Variables used for creating the enemies screen in the game introduction
-  int startingPositionXOfAsteroidListing;
-  int bigAsteroidWidth;
-  int bufferBetweenAsteroid = 64; // Predefined number
+  int                                   startingPositionXOfAsteroidListing;
+  int                                   startingPositionXOfUFOListing;
+  int                                   bigAsteroidWidth;
+  int                                   bufferBetweenAsteroid = 64;                      // Predefined number
 
   /*
    * The code
@@ -207,7 +252,7 @@ public class Asteroids extends GameEngine
     // Debugging vars to be removed when the final game is released
     increaseGunRequest = false;
     decreaseGunRequest = false;
-    
+
     // Initialize all manager. Note that the image manager is static so that it can be referenced from different classes in the game.
     soundManager = new SoundManager();
     powerupManager = new PowerupManager(imageObserver);
@@ -256,7 +301,7 @@ public class Asteroids extends GameEngine
     msgHUDNumberOfTheBombs = new StaticText("", 50, 133, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
     msgHUDTheBombCoundown = new StaticText("", Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_LARGE1, screenWidth, screenHeight);
     msgPaused = new StaticText(Constants.MSG_GAME_PAUSED, Color.WHITE, Constants.FONT_PAUSED_SCREEN, screenWidth, screenHeight);
-    
+
     msgGameTitle = new StaticText(Constants.INTRO_SCREEN_MAIN_TITLE_MSG, -1, 64, Color.RED, Constants.FONT_INTRO_SCREEN_MAIN_TITLE, screenWidth, screenHeight);
     msgGameTitle.centerHorizontally();
 
@@ -268,13 +313,7 @@ public class Asteroids extends GameEngine
     msgPowerupScreenTitle = new StaticText(Constants.MSG_POWERUPS_POWERUP_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_LARGE, screenWidth, screenHeight);
     msgPowerupScreenTitle.centerHorizontally();
 
-    msgInstructionsScreenTitle = new StaticText(Constants.MSG_INSTRUCTIONS_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_LARGE, screenWidth, screenHeight);
-    msgInstructionsScreenTitle.centerHorizontally();
-
-    msgInstructionsPlayerControls = new StaticText(Constants.MSG_INSTRUCTIONS_CONTROLS, -1, 208, Color.WHITE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_MEDIUM, screenWidth, screenHeight);
-    msgInstructionsPlayerControls.centerHorizontally();
-
-    msgPowerupDetailsScreen = new StaticText(Constants.MSG_POWERUP_DETAILS_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_LARGE, screenWidth, screenHeight);
+    msgPowerupDetailsScreen = new StaticText(Constants.MSG_GAME_DETAILS_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_LARGE, screenWidth, screenHeight);
     msgPowerupDetailsScreen.centerHorizontally();
 
     msgEnemiesTitle = new StaticText(Constants.MSG_ENEMIES_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_ENEMIES_SCREEN_LARGE, screenWidth, screenHeight);
@@ -284,12 +323,35 @@ public class Asteroids extends GameEngine
     msgCreditsTitle.centerHorizontally();
 
     currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
-    
+
     msgEnemiesAsteroidLabel = new StaticText("The Asteroids", -1, 192, Color.WHITE, Constants.FONT_INTRO_ENEMIES_SCREEN_REGULAR, screenWidth, screenHeight);
     msgEnemiesAsteroidLabel.centerHorizontally();
+
+    msgEnemiesUFOLabel = new StaticText("The UFOs", -1, 400, Color.WHITE, Constants.FONT_INTRO_ENEMIES_SCREEN_REGULAR, screenWidth, screenHeight);
+    msgEnemiesUFOLabel.centerHorizontally();
+
+    msgCreditSoundLibrary = new StaticText(Constants.MSG_CREDITS_SOUND_LIBRARY, -1, 256, Color.WHITE, Constants.FONT_INTRO_CREDITS_SCREEN_MEDIUM, screenWidth, screenHeight);
+    msgCreditSoundLibraryURL = new StaticText(Constants.MSG_CREDITS_SOUND_LIBRARY_URL, -1, 288, Color.YELLOW, Constants.FONT_INTRO_CREDITS_SCREEN_REGULAR, screenWidth, screenHeight);    
+    msgCreditSoundLibraryBreadcrumb = new StaticText(Constants.MSG_CREDITS_SOUND_LIBRARY_URL_BREADCRUMB, -1, 320, Color.YELLOW, Constants.FONT_INTRO_CREDITS_SCREEN_REGULAR, screenWidth, screenHeight);
+
+    msgCreditSoundEffects = new StaticText(Constants.MSG_CREDITS_SOUND_EFFECTS, -1, 400, Color.WHITE, Constants.FONT_INTRO_CREDITS_SCREEN_MEDIUM, screenWidth, screenHeight);    
+    msgCreditSoundEffectsURL = new StaticText(Constants.MSG_CREDITS_SOUND_EFFECTS_URL, -1, 432, Color.YELLOW, Constants.FONT_INTRO_CREDITS_SCREEN_REGULAR, screenWidth, screenHeight);
+    msgCreditSoundEffectsBreadcrumb = new StaticText(Constants.MSG_CREDITS_SOUND_EFFECTS_URL_BREADCRUMB, -1, 464, Color.YELLOW, Constants.FONT_INTRO_CREDITS_SCREEN_REGULAR, screenWidth, screenHeight);
+    msgCreditGoBack = new StaticText(Constants.MSG_INTRODUCTION_MSG_BACK, -1, 576, Color.YELLOW, Constants.FONT_INTRO_CREDITS_SCREEN_SMALL, screenWidth, screenHeight);
+
+    
+    msgCreditSoundLibrary.centerHorizontally();
+    msgCreditSoundLibraryURL.centerHorizontally();
+    msgCreditSoundLibraryBreadcrumb.centerHorizontally();
+    msgCreditSoundEffects.centerHorizontally();
+    msgCreditSoundEffectsURL.centerHorizontally();
+    msgCreditSoundEffectsBreadcrumb.centerHorizontally();
+    msgCreditGoBack.centerHorizontally();
     
     setupIntroductionEnemiesScreen();
     setupIntroductionPowerupsScreen();
+    setupIntroductionInstructionsScreen();
+    setupIntroductionGameDetailsScreen();
   }
 
   @Override
@@ -472,17 +534,17 @@ public class Asteroids extends GameEngine
     }
 
     if (entity instanceof EnemyEntity)
-    {      
+    {
       if (((EnemyEntity) entity).shouldFireShot() && getPlayer().isAlive())
       {
-        switch(((EnemyEntity) entity).getEnemyType())
+        switch (((EnemyEntity) entity).getEnemyType())
         {
           case UFO:
           case UFO_STRONG:
             soundManager.playSound(SoundManager.SOUND_RESOURCE_UFO_SHOOTING);
             this.addEnemyShot(ufoManager.stockUFOBullet(entity.getCenter(), getPlayer().getCenter(), Constants.EnemyTypes.UFO, this.imageObserver));
             return;           // We do not want to warp the UFO so return
-            
+
           case UFO_SHORTY:
             soundManager.playSound(SoundManager.SOUND_RESOURCE_UFO_SHOOTING);
             this.addEnemyShot(ufoManager.stockUFOBullet(entity.getCenter(), getPlayer().getCenter(), Constants.EnemyTypes.UFO_SHORTY, this.imageObserver));
@@ -536,15 +598,15 @@ public class Asteroids extends GameEngine
               {
                 // Cause damage to the player's shields
                 ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_SHIELD, damageAmount);
-                
+
                 // If the player had shields and after the damage, the value is zero, play the sound for loosing shields
                 if (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_SHIELD) == 0)
                 {
-                  soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_SHIELDS_DEPLETED);                  
+                  soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_SHIELDS_DEPLETED);
                 }
                 else
                 {
-                  soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_SHIELDS_HIT);                  
+                  soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_SHIELDS_HIT);
                 }
               }
               else
@@ -589,7 +651,7 @@ public class Asteroids extends GameEngine
             else
             {
               // Shields are not engaged, play the sound for the respective asteroid to indicate the asteroid hitting the hull
-              switch(((EnemyEntity) entity2).getEnemyType())
+              switch (((EnemyEntity) entity2).getEnemyType())
               {
                 case ASTEROID_BIG:
                   soundManager.playSound(SoundManager.SOUND_RESOURCE_ASTEROID_INITIAL_EXPLOSION);
@@ -603,7 +665,7 @@ public class Asteroids extends GameEngine
                   break;
                 default:
               }
-              
+
               //soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_HULL_HIT);
               ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_HEALTH, damageAmount);
               ((PlayerEntity) entity1).decrementByAmount(Constants.AttributeType.ATTRIBUTE_FIREPOWER, 1);   // A collision with anything reduces the firepower by 1
@@ -676,7 +738,7 @@ public class Asteroids extends GameEngine
           case ASTEROID_TINY:
 
             // Play the respective sound of the asteroid breaking apart
-            switch(((EnemyEntity) entity2).getEnemyType())
+            switch (((EnemyEntity) entity2).getEnemyType())
             {
               case ASTEROID_BIG:
                 soundManager.playSound(SoundManager.SOUND_RESOURCE_ASTEROID_INITIAL_EXPLOSION);
@@ -690,7 +752,7 @@ public class Asteroids extends GameEngine
                 break;
               default:
             }
-            
+
             //System.out.println(" asteroid of type " + ((EnemyEntity) entity2).getEnemyType());
             // Add the point value of the asteroid to the player's score 
             breakAsteroid((EntityImage) entity2);
@@ -896,7 +958,7 @@ public class Asteroids extends GameEngine
           prepareBombTimerSecondCount = 3;
           prepareBombTimer = System.currentTimeMillis();
         }
-        
+
         if (gamePaused)
         {
           previousState = this.state;
@@ -905,18 +967,18 @@ public class Asteroids extends GameEngine
         }
 
         break;
-        
+
       case PAUSED:
 
         if (!gamePaused)
         {
           //state = GameEngineConstants.GameState.PLAYING;
-          state = previousState;          
+          state = previousState;
           unpauseGame();
         }
 
         break;
-        
+
       default:
     }
   }
@@ -953,33 +1015,33 @@ public class Asteroids extends GameEngine
       case INTRODUCTION:
         // Regardless of which screen the the active screen while in the Introduction state, display the game title at the top center of the screen.
         msgGameTitle.draw(g);
-        
-        switch(currentIntroductionScreen)
+
+        switch (currentIntroductionScreen)
         {
           case INSTRUCTIONS:
             displayInstructions(g);
             displayIntroductionFooter(g);
             break;
-            
+
           case POWERUPS:
-            displayPowerups(g);
+            displayIntroductionPowerupsScreen(g);
             displayIntroductionFooter(g);
             break;
 
           case POWERUP_DETAILS:
-            displayPowerupDetailsScreen(g);
+            displayIntroductionGameDetailsScreen(g);
             displayIntroductionFooter(g);
             break;
-          
+
           case CREDITS:
             displayCreditsScreen(g);
             break;
-            
+
           case ENEMIES:
-            displayEnemiesScreen(g);
+            displayIntroductionEnemiesScreen(g);
             displayIntroductionFooter(g);
             break;
-            
+
           default:
             displayIntroductionMainScreen(g);
         }
@@ -990,7 +1052,7 @@ public class Asteroids extends GameEngine
 
       case PAUSED:
         msgPaused.draw(g);
-        
+
       case PLAYING:
         displayHUD(g);
         displayDebugInfo(g);
@@ -1003,7 +1065,7 @@ public class Asteroids extends GameEngine
       case GAMEOVER:
         displayGameOverScreen(g);
         break;
-        
+
       case LEVEL_NEXT:
         displayNextLevelScreen(g);
         break;
@@ -1062,7 +1124,7 @@ public class Asteroids extends GameEngine
     {
       case INTRODUCTION:
 
-        menuFlowTwoForIntroductionScreen(keyCode);
+        menuFlowForIntroductionScreen(keyCode);
 
         // Start the game
         if (keyCode == KeyEvent.VK_ENTER)
@@ -1136,12 +1198,12 @@ public class Asteroids extends GameEngine
             soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_WEAPON_ATTRIBUTE_EMPTY);
           }
         }
-        
+
         if (keyCode == KeyEvent.VK_P)
         {
           gamePaused = true;
         }
-        
+
         break;
 
       case PAUSED:
@@ -1152,7 +1214,7 @@ public class Asteroids extends GameEngine
         }
 
         break;
-        
+
       default:
     }
   }
@@ -1200,7 +1262,7 @@ public class Asteroids extends GameEngine
     asteroid.getVelocity().scaleThisVector(Constants.BIG_ASTEROID_VELOCITY_SCALE[GameUtility.random.nextInt(Constants.BIG_ASTEROID_VELOCITY_SCALE.length)]);
 
     // Add the new asteroid to the sprite list
-    
+
     if (asteroid.getImage() != null)
     {
       getEnemies().add(asteroid);
@@ -1396,7 +1458,7 @@ public class Asteroids extends GameEngine
     while (!newEnemies.isEmpty())
     {
       EnemyEntity enemy = (EnemyEntity) newEnemies.remove();
-      
+
       if (enemy.getImage() != null)
       {
         //getEnemies().add(newEnemies.remove());
@@ -1515,7 +1577,7 @@ public class Asteroids extends GameEngine
         // TODO: Move these sounds to the collision method
         //soundManager.playSound(SoundManager.SOUND_RESOURCE_ASTEROID_TINY_EXPLOSION);
         // Spawn a random powerup
-        addPowerup(powerupManager.spawnPowerup(entity.getPosition(), ((PlayerEntity)getPlayer()), currentLevel));
+        addPowerup(powerupManager.spawnPowerup(entity.getPosition(), ((PlayerEntity) getPlayer()), currentLevel));
 
         // TODO: Draw small explosion
         break;
@@ -1559,7 +1621,7 @@ public class Asteroids extends GameEngine
       case ASTEROID_TINY:
 
         // Spawn a random powerup
-        addPowerup(powerupManager.spawnPowerup(entity.getPosition(), ((PlayerEntity)getPlayer()), currentLevel));
+        addPowerup(powerupManager.spawnPowerup(entity.getPosition(), ((PlayerEntity) getPlayer()), currentLevel));
 
         // TODO: Draw small explosion
         break;
@@ -1750,6 +1812,7 @@ public class Asteroids extends GameEngine
    * Display methods for different screens
    */
 
+  // TODO: Finish this method.
   // Display for the introduction screen
   private void displayIntroductionMainScreen(Graphics2D g)
   {
@@ -1764,144 +1827,162 @@ public class Asteroids extends GameEngine
 
     boundsIntroductionStateTitle = g.getFontMetrics().getStringBounds("Press 'Enter' to begin game", g);
     g.drawString("Press 'Enter' to begin game", (int) ((screenWidth - boundsIntroductionStateTitle.getWidth()) / 2), 384);
-    
+
     // Display the credits and copyright 
     g.setFont(Constants.FONT_INTRO_SCREEN1_CREDIT);
     g.setColor(Color.YELLOW);
 
-    Rectangle2D boundsIntroScreen1Credits = g.getFontMetrics().getStringBounds(Constants.MSG_INTRO_SCREEN1_CREDIT, g);
-    g.drawString(Constants.MSG_INTRO_SCREEN1_CREDIT, (int) ((screenWidth - boundsIntroScreen1Credits.getWidth()) / 2), (int) ((screenHeight * 0.86)));
+    Rectangle2D boundsIntroScreen1Credits = g.getFontMetrics().getStringBounds(Constants.MSG_INTRO_SCREEN1_CREDIT + " " + Constants.MSG_INTRO_SCREEN1_COPYRIGHT, g);
+    g.drawString(Constants.MSG_INTRO_SCREEN1_CREDIT + " " + Constants.MSG_INTRO_SCREEN1_COPYRIGHT, (int) ((screenWidth - boundsIntroScreen1Credits.getWidth()) / 2), 544);
+  }
+
+  private void setupIntroductionInstructionsScreen()
+  {
+    int controlUpperLeftCornerPositionX = 192;  // Was 192
+    int controlUpperLeftCornerPositionY = 304;  // Was 240
+
+    int commandUpperLeftCornerPositionX = 448;
+    int commandUpperLeftCornerPositionY = 304;  // Was 240
+
+    msgInstructionsScreenTitle = new StaticText(Constants.MSG_INSTRUCTIONS_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_LARGE, screenWidth, screenHeight);
+    msgInstructionsScreenTitle.centerHorizontally();
+
+    msgInstructionsGameObjectiveLabel = new StaticText(Constants.MSG_INSTRUCTIONS_GAME_OBJECTIVE_LABEL, -1, 208, Color.WHITE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_MEDIUM, screenWidth, screenHeight);
+    msgInstructionsGameObjectiveLabel.centerHorizontally();
+
+    msgInstructionsGameObjective= new StaticText(Constants.MSG_INSTRUCTIONS_GAME_OBJECTIVE, -1, 240, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    msgInstructionsGameObjective.centerHorizontally();
+
+    msgInstructionsPlayerControls = new StaticText(Constants.MSG_INSTRUCTIONS_CONTROLS, -1, controlUpperLeftCornerPositionY, Color.WHITE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_MEDIUM, screenWidth, screenHeight);
+    msgInstructionsPlayerControls.centerHorizontally();
+    controlUpperLeftCornerPositionY += 48;
     
-    Rectangle2D boundsIntroScreen1Copyright = g.getFontMetrics().getStringBounds(Constants.MSG_INTRO_SCREEN1_COPYRIGHT, g);
-    g.drawString(Constants.MSG_INTRO_SCREEN1_COPYRIGHT, (int) ((screenWidth - boundsIntroScreen1Copyright.getWidth()) / 2), (int) ((screenHeight * 0.91)));
+    msgInstructionsRotateControl = new StaticText(Constants.MSG_INSTRUCTIONS_ROTATE_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    controlUpperLeftCornerPositionY += 24;
+    msgInstructionsThrustControl = new StaticText(Constants.MSG_INSTRUCTIONS_THRUST_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    controlUpperLeftCornerPositionY += 24;
+    msgInstructionsShieldsControl = new StaticText(Constants.MSG_INSTRUCTIONS_SHIELDS_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    controlUpperLeftCornerPositionY += 24;
+    msgInstructionsFireControl = new StaticText(Constants.MSG_INSTRUCTIONS_FIRE_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    controlUpperLeftCornerPositionY += 24;
+    msgInstructionsSuperShieldsControl = new StaticText(Constants.MSG_INSTRUCTIONS_SUPER_SHIELDS_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    controlUpperLeftCornerPositionY += 24;
+    msgInstructionsTheBombControl = new StaticText(Constants.MSG_INSTRUCTIONS_THE_BOMB_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+
+    commandUpperLeftCornerPositionY += 48;
+    msgInstructionsRotateCommand = new StaticText(Constants.MSG_INSTRUCTIONS_ROTATE_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    commandUpperLeftCornerPositionY += 24;
+    msgInstructionsThrustCommand = new StaticText(Constants.MSG_INSTRUCTIONS_THRUST_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    commandUpperLeftCornerPositionY += 24;
+    msgInstructionsShieldsCommand = new StaticText(Constants.MSG_INSTRUCTIONS_SHIELDS_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    commandUpperLeftCornerPositionY += 24;
+    msgInstructionsFireCommand = new StaticText(Constants.MSG_INSTRUCTIONS_FIRE_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    commandUpperLeftCornerPositionY += 24;
+    msgInstructionsSuperShieldsCommand = new StaticText(Constants.MSG_INSTRUCTIONS_SUPER_SHIELDS_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
+    commandUpperLeftCornerPositionY += 24;
+    msgInstructionsTheBombCommand = new StaticText(Constants.MSG_INSTRUCTIONS_THE_BOMB_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
   }
 
   private void displayInstructions(Graphics2D g)
   {
     msgInstructionsScreenTitle.draw(g);
-
-    // Vars used for thruster power-up
-    int controlUpperLeftCornerPositionX = 192;
-    int controlUpperLeftCornerPositionY = 240;
-
-    int commandUpperLeftCornerPositionX = 448;
-    int commandUpperLeftCornerPositionY = 240;
-
+    
+    msgInstructionsGameObjectiveLabel.draw(g);
+    msgInstructionsGameObjective.draw(g);
+    
     msgInstructionsPlayerControls.draw(g);
+    
+    msgInstructionsRotateControl.draw(g);
+    msgInstructionsThrustControl.draw(g);
+    msgInstructionsShieldsControl.draw(g);
+    msgInstructionsFireControl.draw(g);
+    msgInstructionsSuperShieldsControl.draw(g);
+    msgInstructionsTheBombControl.draw(g);
 
-    // Display the ship controls
-    g.setFont(Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR);
-    //g.setFont(Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_MEDIUM);
-    g.setColor(Color.ORANGE);
-
-    g.drawString(Constants.MSG_INSTRUCTIONS_ROTATE_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY);
-    controlUpperLeftCornerPositionY += 24;
-    
-    g.drawString(Constants.MSG_INSTRUCTIONS_THRUST_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY);
-    controlUpperLeftCornerPositionY += 24;
-    
-    g.drawString(Constants.MSG_INSTRUCTIONS_SHIELDS_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY);
-    controlUpperLeftCornerPositionY += 24;
-    
-    g.drawString(Constants.MSG_INSTRUCTIONS_FIRE_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY);
-    controlUpperLeftCornerPositionY += 24;
-        
-    g.drawString(Constants.MSG_INSTRUCTIONS_SUPER_SHIELDS_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY);
-    controlUpperLeftCornerPositionY += 24;
-  
-    g.drawString(Constants.MSG_INSTRUCTIONS_THE_BOMB_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY);
-
-    // Display the corresponding commands
-    g.drawString(Constants.MSG_INSTRUCTIONS_ROTATE_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);
-    commandUpperLeftCornerPositionY += 24;
-    
-    g.drawString(Constants.MSG_INSTRUCTIONS_THRUST_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);
-    commandUpperLeftCornerPositionY += 24;
-    
-    g.drawString(Constants.MSG_INSTRUCTIONS_SHIELDS_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);
-    commandUpperLeftCornerPositionY += 24;
-    
-    g.drawString(Constants.MSG_INSTRUCTIONS_FIRE_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);
-    commandUpperLeftCornerPositionY += 24;
-        
-    g.drawString(Constants.MSG_INSTRUCTIONS_SUPER_SHIELDS_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);
-    commandUpperLeftCornerPositionY += 24;
-  
-    g.drawString(Constants.MSG_INSTRUCTIONS_THE_BOMB_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);    
+    msgInstructionsRotateCommand.draw(g);
+    msgInstructionsThrustCommand.draw(g);
+    msgInstructionsShieldsCommand.draw(g);
+    msgInstructionsFireCommand.draw(g);
+    msgInstructionsSuperShieldsCommand.draw(g);
+    msgInstructionsTheBombCommand.draw(g);
   }
 
   private void setupIntroductionPowerupsScreen()
   {
     int bufferVerticalBetweenText = 48;
     int imageOffset = -24;
-    int startingYPosition = 192;
+    int startingYPositionY = 192;
 
     int thrusterPowerupsUpperLeftCornerPositionX = 64;
     int healthShieldPowerupsUpperLeftCornerPositionX = 336;
     int weaponryPowerupsUpperLeftCornerPositionX = 556;
-    int thrusterImageWidth = ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST1).getWidth(imageObserver);
-    
+    int imageWidth = ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST1).getWidth(imageObserver); // Most images are 32 wide
+
     /*
      * Initialize the static text and images for the thruster upgrades    
-     */    
-    msgIntroductionPowerupScreenThrusterLabel = new StaticText(Constants.MSG_POWERUPS_THRUSTERS, thrusterPowerupsUpperLeftCornerPositionX, startingYPosition, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
+     */
+    msgIntroductionPowerupScreenThrusterLabel = new StaticText(Constants.MSG_POWERUPS_THRUSTERS, thrusterPowerupsUpperLeftCornerPositionX, startingYPositionY, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
 
-    imgIntroductionPowerupScreenThruster1 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_1), thrusterPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelThurster1 = new StaticText(Constants.MSG_POWERUPS_THURST1, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
-    
-    imgIntroductionPowerupScreenThruster2 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), thrusterPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelThruster2 = new StaticText(Constants.MSG_POWERUPS_THURST2, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);;
-    startingYPosition += bufferVerticalBetweenText;
-    
-    imgIntroductionPowerupScreenThruster3 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), thrusterPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelThruster3 = new StaticText(Constants.MSG_POWERUPS_THURST3, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);    
-    
+    imgIntroductionPowerupScreenThruster1 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_1), thrusterPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelThurster1 = new StaticText(Constants.MSG_POWERUPS_THURST1, thrusterPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenThruster2 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), thrusterPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelThruster2 = new StaticText(Constants.MSG_POWERUPS_THURST2, thrusterPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);;
+    startingYPositionY += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenThruster3 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), thrusterPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelThruster3 = new StaticText(Constants.MSG_POWERUPS_THURST3, thrusterPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+
     /*
      *  Initialize the static text and images for the health and shield power-ups 
      */
-    startingYPosition = 192;
-    msgIntroductionPowerupScreenHealthAndShieldLabel = new StaticText(Constants.MSG_POWERUPS_HEALTH_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX - 32, startingYPosition, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
-    
-    imgIntroductionPowerupScreenHealth = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelHealth = new StaticText(Constants.MSG_POWERUPS_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
+    startingYPositionY = 192;
+    msgIntroductionPowerupScreenHealthAndShieldLabel = new StaticText(Constants.MSG_POWERUPS_HEALTH_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX - 32, startingYPositionY, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
 
-    imgIntroductionPowerupScreenShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelShield = new StaticText(Constants.MSG_POWERUPS_SHIELDS, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
+    imgIntroductionPowerupScreenHealth = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelHealth = new StaticText(Constants.MSG_POWERUPS_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
 
-    imgIntroductionPowerupScreenFullHealth = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_FULL_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelFullHealth = new StaticText(Constants.MSG_POWERUPS_FULL_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
+    imgIntroductionPowerupScreenShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelShield = new StaticText(Constants.MSG_POWERUPS_SHIELDS, healthShieldPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
 
-    imgIntroductionPowerupScreenFullShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelFullShield = new StaticText(Constants.MSG_POWERUPS_FULL_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
+    imgIntroductionPowerupScreenFullHealth = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_FULL_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelFullHealth = new StaticText(Constants.MSG_POWERUPS_FULL_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
 
-    imgIntroductionPowerupScreenSuperShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelSuperShield = new StaticText(Constants.MSG_POWERUPS_SUPER_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
+    imgIntroductionPowerupScreenFullShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE), healthShieldPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelFullShield = new StaticText(Constants.MSG_POWERUPS_FULL_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
 
-    
+    imgIntroductionPowerupScreenSuperShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelSuperShield = new StaticText(Constants.MSG_POWERUPS_SUPER_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
+
     /*
      * Initialize the static text and images for the armament power-ups 
      */
-    startingYPosition = 192;
-    msgIntroductionPowerupScreenArmamentsLabel = new StaticText(Constants.MSG_POWERUPS_WEAPONS, weaponryPowerupsUpperLeftCornerPositionX, startingYPosition, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
-    
-    imgIntroductionPowerupScreenFirepower = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_GUN), weaponryPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelFirepower = new StaticText(Constants.MSG_POWERUPS_FIREPOWER, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
-    startingYPosition += bufferVerticalBetweenText;
+    startingYPositionY = 192;
+    msgIntroductionPowerupScreenArmamentsLabel = new StaticText(Constants.MSG_POWERUPS_WEAPONS, weaponryPowerupsUpperLeftCornerPositionX, startingYPositionY, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
 
-    imgIntroductionPowerupScreenTheBomb = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB), weaponryPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
-    msgIntroductionPowerupScreenLabelTheBomb = new StaticText(Constants.MSG_POWERUPS_THE_BOMB, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    imgIntroductionPowerupScreenFirepower = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_GUN), weaponryPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelFirepower = new StaticText(Constants.MSG_POWERUPS_FIREPOWER, weaponryPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPositionY += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenTheBomb = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB), weaponryPowerupsUpperLeftCornerPositionX, startingYPositionY + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelTheBomb = new StaticText(Constants.MSG_POWERUPS_THE_BOMB, weaponryPowerupsUpperLeftCornerPositionX + imageWidth, startingYPositionY, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
   }
-  
-  private void displayPowerups(Graphics2D g)
+
+  /**
+   * Display the power-ups screen
+   * 
+   * @param g
+   */
+  private void displayIntroductionPowerupsScreen(Graphics2D g)
   {
     msgPowerupScreenTitle.draw(g);
 
@@ -1927,7 +2008,7 @@ public class Asteroids extends GameEngine
 
     /*
      * Display health and shield power-ups
-     */    
+     */
     msgIntroductionPowerupScreenHealthAndShieldLabel.draw(g);
     imgIntroductionPowerupScreenHealth.draw(g);
     imgIntroductionPowerupScreenHealth.draw(g);
@@ -1944,7 +2025,7 @@ public class Asteroids extends GameEngine
     /*
      * Display weapons
      */
-    msgIntroductionPowerupScreenArmamentsLabel.draw(g);    
+    msgIntroductionPowerupScreenArmamentsLabel.draw(g);
     imgIntroductionPowerupScreenFirepower.draw(g);
     msgIntroductionPowerupScreenLabelFirepower.draw(g);
     imgIntroductionPowerupScreenTheBomb.draw(g);
@@ -1959,102 +2040,111 @@ public class Asteroids extends GameEngine
     //       below will probably remain this way.
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_MEDIUM);
     Rectangle2D bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_SCREEN_POINT_BONUSES, g);
-    pointBonusTextLength = (int)bounds.getWidth();
-    pointBonusTextHeight = (int)bounds.getHeight();
+    pointBonusTextLength = (int) bounds.getWidth();
+    pointBonusTextHeight = (int) bounds.getHeight();
 
     // Compute the starting x position of the text 
-    pointBonusesPositionX = (screenWidth - pointBonusTextLength - 3*regularBufferBetweenImages - 3*powerupImageWidth)/2;
-    g.drawString(Constants.MSG_POWERUPS_SCREEN_POINT_BONUSES, pointBonusesPositionX, (int)(pointBonusesPositionY + pointBonusTextHeight/4));
+    pointBonusesPositionX = (screenWidth - pointBonusTextLength - 3 * regularBufferBetweenImages - 3 * powerupImageWidth) / 2;
+    g.drawString(Constants.MSG_POWERUPS_SCREEN_POINT_BONUSES, pointBonusesPositionX, (int) (pointBonusesPositionY + pointBonusTextHeight / 4));
 
     // Draw point bonus icons after the point bonus text
     pointBonusesPositionX += pointBonusTextLength + regularBufferBetweenImages;  // Compute the x position of the first power image
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_250), pointBonusesPositionX, pointBonusesPositionY-powerupImageHeight/2, this.imageObserver);
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_250), pointBonusesPositionX, pointBonusesPositionY - powerupImageHeight / 2, this.imageObserver);
 
     pointBonusesPositionX += powerupImageWidth + regularBufferBetweenImages;     // Compute the x position of the second power image
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_500), pointBonusesPositionX, pointBonusesPositionY-powerupImageHeight/2, this.imageObserver);
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_500), pointBonusesPositionX, pointBonusesPositionY - powerupImageHeight / 2, this.imageObserver);
 
     pointBonusesPositionX += powerupImageWidth + regularBufferBetweenImages;     // Compute the x position of the third power image
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_1000), pointBonusesPositionX, pointBonusesPositionY-powerupImageHeight/2, this.imageObserver);
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_1000), pointBonusesPositionX, pointBonusesPositionY - powerupImageHeight / 2, this.imageObserver);
   }
 
-  /**
-   * Displays the details of specific power-ups to better inform the player.
-   *  
-   * @param g - The graphics object passed from the draw method.
-   */
-  public void displayPowerupDetailsScreen(Graphics2D g)
+  public void setupIntroductionGameDetailsScreen()
   {
-    msgPowerupDetailsScreen.draw(g);
-    
     int upgradeMsgUpperLeftPositionX = 112;
-    int upgradeMsgUpperLeftPositionY = 320;
+    int upgradeMsgUpperLeftPositionY = 208;
 
     int spacingBetweenLines = 16;
     int spacingBetweenSections = 40;
 
     int usageUpperLeftCornerX = 320;
-    int usageUpperLeftCornerY = 320;
-    
+    int usageUpperLeftCornerY = 208;
+
+    msgGameDetailsFirepowerLabel = new StaticText(Constants.MSG_POWERUPS_FIREPOWER, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    upgradeMsgUpperLeftPositionY += spacingBetweenSections + spacingBetweenLines;
+    msgGameDetailsSuperShieldLabel = new StaticText(Constants.MSG_POWERUPS_SUPER_SHIELD, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    upgradeMsgUpperLeftPositionY += spacingBetweenSections;
+    msgGameDetailsTheBombLabel = new StaticText(Constants.MSG_POWERUPS_THE_BOMB, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    upgradeMsgUpperLeftPositionY += spacingBetweenSections;
+    msgGameDetailsThrust1Label = new StaticText(Constants.MSG_POWERUPS_THURST1, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    upgradeMsgUpperLeftPositionY += spacingBetweenSections;
+
+    msgGameDetailsFirepowerUse = new StaticText(Constants.MSG_GAME_DETAILS_FIREPOWER_UPGRADE_USE, usageUpperLeftCornerX, usageUpperLeftCornerY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    usageUpperLeftCornerY += spacingBetweenLines;
+    msgGameDetailsMaxFirepower = new StaticText(Constants.MSG_GAME_DETAILS_MAX_FIREPOWER, usageUpperLeftCornerX, usageUpperLeftCornerY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    usageUpperLeftCornerY += spacingBetweenSections;
+    msgGameDetailsSuperShieldUse = new StaticText(Constants.MSG_GAME_DETAILS_SUPER_SHIELDS_USE, usageUpperLeftCornerX, usageUpperLeftCornerY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    usageUpperLeftCornerY += spacingBetweenSections;
+    msgGameDetailsTheBombUse = new StaticText(Constants.MSG_GAME_DETAILS_THE_BOMB_USE, usageUpperLeftCornerX, usageUpperLeftCornerY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    usageUpperLeftCornerY += spacingBetweenSections;
+    msgGameDetailsIonThrusterUse = new StaticText(Constants.MSG_GAME_DETAILS_ION_THRUSTER, usageUpperLeftCornerX, usageUpperLeftCornerY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+    usageUpperLeftCornerY += spacingBetweenLines;
+    msgGameDetailsThrustersUse = new StaticText(Constants.MSG_GAME_DETAILS_THRUSTERS, usageUpperLeftCornerX, usageUpperLeftCornerY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL, screenWidth, screenHeight);
+  }
+
+  /**
+   * Displays the details of specific power-ups to better inform the player.
+   * 
+   * @param g - The graphics object passed from the draw method.
+   */
+  public void displayIntroductionGameDetailsScreen(Graphics2D g)
+  {
+    msgPowerupDetailsScreen.draw(g);
+
     // Display some more details about player controls and power-ups
     int imageStartingPositionX = 64;  // Was 32
-    int imageStartingPositionY = 300;
-
-
+    int imageStartingPositionY = 188;
 
     g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_GUN), imageStartingPositionX, imageStartingPositionY, this.imageObserver);
     imageStartingPositionY += 40 + 16;
 
     g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD), imageStartingPositionX, imageStartingPositionY, this.imageObserver);
     imageStartingPositionY += 40;
- 
+
     g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB), imageStartingPositionX, imageStartingPositionY, this.imageObserver);
     imageStartingPositionY += 40;
-    
+
     g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_1), imageStartingPositionX, imageStartingPositionY, this.imageObserver);
     imageStartingPositionY += 40;
-    
-    g.setColor(Color.ORANGE);
-    g.setFont(Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL);
 
-    g.drawString(Constants.MSG_POWERUPS_FIREPOWER, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY);
-    upgradeMsgUpperLeftPositionY += spacingBetweenSections + spacingBetweenLines;
-  
-    g.drawString(Constants.MSG_POWERUPS_SUPER_SHIELD, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY);
-    upgradeMsgUpperLeftPositionY += spacingBetweenSections;
-  
-    g.drawString(Constants.MSG_POWERUPS_THE_BOMB, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY);
-    upgradeMsgUpperLeftPositionY += spacingBetweenSections;
-    
-    g.drawString(Constants.MSG_POWERUPS_THURST1, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY);
-    upgradeMsgUpperLeftPositionY += spacingBetweenSections;
+    msgGameDetailsFirepowerLabel.draw(g);
+    msgGameDetailsSuperShieldLabel.draw(g);
+    msgGameDetailsTheBombLabel.draw(g);
+    msgGameDetailsThrust1Label.draw(g);
 
-    
-    
-    g.drawString(Constants.MSG_POWERUP_DETAILS_FIREPOWER_UPGRADE_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
-    usageUpperLeftCornerY += spacingBetweenLines;
-  
-    g.drawString(Constants.MSG_POWERUP_DETAILS_MAX_FIREPOWER, usageUpperLeftCornerX, usageUpperLeftCornerY);
-    usageUpperLeftCornerY += spacingBetweenSections;
-    
-    g.drawString(Constants.MSG_POWERUP_DETAILS_SUPER_SHIELDS_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
-    usageUpperLeftCornerY += spacingBetweenSections;
-  
-    g.drawString(Constants.MSG_POWERUP_DETAILS_THE_BOMB_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
-    usageUpperLeftCornerY += spacingBetweenSections;
-    
-    g.drawString(Constants.MSG_POWERUP_DETAILS_ION_THRUSTER, usageUpperLeftCornerX, usageUpperLeftCornerY);
-    usageUpperLeftCornerY += spacingBetweenLines;
-    
-    g.drawString(Constants.MSG_POWERUP_DETAILS_THRUSTERS, usageUpperLeftCornerX, usageUpperLeftCornerY);
-    usageUpperLeftCornerY += spacingBetweenSections;
+    msgGameDetailsFirepowerUse.draw(g);
+    msgGameDetailsMaxFirepower.draw(g);
+    msgGameDetailsSuperShieldUse.draw(g);
+    msgGameDetailsTheBombUse.draw(g);
+    msgGameDetailsIonThrusterUse.draw(g);
+    msgGameDetailsThrustersUse.draw(g);
   }
-  
+
+  // TODO: Finish this method
   private void displayCreditsScreen(Graphics2D g)
   {
     msgCreditsTitle.draw(g);
+    
+    msgCreditSoundLibrary.draw(g);
+    msgCreditSoundLibraryURL.draw(g);
+    msgCreditSoundLibraryBreadcrumb.draw(g);
+    msgCreditSoundEffects.draw(g);
+    msgCreditSoundEffectsURL.draw(g);
+    msgCreditSoundEffectsBreadcrumb.draw(g);
+    
+    msgCreditGoBack.draw(g);
   }
 
-  // NOTE: Possibly place all methods responsible for drawing the screen content into some type of screen/display manager
+  // TODO: Possibly place all methods responsible for drawing the screen content into some type of screen/display manager
   /**
    * Initialize the images used in the enemies screen from the introduction. Since all of this can be computed
    * before hand, it is computed here once and the content is used to create instances of the static image class
@@ -2064,7 +2154,6 @@ public class Asteroids extends GameEngine
   {
     int startingPositionYOfAsteroidListing = 208;
 
-    int bufferBetweenAsteroid = 64;
     bigAsteroidWidth = ImageManager.getWidth(Constants.FILENAME_BIG_ASTEROID_1);  // Non local variable since it is needed in other methods for the enemies screen in the introduction
     int mediumAsteroidWidth = ImageManager.getWidth(Constants.FILENAME_MEDIUM_ASTEROID_1);
     int smallAsteroidWidth = ImageManager.getWidth(Constants.FILENAME_SMALL_ASTEROID_1);
@@ -2077,25 +2166,46 @@ public class Asteroids extends GameEngine
 
     // (Number of Asteroid Types) x (Width of Largest Asteroids) + ((Number of Asteroid Types) - 1) x (Buffer Between Each Asteroid)
     int widthOfAsteroidListing = 4 * bigAsteroidWidth + (3) * bufferBetweenAsteroid;
-    startingPositionXOfAsteroidListing = (screenWidth - widthOfAsteroidListing)/2;
+    startingPositionXOfAsteroidListing = (screenWidth - widthOfAsteroidListing) / 2;
 
     int largeAsteroidStartingPositionX = startingPositionXOfAsteroidListing;
-    int mediumAsteroidStartingPositionX = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - mediumAsteroidWidth)/2;
-    int smallAsteroidStartingPositionX = startingPositionXOfAsteroidListing + 2*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - smallAsteroidWidth)/2;
-    int tinyAsteroidStartingPositionX = startingPositionXOfAsteroidListing + 3*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - tinyAsteroidWidth)/2;
+    int mediumAsteroidStartingPositionX = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - mediumAsteroidWidth) / 2;
+    int smallAsteroidStartingPositionX = startingPositionXOfAsteroidListing + 2 * (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - smallAsteroidWidth) / 2;
+    int tinyAsteroidStartingPositionX = startingPositionXOfAsteroidListing + 3 * (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - tinyAsteroidWidth) / 2;
 
     int largeAsteroidStartingPositionY = startingPositionYOfAsteroidListing;
-    int mediumAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - mediumAsteroidHeight)/2;
-    int smallAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - smallAsteroidHeight)/2;
-    int tinyAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - tinyAsteroidHeight)/2;
-    
+    int mediumAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - mediumAsteroidHeight) / 2;
+    int smallAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - smallAsteroidHeight) / 2;
+    int tinyAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - tinyAsteroidHeight) / 2;
+
     imgIntroductionEnemiesScreenAsteroidLarge = new StaticImage(ImageManager.getImage(Constants.FILENAME_BIG_ASTEROID_1), largeAsteroidStartingPositionX, largeAsteroidStartingPositionY, false, imageObserver);
     imgIntroductionEnemiesScreenAsteroidMedium = new StaticImage(ImageManager.getImage(Constants.FILENAME_MEDIUM_ASTEROID_1), mediumAsteroidStartingPositionX, mediumAsteroidStartingPositionY, false, imageObserver);
     imgIntroductionEnemiesScreenAsteroidSmall = new StaticImage(ImageManager.getImage(Constants.FILENAME_SMALL_ASTEROID_1), smallAsteroidStartingPositionX, smallAsteroidStartingPositionY, false, imageObserver);
     imgIntroductionEnemiesScreenAsteroidTiny = new StaticImage(ImageManager.getImage(Constants.FILENAME_TINY_ASTEROID_1), tinyAsteroidStartingPositionX, tinyAsteroidStartingPositionY, false, imageObserver);
+
+    int widthOfUFOListing = 2 * bigAsteroidWidth + bufferBetweenAsteroid;
+    startingPositionXOfUFOListing = (screenWidth - widthOfUFOListing) / 2;
+
+    int ufoWidth = ImageManager.getWidth(Constants.FILENAME_UFO);
+    int ufoHeight = ImageManager.getHeight(Constants.FILENAME_UFO);
+    int ufoShortyWidth = ImageManager.getWidth(Constants.FILENAME_UFO_SHORTY);
+    int ufoShortyHeight = ImageManager.getHeight(Constants.FILENAME_UFO_SHORTY);
+
+    int ufoPositionX = startingPositionXOfUFOListing + (bigAsteroidWidth - ufoWidth) / 2;
+    int ufoPositionY = 432;
+    int ufoShortyPositionX = startingPositionXOfUFOListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - ufoShortyWidth) / 2;
+    int ufoShortyPositionY = 432 + (ufoHeight - ufoShortyHeight) / 2;
+
+    imgIntroductionEnemiesScreenUFO = new StaticImage(ImageManager.getImage(Constants.FILENAME_UFO), ufoPositionX, ufoPositionY, false, imageObserver);
+    imgIntroductionEnemiesScreenUFOShorty = new StaticImage(ImageManager.getImage(Constants.FILENAME_UFO_SHORTY), ufoShortyPositionX, ufoShortyPositionY, false, imageObserver);
   }
 
-  private void displayEnemiesScreen(Graphics2D g)
+  /**
+   * Displays the enemies (both Asteroids and UFOs) from the game.
+   * 
+   * @param g
+   */
+  private void displayIntroductionEnemiesScreen(Graphics2D g)
   {
     int startingYPositionLabel = 328;
     int startingYPositionScore = startingYPositionLabel + 16;
@@ -2112,44 +2222,67 @@ public class Asteroids extends GameEngine
     imgIntroductionEnemiesScreenAsteroidTiny.draw(g);
 
     // Draw the labels below each asteroid, both point value and 
-    
+
     g.setColor(Color.WHITE);
 
     // Display the respective asteroid labels
+    // NOTE: Since the string bounds is used in these computations, the power-up images and text will not be replaced with static images and text since
+    //       the bounds cannot be known without the g object. Also note that there are other ways to compute the length of the text, but these approaches
+    //       do not produce accurate results according to some of the posts on various blogs. The bottom line, until this becomes a bottle neck, this code
+    //       below will probably remain this way.
     g.setFont(Constants.FONT_INTRO_ENEMIES_SCREEN_SMALL);
     bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_LARGE_LABEL, g);
-    int largeAsteroidTextPosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    int largeAsteroidTextPosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
     g.drawString(Constants.MSG_ENEMIES_ASTEROID_LARGE_LABEL, largeAsteroidTextPosition, startingYPositionLabel);
 
     bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_MEDIUM_LABEL, g);
-    int mediumAsteroidTextPosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    int mediumAsteroidTextPosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
     g.drawString(Constants.MSG_ENEMIES_ASTEROID_MEDIUM_LABEL, mediumAsteroidTextPosition, startingYPositionLabel);
 
     bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_SMALL_LABEL, g);
-    int smallAsteroidTextPosition = startingPositionXOfAsteroidListing + 2*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    int smallAsteroidTextPosition = startingPositionXOfAsteroidListing + 2 * (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
     g.drawString(Constants.MSG_ENEMIES_ASTEROID_SMALL_LABEL, smallAsteroidTextPosition, startingYPositionLabel);
 
     bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_TINY_LABEL, g);
-    int tinyAsteroidTextPosition = startingPositionXOfAsteroidListing + 3*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    int tinyAsteroidTextPosition = startingPositionXOfAsteroidListing + 3 * (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
     g.drawString(Constants.MSG_ENEMIES_ASTEROID_TINY_LABEL, tinyAsteroidTextPosition, startingYPositionLabel);
 
     // Display the respective asteroid point values
+    // NOTE: Since the string bounds is used in these computations, the power-up images and text will not be replaced with static images and text since
+    //       the bounds cannot be known without the g object. Also note that there are other ways to compute the length of the text, but these approaches
+    //       do not produce accurate results according to some of the posts on various blogs. The bottom line, until this becomes a bottle neck, this code
+    //       below will probably remain this way.
     g.setFont(Constants.FONT_INTRO_ENEMIES_SCREEN_TINY);
     bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_BIG_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
-    int largeAsteroidTextScorePosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    int largeAsteroidTextScorePosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
     g.drawString("(" + Constants.SCORE_BIG_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", largeAsteroidTextScorePosition, startingYPositionScore);
 
     bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_MEDIUM_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
-    int mediumAsteroidTextScorePosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    int mediumAsteroidTextScorePosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
     g.drawString("(" + Constants.SCORE_MEDIUM_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", mediumAsteroidTextScorePosition, startingYPositionScore);
 
     bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_SMALL_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
-    int smallAsteroidTextScorePosition = startingPositionXOfAsteroidListing + 2*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    int smallAsteroidTextScorePosition = startingPositionXOfAsteroidListing + 2 * (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
     g.drawString("(" + Constants.SCORE_SMALL_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", smallAsteroidTextScorePosition, startingYPositionScore);
 
     bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_TINY_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
-    int tinyAsteroidTextScorePosition = startingPositionXOfAsteroidListing + 3*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    int tinyAsteroidTextScorePosition = startingPositionXOfAsteroidListing + 3 * (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
     g.drawString("(" + Constants.SCORE_TINY_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", tinyAsteroidTextScorePosition, startingYPositionScore);
+
+    // Draw the UFOs
+    msgEnemiesUFOLabel.draw(g);
+    imgIntroductionEnemiesScreenUFO.draw(g);
+    imgIntroductionEnemiesScreenUFOShorty.draw(g);
+
+    g.setFont(Constants.FONT_INTRO_ENEMIES_SCREEN_SMALL);
+    g.setColor(Color.WHITE);
+    bounds = g.getFontMetrics().getStringBounds("Regular", g);
+    int UFOTextPosition = startingPositionXOfUFOListing + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
+    g.drawString(Constants.MSG_ENEMIES_UFO_LABEL, UFOTextPosition, 500);
+
+    bounds = g.getFontMetrics().getStringBounds("Regular", g);
+    int UFOShortyTextPosition = startingPositionXOfUFOListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int) bounds.getWidth()) / 2;
+    g.drawString(Constants.MSG_ENEMIES_UFO_SHORTY_LABEL, UFOShortyTextPosition, 500);
   }
 
   private void displayIntroductionFooter(Graphics2D g)
@@ -2159,7 +2292,7 @@ public class Asteroids extends GameEngine
     int backMsgPositionY = 576;
     int nextMsgPositionX = 592;
     int nextMsgPositionY = 576;
-    
+
     g.setFont(Constants.FONT_INTRO_SCREEN_SMALL);
     g.setColor(Color.WHITE);
     g.drawString(Constants.MSG_INTRODUCTION_MSG_NEXT, nextMsgPositionX, nextMsgPositionY);
@@ -2175,7 +2308,7 @@ public class Asteroids extends GameEngine
   {
     // Draw player health bar
     String barFrameImageName = "";
-    switch(((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH))
+    switch (((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH))
     {
       case Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20:
         barFrameImageName = Constants.FILENAME_BAR_FRAME_20;
@@ -2187,9 +2320,9 @@ public class Asteroids extends GameEngine
         barFrameImageName = Constants.FILENAME_BAR_FRAME_10;
     }
     g.drawImage(ImageManager.getImage(barFrameImageName), screenWidth - ImageManager.getWidth(Constants.FILENAME_BAR_FRAME_40) - 20, 18, this.imageObserver);
-    
+
     // Draw player shield bar
-    switch(((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD))
+    switch (((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD))
     {
       case Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_20:
         barFrameImageName = Constants.FILENAME_BAR_FRAME_20;
@@ -2230,7 +2363,7 @@ public class Asteroids extends GameEngine
 
     // Draw the amounts for Super Shields and for The Bomb 
     msgHUDNumberOfSuperShields.setText(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_SUPER_SHIELD) + "");
-    msgHUDNumberOfTheBombs.setText(((PlayerEntity)getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_THE_BOMB) + "");
+    msgHUDNumberOfTheBombs.setText(((PlayerEntity) getPlayer()).getValue(Constants.AttributeType.ATTRIBUTE_THE_BOMB) + "");
     msgHUDNumberOfSuperShields.draw(g);
     msgHUDNumberOfTheBombs.draw(g);
 
@@ -2261,24 +2394,24 @@ public class Asteroids extends GameEngine
 
     // Draw the super shield icon
     g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_SUPERSHIELD_ICON), 20, 85, this.imageObserver);
-    
+
     // Draw the bomb icon
     g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_THE_BOMB_ICON), 20, 115, this.imageObserver);
-    
+
     // Draw the auto shield icon along with amount
     //g.drawImage(powerupAutoShield.getImage(), 20, 145, this.imageObserver);
-    
+
     // Draw the respective thrust icon given the players current thrust level
-    switch(((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST))
+    switch (((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST))
     {
       case 2:
         g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), 20, 185, this.imageObserver);
         break;
-        
+
       case 3:
         g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), 20, 185, this.imageObserver);
         break;
-        
+
       default:
     }
 
@@ -2300,7 +2433,7 @@ public class Asteroids extends GameEngine
             this.playCountdownTimerSound = false;
         }
       }
-      
+
       msgHUDTheBombCoundown.setText(Constants.DOT_DOT_DOT + prepareBombTimerSecondCount + Constants.DOT_DOT_DOT);
       msgHUDTheBombCoundown.draw(g);
     }
@@ -2327,46 +2460,17 @@ public class Asteroids extends GameEngine
     msgGameOverScreen.draw(g);
   }
 
-  // TODO: Add a method to display the instructions screen
-  
-  public void displayDebugInfo(Graphics2D g)
+  private void menuFlowForIntroductionScreen(int keyCode)
   {
-    // For debugging purposes
-    int line = 300;
-    
-    if (displayDebugInfo)
-    {
-      g.setFont(Constants.FONT_DEBUG);
-      g.setColor(Color.WHITE);
-
-      g.drawString(Constants.DEBUG_MSG_THRUST_ON + thrust, 560, line);
-      line += 16;
-      g.drawString(Constants.DEBUG_MSG_SHIELD + keyShield, 560, line);
-      line += 16;
-      g.drawString(Constants.DEBUG_MSG_UFO_PROB + ufoManager.getProbability(), 560, line);
-      line += 16;
-      g.drawString(Constants.DEBUG_MSG_THRUST_VALUE + ((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST), 560, line);
-      line += 16;
-      g.drawString(Constants.DEBUG_MSG_SPAWN_PROBABILITY + powerupManager.getProbability(), 560, line);
-      line += 16;
-      g.drawString(Constants.DEBUG_MSG_PLAYER_HEALTH_CAPACITY + ((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) , 560, line);
-      line += 16;
-      g.drawString(Constants.DEBUG_MSG_PLAYER_SHIELD_CAPACITY + ((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD), 560, line);
-      line += 16;
-    }
-  }
-  
-  private void menuFlowTwoForIntroductionScreen(int keyCode)
-  {
-    switch(currentIntroductionScreen)
+    switch (currentIntroductionScreen)
     {
       case MAIN:
-        
+
         if (keyCode == KeyEvent.VK_SPACE)
         {
           currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
         }
-        
+
         if (keyCode == KeyEvent.VK_C)
         {
           currentIntroductionScreen = Constants.IntroductionScreens.CREDITS;
@@ -2377,8 +2481,7 @@ public class Asteroids extends GameEngine
           // TODO: Add request here to exit game.
         }
         break;
-        
-        
+
       case INSTRUCTIONS:
 
         if (keyCode == KeyEvent.VK_SPACE)
@@ -2438,10 +2541,38 @@ public class Asteroids extends GameEngine
           currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
         }
         break;
-        
+
       default:
     }
-    
+
     System.out.println("Current Introduction Screen:" + currentIntroductionScreen.toString());
   }
+
+  public void displayDebugInfo(Graphics2D g)
+  {
+    // For debugging purposes
+    int line = 300;
+
+    if (displayDebugInfo)
+    {
+      g.setFont(Constants.FONT_DEBUG);
+      g.setColor(Color.WHITE);
+
+      g.drawString(Constants.DEBUG_MSG_THRUST_ON + thrust, 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_SHIELD + keyShield, 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_UFO_PROB + ufoManager.getProbability(), 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_THRUST_VALUE + ((PlayerEntity) getPlayer()).getValue(AttributeType.ATTRIBUTE_THRUST), 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_SPAWN_PROBABILITY + powerupManager.getProbability(), 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_PLAYER_HEALTH_CAPACITY + ((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH), 560, line);
+      line += 16;
+      g.drawString(Constants.DEBUG_MSG_PLAYER_SHIELD_CAPACITY + ((PlayerEntity) getPlayer()).getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD), 560, line);
+      line += 16;
+    }
+  }
+
 }
