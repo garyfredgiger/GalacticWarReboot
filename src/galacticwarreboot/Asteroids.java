@@ -2,6 +2,7 @@ package galacticwarreboot;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
@@ -21,6 +22,7 @@ import galacticwarreboot.entities.UFOStrongEntity;
 import game.framework.GameEngine;
 import game.framework.entities.Entity2D;
 import game.framework.entities.EntityImage;
+import game.framework.entities.StaticImage;
 import game.framework.entities.text.StaticText;
 import game.framework.interfaces.IRender;
 import game.framework.utilities.GameEngineConstants;
@@ -47,7 +49,7 @@ public class Asteroids extends GameEngine
   private boolean             thrust;
   //private boolean             previousShieldState;
   private long                lastUFOCollisionTime;
-  
+
   private boolean             gamePaused;
 
   // When paused is activated, stores the previous state from which the paused state was entered so the previous state can be restored after paused is exited. 
@@ -91,11 +93,6 @@ public class Asteroids extends GameEngine
   private long                timerNextLevel                 = 0;
 
   /*
-   * Timers used to manage player entity states
-   */
-  //private long                timerCollision                   = 0;
-
-  /*
    * Bounding boxes used for messages displayed to the screen
    */
   private Rectangle2D         boundsIntroductionTitleMsg;
@@ -120,12 +117,20 @@ public class Asteroids extends GameEngine
   private StaticText          msgInstructionsScreenTitle;
   private StaticText          msgInstructionsPlayerControls;
   private StaticText          msgPowerupDetailsScreen;
+  private StaticText          msgEnemiesTitle;
+  private StaticText          msgCreditsTitle;
+  
+  private StaticText          msgEnemiesAsteroidLabel;
   
   /*
    * Static Image Variables
    */
 //  StaticImage imagePowerup
-  
+  StaticImage imgAsteroidLargeIntroductionScreen;
+  StaticImage imgAsteroidMediumIntroductionScreen;
+  StaticImage imgAsteroidSmallIntroductionScreen;
+  StaticImage imgAsteroidTinyIntroductionScreen;
+
   /*
    * Managers
    */
@@ -133,6 +138,15 @@ public class Asteroids extends GameEngine
   UFOEntityManager            ufoManager;
   PowerupManager              powerupManager;
 
+  // Variables used for creating the enemies screen in the game introduction
+  int startingPositionXOfAsteroidListing;
+  int bigAsteroidWidth;
+  int bufferBetweenAsteroid = 64; // Predefined number
+
+  /*
+   * The code
+   */
+  
   public Asteroids(IRender renderer, ImageObserver imageObserver)
   {
     super(renderer);
@@ -206,7 +220,7 @@ public class Asteroids extends GameEngine
     msgHUDNumberOfTheBombs = new StaticText("", 50, 133, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
     msgHUDTheBombCoundown = new StaticText("", Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_LARGE1, screenWidth, screenHeight);
     msgPaused = new StaticText(Constants.MSG_GAME_PAUSED, Color.WHITE, Constants.FONT_PAUSED_SCREEN, screenWidth, screenHeight);
-
+    
     msgGameTitle = new StaticText(Constants.INTRO_SCREEN_MAIN_TITLE_MSG, -1, 64, Color.RED, Constants.FONT_INTRO_SCREEN_MAIN_TITLE, screenWidth, screenHeight);
     msgGameTitle.centerHorizontally();
 
@@ -220,14 +234,25 @@ public class Asteroids extends GameEngine
 
     msgInstructionsScreenTitle = new StaticText(Constants.MSG_INSTRUCTIONS_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_LARGE, screenWidth, screenHeight);
     msgInstructionsScreenTitle.centerHorizontally();
-    
+
     msgInstructionsPlayerControls = new StaticText(Constants.MSG_INSTRUCTIONS_CONTROLS, -1, 208, Color.WHITE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_MEDIUM, screenWidth, screenHeight);
     msgInstructionsPlayerControls.centerHorizontally();
-    
+
+    msgPowerupDetailsScreen = new StaticText(Constants.MSG_POWERUP_DETAILS_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_LARGE, screenWidth, screenHeight);
+    msgPowerupDetailsScreen.centerHorizontally();
+
+    msgEnemiesTitle = new StaticText(Constants.MSG_ENEMIES_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_ENEMIES_SCREEN_LARGE, screenWidth, screenHeight);
+    msgEnemiesTitle.centerHorizontally();
+
+    msgCreditsTitle = new StaticText(Constants.MSG_CREDITS_TITLE, -1, 150, Color.WHITE, Constants.FONT_INTRO_CREDITS_SCREEN_LARGE, screenWidth, screenHeight);
+    msgCreditsTitle.centerHorizontally();
+
     currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
     
-    msgPowerupDetailsScreen = new StaticText(Constants.MSG_INSTRUCTIONS_POWERUP_DETAILS, -1, 150, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_LARGE, screenWidth, screenHeight);
-    msgPowerupDetailsScreen.centerHorizontally();
+    msgEnemiesAsteroidLabel = new StaticText("The Asteroids", -1, 192, Color.WHITE, Constants.FONT_INTRO_ENEMIES_SCREEN_REGULAR, screenWidth, screenHeight);
+    msgEnemiesAsteroidLabel.centerHorizontally();
+    
+    setupIntroductionEnemiesScreen();
   }
 
   @Override
@@ -381,6 +406,7 @@ public class Asteroids extends GameEngine
         {
           state = GameEngineConstants.GameState.GAMEOVER;
           timerGameOver = System.currentTimeMillis();
+          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
         }
 
         break;
@@ -895,20 +921,31 @@ public class Asteroids extends GameEngine
         {
           case INSTRUCTIONS:
             displayInstructions(g);
+            displayIntroductionFooter(g);
             break;
             
           case POWERUPS:
             displayPowerups(g);
+            displayIntroductionFooter(g);
             break;
 
           case POWERUP_DETAILS:
-            displayPowerupsScreen2(g);
+            displayPowerupDetailsScreen(g);
+            displayIntroductionFooter(g);
+            break;
+          
+          case CREDITS:
+            displayCreditsScreen(g);
+            break;
+            
+          case ENEMIES:
+            displayEnemiesScreen(g);
+            displayIntroductionFooter(g);
             break;
             
           default:
             displayIntroductionMainScreen(g);
         }
-        
         break;
 
       case GAME_START:
@@ -988,25 +1025,7 @@ public class Asteroids extends GameEngine
     {
       case INTRODUCTION:
 
-        if (keyCode == KeyEvent.VK_P)
-        {
-          currentIntroductionScreen = Constants.IntroductionScreens.POWERUPS;
-        }
-        
-        if (keyCode == KeyEvent.VK_I)
-        {
-          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
-        }
-
-        if (keyCode == KeyEvent.VK_ESCAPE)
-        {
-          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
-        }
-        
-        if (keyCode == KeyEvent.VK_D)
-        {
-          currentIntroductionScreen = Constants.IntroductionScreens.POWERUP_DETAILS; 
-        }
+        menuFlowTwoForIntroductionScreen(keyCode);
 
         // Start the game
         if (keyCode == KeyEvent.VK_ENTER)
@@ -1058,13 +1077,13 @@ public class Asteroids extends GameEngine
           keyShield = false;
         }
 
-        if (keyCode == KeyEvent.VK_S)
+        if (keyCode == KeyEvent.VK_Z)
         {
           requestSuperShield = true;
         }
 
         // Only accept The Bomb request if the player is equipped with at least one bomb and there is no previous bomb request pending
-        if (keyCode == KeyEvent.VK_D)
+        if (keyCode == KeyEvent.VK_X)
         {
           // If the player has at least one bomb left
           if (((PlayerEntity) getPlayer()).isEquipped(Constants.AttributeType.ATTRIBUTE_THE_BOMB))
@@ -1699,14 +1718,15 @@ public class Asteroids extends GameEngine
   {
     g.setColor(Color.WHITE);
     g.setFont(Constants.FONT_INTRO_SCREEN_MAIN_START);
-    boundsIntroductionPowerupsMsg = g.getFontMetrics().getStringBounds("Press 'P' for Available Powerups", g);
-    g.drawString("Press 'P' for Available Powerups", (int) ((screenWidth - boundsIntroductionPowerupsMsg.getWidth()) / 2), 320);
 
-    boundsIntroductionStateTitle = g.getFontMetrics().getStringBounds("Press 'I' for Game Instructions", g);
-    g.drawString("Press 'I' for Game Instructions", (int) ((screenWidth - boundsIntroductionStateTitle.getWidth()) / 2), 420);
-    
+    boundsIntroductionStateTitle = g.getFontMetrics().getStringBounds("Press 'Space' for Game Instructions", g);
+    g.drawString("Press 'Space' for Game Instructions", (int) ((screenWidth - boundsIntroductionStateTitle.getWidth()) / 2), 320);
+
+    boundsIntroductionPowerupsMsg = g.getFontMetrics().getStringBounds("Press 'C' for Game Credits", g);
+    g.drawString("Press 'C' for Game Credits", (int) ((screenWidth - boundsIntroductionPowerupsMsg.getWidth()) / 2), 352);
+
     boundsIntroductionStateTitle = g.getFontMetrics().getStringBounds("Press 'Enter' to begin game", g);
-    g.drawString("Press 'Enter' to begin game", (int) ((screenWidth - boundsIntroductionStateTitle.getWidth()) / 2), 520);
+    g.drawString("Press 'Enter' to begin game", (int) ((screenWidth - boundsIntroductionStateTitle.getWidth()) / 2), 384);
   }
 
   private void displayInstructions(Graphics2D g)
@@ -1717,19 +1737,14 @@ public class Asteroids extends GameEngine
     int controlUpperLeftCornerPositionX = 192;
     int controlUpperLeftCornerPositionY = 240;
 
-    int commandUpperLeftCornerPositionX = 480;
+    int commandUpperLeftCornerPositionX = 448;
     int commandUpperLeftCornerPositionY = 240;
-
-//    int upgradeMsgUpperLeftPositionX = 112;
-//    int upgradeMsgUpperLeftPositionY = 480;
-//
-//    int usageUpperLeftCornerX = 320;
-//    int usageUpperLeftCornerY = 480;
 
     msgInstructionsPlayerControls.draw(g);
 
     // Display the ship controls
     g.setFont(Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR);
+    //g.setFont(Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_MEDIUM);
     g.setColor(Color.ORANGE);
 
     g.drawString(Constants.MSG_INSTRUCTIONS_ROTATE_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY);
@@ -1749,7 +1764,6 @@ public class Asteroids extends GameEngine
   
     g.drawString(Constants.MSG_INSTRUCTIONS_THE_BOMB_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY);
 
-
     // Display the corresponding commands
     g.drawString(Constants.MSG_INSTRUCTIONS_ROTATE_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);
     commandUpperLeftCornerPositionY += 24;
@@ -1766,153 +1780,112 @@ public class Asteroids extends GameEngine
     g.drawString(Constants.MSG_INSTRUCTIONS_SUPER_SHIELDS_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);
     commandUpperLeftCornerPositionY += 24;
   
-    g.drawString(Constants.MSG_INSTRUCTIONS_THE_BOMB_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);
-    
-    // Display some more details about player controls and power-ups
-//    int imageStartingPositionX = 64;  // Was 32
-//    int imageStartingPositionY = 460;
-//    
-//    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_GUN), imageStartingPositionX, imageStartingPositionY, this.imageObserver);
-//    imageStartingPositionY += 40;
-//
-//    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD), imageStartingPositionX, imageStartingPositionY, this.imageObserver);
-//    imageStartingPositionY += 40;
-//
-//    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB), imageStartingPositionX, imageStartingPositionY, this.imageObserver);
-//    
-
-//    g.setFont(Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_SMALL);
-//    
-//    g.drawString(Constants.MSG_POWERUPS_FIREPOWER, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY);
-//    upgradeMsgUpperLeftPositionY += 40;
-//    
-//    g.drawString(Constants.MSG_POWERUPS_SUPER_SHIELD, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY);
-//    upgradeMsgUpperLeftPositionY += 40;
-//    
-//    g.drawString(Constants.MSG_POWERUPS_THE_BOMB, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY);
-//    
-//
-//    g.drawString(Constants.MSG_INSTRUCTIONS_FIREPOWER_UPGRADE_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
-//    usageUpperLeftCornerY += 40;
-//    
-//    g.drawString(Constants.MSG_INSTRUCTIONS_SUPER_SHIELDS_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
-//    usageUpperLeftCornerY += 40;
-//    
-//    g.drawString(Constants.MSG_INSTRUCTIONS_THE_BOMB_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
-    
+    g.drawString(Constants.MSG_INSTRUCTIONS_THE_BOMB_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);    
   }
 
   private void displayPowerups(Graphics2D g)
   {
     msgPowerupScreenTitle.draw(g);
 
-    int smallBufferBetweenImages = 8;
     int regularBufferBetweenImages = 16;
+    int bufferVerticalBetweenText = 48;
+    int imageOffset = -24;
 
     // Vars used for thruster power-up
     int thrusterPowerupsUpperLeftCornerPositionX = 64;
-    int thrusterPowerupsUpperLeftCornerPositionY = 208;
+    int thrusterPowerupsUpperLeftCornerPositionY = 192; // Was 208
     int thrusterImageWidth = ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST1).getWidth(imageObserver);
 
     // Vars used in health and shield power-ups
     int healthShieldPowerupsUpperLeftCornerPositionX = 336;
-    int healthShieldPowerupsUpperLeftCornerPositionY = 208;
+    int healthShieldPowerupsUpperLeftCornerPositionY = 192; // Was 208
 
     // Vars used in health and shield power-ups
     int weaponryPowerupsUpperLeftCornerPositionX = 556;
-    int weaponryPowerupsUpperLeftCornerPositionY = 208;
+    int weaponryPowerupsUpperLeftCornerPositionY = 192; // Was 208
 
     // Vars for the point bonuses
-    int pointBonusesPositionY = 528;
+    int pointBonusesPositionY = 496;
     int pointBonusesPositionX;
     int powerupImageWidth = ImageManager.getImage(Constants.FILENAME_POWERUP_250).getWidth(imageObserver);
     int powerupImageHeight = ImageManager.getImage(Constants.FILENAME_POWERUP_250).getHeight(imageObserver);
     int pointBonusTextLength, pointBonusTextHeight;
-
-    Rectangle2D bounds;
 
     /*
      * Display the ship thruster power-ups
      */
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR);
     g.setColor(Color.WHITE);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_THRUSTERS, g);
-    g.drawString(Constants.MSG_POWERUPS_THRUSTERS, thrusterPowerupsUpperLeftCornerPositionX, (int)(thrusterPowerupsUpperLeftCornerPositionY - bounds.getHeight()/2));
+
+    //g.drawString(Constants.MSG_POWERUPS_THRUSTERS, thrusterPowerupsUpperLeftCornerPositionX, (int)(thrusterPowerupsUpperLeftCornerPositionY - bounds.getHeight()/2));
+    g.drawString(Constants.MSG_POWERUPS_THRUSTERS, thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY);
+    thrusterPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
 
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL);
     g.setColor(Color.ORANGE);
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_1), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_THURST1, g);
-    g.drawString(Constants.MSG_POWERUPS_THURST1, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(thrusterPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
-    thrusterPowerupsUpperLeftCornerPositionY += 48;
 
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_THURST2, g);
-    g.drawString(Constants.MSG_POWERUPS_THURST2, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(thrusterPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
-    thrusterPowerupsUpperLeftCornerPositionY += 48;
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_1), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_THURST1, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, thrusterPowerupsUpperLeftCornerPositionY);
+    thrusterPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
 
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_THURST3, g);
-    g.drawString(Constants.MSG_POWERUPS_THURST3, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(thrusterPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_THURST2, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, thrusterPowerupsUpperLeftCornerPositionY);
+    thrusterPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
+
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_THURST3, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, thrusterPowerupsUpperLeftCornerPositionY);
 
     /*
      * Display health and shield power-ups
      */
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR);
     g.setColor(Color.WHITE);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_HEALTH_SHIELD, g);
-    g.drawString(Constants.MSG_POWERUPS_HEALTH_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX - 32, (int)(healthShieldPowerupsUpperLeftCornerPositionY - bounds.getHeight()/2));
-
+    g.drawString(Constants.MSG_POWERUPS_HEALTH_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX - 32, healthShieldPowerupsUpperLeftCornerPositionY);
+    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
+    
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL);
     g.setColor(Color.ORANGE);
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_HEALTH, g);
-    g.drawString(Constants.MSG_POWERUPS_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(healthShieldPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
-    healthShieldPowerupsUpperLeftCornerPositionY += 48;
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
+    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
 
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_SHIELDS, g);
-    g.drawString(Constants.MSG_POWERUPS_SHIELDS, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(healthShieldPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
-    healthShieldPowerupsUpperLeftCornerPositionY += 48;
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_SHIELDS, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
+    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
 
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_FULL_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_FULL_HEALTH, g);
-    g.drawString(Constants.MSG_POWERUPS_FULL_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(healthShieldPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
-    healthShieldPowerupsUpperLeftCornerPositionY += 48;
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_FULL_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_FULL_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
+    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
 
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_FULL_SHIELD, g);
-    g.drawString(Constants.MSG_POWERUPS_FULL_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(healthShieldPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
-    healthShieldPowerupsUpperLeftCornerPositionY += 48;
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_FULL_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
+    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
 
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_SUPER_SHIELD, g);
-    g.drawString(Constants.MSG_POWERUPS_SUPER_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(healthShieldPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_SUPER_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
     
     /*
      * Display weapons
      */
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR);
     g.setColor(Color.WHITE);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_WEAPONS, g);
-    g.drawString(Constants.MSG_POWERUPS_WEAPONS, weaponryPowerupsUpperLeftCornerPositionX + 32, (int)(weaponryPowerupsUpperLeftCornerPositionY - bounds.getHeight()/2));
-
+    g.drawString(Constants.MSG_POWERUPS_WEAPONS, weaponryPowerupsUpperLeftCornerPositionX + 32, weaponryPowerupsUpperLeftCornerPositionY);
+    weaponryPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
+    
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL);
     g.setColor(Color.ORANGE);
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_GUN), weaponryPowerupsUpperLeftCornerPositionX, weaponryPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_FIREPOWER, g);
-    g.drawString(Constants.MSG_POWERUPS_FIREPOWER, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(weaponryPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
-    weaponryPowerupsUpperLeftCornerPositionY += 48;
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_GUN), weaponryPowerupsUpperLeftCornerPositionX, weaponryPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_FIREPOWER, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, weaponryPowerupsUpperLeftCornerPositionY);
+    weaponryPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
 
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB), weaponryPowerupsUpperLeftCornerPositionX, weaponryPowerupsUpperLeftCornerPositionY, this.imageObserver);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_THE_BOMB, g);
-    g.drawString(Constants.MSG_POWERUPS_THE_BOMB, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, (int)(weaponryPowerupsUpperLeftCornerPositionY + bounds.getHeight()));
-    
+    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB), weaponryPowerupsUpperLeftCornerPositionX, weaponryPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
+    g.drawString(Constants.MSG_POWERUPS_THE_BOMB, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, weaponryPowerupsUpperLeftCornerPositionY);
+
     /*
      * Display point bonus power-ups at the bottom of the screen        
      */
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_MEDIUM);
-    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_SCREEN_POINT_BONUSES, g);
+    Rectangle2D bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_SCREEN_POINT_BONUSES, g);
     pointBonusTextLength = (int)bounds.getWidth();
     pointBonusTextHeight = (int)bounds.getHeight();
 
@@ -1931,7 +1904,12 @@ public class Asteroids extends GameEngine
     g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_1000), pointBonusesPositionX, pointBonusesPositionY-powerupImageHeight/2, this.imageObserver);
   }
 
-  public void displayPowerupsScreen2(Graphics2D g)
+  /**
+   * Displays the details of specific power-ups to better inform the player.
+   *  
+   * @param g - The graphics object passed from the draw method.
+   */
+  public void displayPowerupDetailsScreen(Graphics2D g)
   {
     msgPowerupDetailsScreen.draw(g);
     
@@ -1976,31 +1954,149 @@ public class Asteroids extends GameEngine
     
     g.drawString(Constants.MSG_POWERUPS_THURST1, upgradeMsgUpperLeftPositionX, upgradeMsgUpperLeftPositionY);
     upgradeMsgUpperLeftPositionY += spacingBetweenSections;
+
     
     
-    
-    
-    
-    
-    g.drawString(Constants.MSG_INSTRUCTIONS_FIREPOWER_UPGRADE_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
+    g.drawString(Constants.MSG_POWERUP_DETAILS_FIREPOWER_UPGRADE_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
     usageUpperLeftCornerY += spacingBetweenLines;
   
-    g.drawString(Constants.MSG_INSTRUCTIONS_MAX_FIREPOWER, usageUpperLeftCornerX, usageUpperLeftCornerY);
+    g.drawString(Constants.MSG_POWERUP_DETAILS_MAX_FIREPOWER, usageUpperLeftCornerX, usageUpperLeftCornerY);
     usageUpperLeftCornerY += spacingBetweenSections;
     
-    g.drawString(Constants.MSG_INSTRUCTIONS_SUPER_SHIELDS_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
+    g.drawString(Constants.MSG_POWERUP_DETAILS_SUPER_SHIELDS_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
     usageUpperLeftCornerY += spacingBetweenSections;
   
-    g.drawString(Constants.MSG_INSTRUCTIONS_THE_BOMB_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
+    g.drawString(Constants.MSG_POWERUP_DETAILS_THE_BOMB_USE, usageUpperLeftCornerX, usageUpperLeftCornerY);
     usageUpperLeftCornerY += spacingBetweenSections;
     
-    g.drawString(Constants.MSG_INSTRUCTIONS_ION_THRUSTER, usageUpperLeftCornerX, usageUpperLeftCornerY);
+    g.drawString(Constants.MSG_POWERUP_DETAILS_ION_THRUSTER, usageUpperLeftCornerX, usageUpperLeftCornerY);
     usageUpperLeftCornerY += spacingBetweenLines;
     
-    g.drawString(Constants.MSG_INSTRUCTIONS_THRUSTERS, usageUpperLeftCornerX, usageUpperLeftCornerY);
+    g.drawString(Constants.MSG_POWERUP_DETAILS_THRUSTERS, usageUpperLeftCornerX, usageUpperLeftCornerY);
     usageUpperLeftCornerY += spacingBetweenSections;
   }
   
+  private void displayCreditsScreen(Graphics2D g)
+  {
+    msgCreditsTitle.draw(g);
+  }
+
+  // NOTE: Possibly place all methods responsible for drawing the screen content into some type of screen/display manager
+  /**
+   * Initialize the images used in the enemies screen from the introduction. Since all of this can be computed
+   * before hand, it is computed here once and the content is used to create instances of the static image class
+   * one for each asteroid type.
+   */
+  private void setupIntroductionEnemiesScreen()
+  {
+    int startingPositionYOfAsteroidListing = 208;
+
+    int bufferBetweenAsteroid = 64;
+    bigAsteroidWidth = ImageManager.getWidth(Constants.FILENAME_BIG_ASTEROID_1);  // Non local variable since it is needed in other methods for the enemies screen in the introduction
+    int mediumAsteroidWidth = ImageManager.getWidth(Constants.FILENAME_MEDIUM_ASTEROID_1);
+    int smallAsteroidWidth = ImageManager.getWidth(Constants.FILENAME_SMALL_ASTEROID_1);
+    int tinyAsteroidWidth = ImageManager.getWidth(Constants.FILENAME_TINY_ASTEROID_1);
+
+    int bigAsteroidHeight = ImageManager.getHeight(Constants.FILENAME_BIG_ASTEROID_1);
+    int mediumAsteroidHeight = ImageManager.getHeight(Constants.FILENAME_MEDIUM_ASTEROID_1);
+    int smallAsteroidHeight = ImageManager.getHeight(Constants.FILENAME_SMALL_ASTEROID_1);
+    int tinyAsteroidHeight = ImageManager.getHeight(Constants.FILENAME_TINY_ASTEROID_1);
+
+    // (Number of Asteroid Types) x (Width of Largest Asteroids) + ((Number of Asteroid Types) - 1) x (Buffer Between Each Asteroid)
+    int widthOfAsteroidListing = 4 * bigAsteroidWidth + (3) * bufferBetweenAsteroid;
+    startingPositionXOfAsteroidListing = (screenWidth - widthOfAsteroidListing)/2;
+
+    int largeAsteroidStartingPositionX = startingPositionXOfAsteroidListing;
+    int mediumAsteroidStartingPositionX = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - mediumAsteroidWidth)/2;
+    int smallAsteroidStartingPositionX = startingPositionXOfAsteroidListing + 2*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - smallAsteroidWidth)/2;
+    int tinyAsteroidStartingPositionX = startingPositionXOfAsteroidListing + 3*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - tinyAsteroidWidth)/2;
+
+    int largeAsteroidStartingPositionY = startingPositionYOfAsteroidListing;
+    int mediumAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - mediumAsteroidHeight)/2;
+    int smallAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - smallAsteroidHeight)/2;
+    int tinyAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - tinyAsteroidHeight)/2;
+    
+    imgAsteroidLargeIntroductionScreen = new StaticImage(ImageManager.getImage(Constants.FILENAME_BIG_ASTEROID_1), largeAsteroidStartingPositionX, largeAsteroidStartingPositionY, false, imageObserver);
+    imgAsteroidMediumIntroductionScreen = new StaticImage(ImageManager.getImage(Constants.FILENAME_MEDIUM_ASTEROID_1), mediumAsteroidStartingPositionX, mediumAsteroidStartingPositionY, false, imageObserver);
+    imgAsteroidSmallIntroductionScreen = new StaticImage(ImageManager.getImage(Constants.FILENAME_SMALL_ASTEROID_1), smallAsteroidStartingPositionX, smallAsteroidStartingPositionY, false, imageObserver);
+    imgAsteroidTinyIntroductionScreen = new StaticImage(ImageManager.getImage(Constants.FILENAME_TINY_ASTEROID_1), tinyAsteroidStartingPositionX, tinyAsteroidStartingPositionY, false, imageObserver);
+  }
+
+  private void displayEnemiesScreen(Graphics2D g)
+  {
+    // Draw screen titles
+    msgEnemiesTitle.draw(g);
+    msgEnemiesAsteroidLabel.draw(g);
+
+    // Draw asteroid images
+    imgAsteroidLargeIntroductionScreen.draw(g);
+    imgAsteroidMediumIntroductionScreen.draw(g);
+    imgAsteroidSmallIntroductionScreen.draw(g);
+    imgAsteroidTinyIntroductionScreen.draw(g);
+
+    // Draw the labels below each asteroid, both point value and 
+    
+    g.setColor(Color.WHITE);
+
+    // NOTE: These variables can be computed once and moved outside of this method after testing to reduce unnecessary computation
+    Rectangle2D bounds;
+
+    // Display the respective asteroid labels
+    g.setFont(Constants.FONT_INTRO_ENEMIES_SCREEN_SMALL);
+    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_LARGE_LABEL, g);
+    int largeAsteroidTextPosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    g.drawString(Constants.MSG_ENEMIES_ASTEROID_LARGE_LABEL, largeAsteroidTextPosition, 352);
+
+    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_MEDIUM_LABEL, g);
+    int mediumAsteroidTextPosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    g.drawString(Constants.MSG_ENEMIES_ASTEROID_MEDIUM_LABEL, mediumAsteroidTextPosition, 352);
+
+    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_SMALL_LABEL, g);
+    int smallAsteroidTextPosition = startingPositionXOfAsteroidListing + 2*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    g.drawString(Constants.MSG_ENEMIES_ASTEROID_SMALL_LABEL, smallAsteroidTextPosition, 352);
+
+    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_TINY_LABEL, g);
+    int tinyAsteroidTextPosition = startingPositionXOfAsteroidListing + 3*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    g.drawString(Constants.MSG_ENEMIES_ASTEROID_TINY_LABEL, tinyAsteroidTextPosition, 352);
+
+    // Display the respective asteroid point values
+    g.setFont(Constants.FONT_INTRO_ENEMIES_SCREEN_TINY);
+    bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_BIG_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
+    int largeAsteroidTextScorePosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    g.drawString("(" + Constants.SCORE_BIG_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", largeAsteroidTextScorePosition, 368);
+
+    bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_MEDIUM_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
+    int mediumAsteroidTextScorePosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    g.drawString("(" + Constants.SCORE_MEDIUM_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", mediumAsteroidTextScorePosition, 368);
+
+    bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_SMALL_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
+    int smallAsteroidTextScorePosition = startingPositionXOfAsteroidListing + 2*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    g.drawString("(" + Constants.SCORE_SMALL_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", smallAsteroidTextScorePosition, 368);
+
+    bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_TINY_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
+    int tinyAsteroidTextScorePosition = startingPositionXOfAsteroidListing + 3*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
+    g.drawString("(" + Constants.SCORE_TINY_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", tinyAsteroidTextScorePosition, 368);
+  }
+
+  private void displayIntroductionFooter(Graphics2D g)
+  {
+    // NOTE: These variables can be computed once and moved outside of this method after testing to reduce unnecessary computation
+    int backMsgPositionX = 32;
+    int backMsgPositionY = 576;
+    int nextMsgPositionX = 592;
+    int nextMsgPositionY = 576;
+    
+    g.setFont(Constants.FONT_INTRO_SCREEN_SMALL);
+    g.setColor(Color.WHITE);
+    g.drawString(Constants.MSG_INTRODUCTION_MSG_NEXT, nextMsgPositionX, nextMsgPositionY);
+    g.drawString(Constants.MSG_INTRODUCTION_MSG_BACK, backMsgPositionX, backMsgPositionY);
+  }
+
+  /**
+   * 
+   * 
+   * @param g
+   */
   private void displayHUD(Graphics2D g)
   {
     // Draw player health bar
@@ -2186,4 +2282,175 @@ public class Asteroids extends GameEngine
     }
   }
   
+//  private void menuFlowOneForIntroductionScreen(int keyCode)
+//  {
+//    switch(currentIntroductionScreen)
+//    {
+//      // From the power-ups screen, the player can view the details screen or return to the previous screen, which is the instructions screen.
+//      case POWERUPS:
+//
+//        if (keyCode == KeyEvent.VK_ESCAPE)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
+//        }
+//
+//        if (keyCode == KeyEvent.VK_D)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.POWERUP_DETAILS;
+//        }
+//        break;
+//      
+//      // From the power-ups detail screen, the player can return to the power-ups screen.
+//      case POWERUP_DETAILS:
+//
+//        if (keyCode == KeyEvent.VK_ESCAPE)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.POWERUPS;
+//        }
+//        break;
+//        
+//      // From the instructions screen, the player can view the power-ups screen, the enemies screen or return to the main introduction screen.
+//      case INSTRUCTIONS:
+//
+//        if (keyCode == KeyEvent.VK_P)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.POWERUPS;
+//        }
+//
+//        if (keyCode == KeyEvent.VK_E)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.ENEMIES;
+//        }
+//
+//        if (keyCode == KeyEvent.VK_ESCAPE)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
+//        }
+//        break;
+//        
+//      // From the main introduction screen, the player can view the credits or view the instruction screens.
+//      case MAIN:
+//        
+//        if (keyCode == KeyEvent.VK_I)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
+//        }
+//        
+//        if (keyCode == KeyEvent.VK_C)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.CREDITS;
+//        }
+//
+//        if (keyCode == KeyEvent.VK_ESCAPE)
+//        {
+//          // TODO: Add request here to exit game.
+//        }
+//
+//      case CREDITS:
+//        
+//        if (keyCode == KeyEvent.VK_ESCAPE)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
+//        }
+//        break;
+//
+//      case ENEMIES:
+//        if (keyCode == KeyEvent.VK_ESCAPE)
+//        {
+//          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
+//        }
+//        break;
+//        
+//      default:
+//    }
+//  }
+  
+  private void menuFlowTwoForIntroductionScreen(int keyCode)
+  {
+    switch(currentIntroductionScreen)
+    {
+      case MAIN:
+        
+        if (keyCode == KeyEvent.VK_SPACE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
+        }
+        
+        if (keyCode == KeyEvent.VK_C)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.CREDITS;
+        }
+
+        if (keyCode == KeyEvent.VK_ESCAPE)
+        {
+          // TODO: Add request here to exit game.
+        }
+        break;
+        
+        
+      case INSTRUCTIONS:
+
+        if (keyCode == KeyEvent.VK_SPACE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.POWERUPS;
+        }
+
+        if (keyCode == KeyEvent.VK_ESCAPE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
+        }
+        break;
+
+      case POWERUPS:
+
+        if (keyCode == KeyEvent.VK_SPACE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.ENEMIES;
+        }
+
+        if (keyCode == KeyEvent.VK_ESCAPE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
+        }
+        break;
+
+      case ENEMIES:
+
+        if (keyCode == KeyEvent.VK_SPACE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.POWERUP_DETAILS;
+        }
+
+        if (keyCode == KeyEvent.VK_ESCAPE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.POWERUPS;
+        }
+        break;
+
+      case POWERUP_DETAILS:
+
+        if (keyCode == KeyEvent.VK_SPACE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
+        }
+
+        if (keyCode == KeyEvent.VK_ESCAPE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.ENEMIES;
+        }
+        break;
+
+      case CREDITS:
+
+        if (keyCode == KeyEvent.VK_ESCAPE)
+        {
+          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
+        }
+        break;
+        
+      default:
+    }
+    
+    System.out.println("Current Introduction Screen:" + currentIntroductionScreen.toString());
+  }
 }
