@@ -71,6 +71,14 @@ public class ImageManager
     ImageManager.loadImage(Constants.FILENAME_BAR_FRAME_10);
     ImageManager.loadImage(Constants.FILENAME_BAR_FRAME_20);
     ImageManager.loadImage(Constants.FILENAME_BAR_FRAME_40);
+    ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_COCKPIT);
+    ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_LEFT_SIDE);
+    ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_SIDE);
+    ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_LEFT_HULL);
+    ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_HULL);
+    ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_CENTER_HULL);
+    ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_LEFT_ENGINE);
+    ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_ENGINE);
   }
   
   /**

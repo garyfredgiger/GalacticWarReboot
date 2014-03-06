@@ -2,6 +2,7 @@ package galacticwarreboot;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.ImageObserver;
 import java.util.Iterator;
@@ -257,6 +258,20 @@ public class Asteroids extends GameEngine
           soundManager.playSound(SoundManager.SOUND_RESOURCE_PLAYER_SHIP_EXPLOSION);
           state = GameEngineConstants.GameState.PLAYER_DEAD;
           timerPlayerDeadState = System.currentTimeMillis();
+
+          // TODO: Add pieces of players ship and
+          double playerFaceAngle = getPlayer().getFaceAngle();
+          double playerX = getPlayer().getPositionX();
+          double playerY = getPlayer().getPositionY();
+
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_COCKPIT), playerFaceAngle, playerX, playerY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_SIDE), playerFaceAngle, playerX, playerY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_SIDE), playerFaceAngle, playerX, playerY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_HULL), playerFaceAngle, playerX, playerY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_HULL), playerFaceAngle, playerX, playerY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_CENTER_HULL), playerFaceAngle, playerX, playerY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_ENGINE), playerFaceAngle, playerX, playerY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_ENGINE), playerFaceAngle, playerX, playerY));
         }
 
         if (getEnemies().isEmpty())
@@ -339,7 +354,35 @@ public class Asteroids extends GameEngine
       default:
     }
   }
+  
+  public EntityImage createPlayerShipDebris(Image image, double playerFaceAngle, double playerX, double playerY)
+  {
+    EntityImage piece = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.POWER_UP);
 
+    piece.setImage(image);
+    piece.setPosition(playerX, playerY);
+    piece.setFaceAngle(playerFaceAngle);
+
+    // Set rotation and direction angles of asteroid
+
+    int moveAngle = GameUtility.random.nextInt((int) GameEngineConstants.DEGREES_IN_A_CIRCLE);    
+    piece.setMoveAngle(moveAngle);
+    
+    int rotationRate = GameUtility.random.nextInt(Constants.POWERUP_ROTAITON_RATE) + 25;
+    rotationRate = (GameUtility.random.nextBoolean() ? -rotationRate : rotationRate);
+    piece.setRotationRate(rotationRate);
+
+    // Set velocity based on movement direction
+    double angle = piece.getMoveAngle() - 90;
+    piece.setVelocity(GameUtility.calcAngleMoveX(angle), GameUtility.calcAngleMoveY(angle));
+    piece.getVelocity().scaleThisVector((GameUtility.random.nextInt(30) + 20));
+
+    // Set the lifespan
+    piece.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * (GameUtility.random.nextInt(10) + 10)));
+
+    return piece;
+  }
+  
   @Override
   public void userGameUpdateEntity(Entity2D entity)
   {

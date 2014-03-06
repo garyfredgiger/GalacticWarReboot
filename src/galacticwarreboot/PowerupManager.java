@@ -305,13 +305,17 @@ public class PowerupManager
     int moveAngle = GameUtility.random.nextInt((int) GameEngineConstants.DEGREES_IN_A_CIRCLE);
     powerup.setFaceAngle(faceAngle);
     powerup.setMoveAngle(moveAngle);
-    powerup.setRotationRate(Constants.POWERUP_ROTAITON_RATE);
+    
+    // Set the rotation rate, but randomly select whether is it CQW or CCQ 
+    powerup.setRotationRate((GameUtility.random.nextBoolean() ? -Constants.POWERUP_ROTAITON_RATE : Constants.POWERUP_ROTAITON_RATE));
 
     // Set velocity based on movement direction
     double angle = powerup.getMoveAngle() - 90;
     powerup.setVelocity(GameUtility.calcAngleMoveX(angle), GameUtility.calcAngleMoveY(angle));
     powerup.getVelocity().scaleThisVector(Constants.POWERUP_SPEED);
 
+    
+    
     // Set the lifespan
     powerup.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.POWERUP_LIFE_SPAN_IN_SECS));
 
