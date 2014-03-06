@@ -185,6 +185,8 @@ public class Constants
   public static final Font   FONT_INTRO_SCREEN_MAIN_START                     = new Font("Ariel", Font.BOLD, 24);
   public static final Font   FONT_INTRO_SCREEN_SMALL                          = new Font("Verdana", Font.BOLD, 14);
 
+  public static final Font FONT_INTRO_SCREEN1_CREDIT                          = new Font("Courier", Font.BOLD, 18);
+  
   // Fonts used during game play
   public static final Font   FONT_GAME_PLAYING_HUD_SMALL                      = new Font("Verdana", Font.BOLD, 14);
   public static final Font   FONT_GAME_PLAYING_HUD_MEDIUM                     = new Font("Verdana", Font.BOLD, 18);
@@ -235,14 +237,9 @@ public class Constants
 
   // String constants for Introduction screen
   public static final String INTRO_SCREEN_MAIN_TITLE_MSG                      = "GALACTIC WAR REBOOT";
+  public static final String MSG_INTRO_SCREEN1_CREDIT                  = "Written and Developed by Gary Giger";
+  public static final String MSG_INTRO_SCREEN1_COPYRIGHT               = "\u00a9 2014";
 
-  //  public static final String INTRO_SCREEN_MAIN_CONTROLS_MSG                   = "Player Controls";
-  //  public static final String INTRO_SCREEN_MAIN_ROTATE_MSG                     = "ROTATE Left/Right Arrows Keys";
-  //  public static final String INTRO_SCREEN_MAIN_THRUST_MSG                     = "THRUST Up Arrow Key";
-  //  public static final String INTRO_SCREEN_MAIN_SHIELD_MSG                     = "SHIELD Shift Key";
-  //  public static final String INTRO_SCREEN_MAIN_FIRE_MSG                       = "FIRE - Ctrl Key";
-  //  public static final String INTRO_SCREEN_MAIN_POWERUPS_MSG                   = "POWERUPS INCREASE FIREPOWER!";
-  //  public static final String INTRO_SCREEN_MAIN_START_MSG                      = "Press ENTER to Start Game";
 
   // String constants for power-ups screen
   public static final String MSG_POWERUPS_POWERUP_TITLE                       = "Available Powerups";

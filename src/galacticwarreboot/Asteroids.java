@@ -1,6 +1,7 @@
 package galacticwarreboot;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -118,23 +119,59 @@ public class Asteroids extends GameEngine
   private StaticText          msgInstructionsPlayerControls;
   private StaticText          msgPowerupDetailsScreen;
   private StaticText          msgEnemiesTitle;
-  private StaticText          msgCreditsTitle;
-  
+  private StaticText          msgCreditsTitle;  
   private StaticText          msgEnemiesAsteroidLabel;
+
+  // Static text for the power-ups screen
+  private StaticText          msgIntroductionPowerupScreenThrusterLabel;
+  private StaticText          msgIntroductionPowerupScreenLabelThurster1;
+  private StaticText          msgIntroductionPowerupScreenLabelThruster2;
+  private StaticText          msgIntroductionPowerupScreenLabelThruster3;
+  
+  private StaticText          msgIntroductionPowerupScreenHealthAndShieldLabel;
+  private StaticText          msgIntroductionPowerupScreenLabelHealth;
+  private StaticText          msgIntroductionPowerupScreenLabelShield;
+  private StaticText          msgIntroductionPowerupScreenLabelFullHealth;
+  private StaticText          msgIntroductionPowerupScreenLabelFullShield;
+  private StaticText          msgIntroductionPowerupScreenLabelSuperShield;
+
+  private StaticText          msgIntroductionPowerupScreenArmamentsLabel;
+  private StaticText          msgIntroductionPowerupScreenLabelFirepower;
+  private StaticText          msgIntroductionPowerupScreenLabelTheBomb;
+
+  private StaticText          msgIntroductionPowerupScreenLabel250Bonus;
+  private StaticText          msgIntroductionPowerupScreenLabel500Bonus;
+  private StaticText          msgIntroductionPowerupScreenLabel1000Bonus;
   
   /*
    * Static Image Variables
    */
-//  StaticImage imagePowerup
-  StaticImage imgAsteroidLargeIntroductionScreen;
-  StaticImage imgAsteroidMediumIntroductionScreen;
-  StaticImage imgAsteroidSmallIntroductionScreen;
-  StaticImage imgAsteroidTinyIntroductionScreen;
+  StaticImage imgIntroductionEnemiesScreenAsteroidLarge;
+  StaticImage imgIntroductionEnemiesScreenAsteroidMedium;
+  StaticImage imgIntroductionEnemiesScreenAsteroidSmall;
+  StaticImage imgIntroductionEnemiesScreenAsteroidTiny;
+
+  StaticImage imgIntroductionPowerupScreenThruster1;
+  StaticImage imgIntroductionPowerupScreenThruster2;
+  StaticImage imgIntroductionPowerupScreenThruster3;
+
+  StaticImage imgIntroductionPowerupScreenHealth;
+  StaticImage imgIntroductionPowerupScreenShield;
+  StaticImage imgIntroductionPowerupScreenFullHealth;
+  StaticImage imgIntroductionPowerupScreenFullShield;
+  StaticImage imgIntroductionPowerupScreenSuperShield;
+
+  StaticImage imgIntroductionPowerupScreenFirepower;
+  StaticImage imgIntroductionPowerupScreenTheBomb;
+
+  StaticImage imgIntroductionPowerupScreen250Bonus;
+  StaticImage imgIntroductionPowerupScreen500Bonus;
+  StaticImage imgIntroductionPowerupScreen1000Bonus;
 
   /*
    * Managers
    */
-  SoundManager                soundManager; 
+  SoundManager                soundManager;
   UFOEntityManager            ufoManager;
   PowerupManager              powerupManager;
 
@@ -146,7 +183,6 @@ public class Asteroids extends GameEngine
   /*
    * The code
    */
-  
   public Asteroids(IRender renderer, ImageObserver imageObserver)
   {
     super(renderer);
@@ -253,6 +289,7 @@ public class Asteroids extends GameEngine
     msgEnemiesAsteroidLabel.centerHorizontally();
     
     setupIntroductionEnemiesScreen();
+    setupIntroductionPowerupsScreen();
   }
 
   @Override
@@ -1727,6 +1764,16 @@ public class Asteroids extends GameEngine
 
     boundsIntroductionStateTitle = g.getFontMetrics().getStringBounds("Press 'Enter' to begin game", g);
     g.drawString("Press 'Enter' to begin game", (int) ((screenWidth - boundsIntroductionStateTitle.getWidth()) / 2), 384);
+    
+    // Display the credits and copyright 
+    g.setFont(Constants.FONT_INTRO_SCREEN1_CREDIT);
+    g.setColor(Color.YELLOW);
+
+    Rectangle2D boundsIntroScreen1Credits = g.getFontMetrics().getStringBounds(Constants.MSG_INTRO_SCREEN1_CREDIT, g);
+    g.drawString(Constants.MSG_INTRO_SCREEN1_CREDIT, (int) ((screenWidth - boundsIntroScreen1Credits.getWidth()) / 2), (int) ((screenHeight * 0.86)));
+    
+    Rectangle2D boundsIntroScreen1Copyright = g.getFontMetrics().getStringBounds(Constants.MSG_INTRO_SCREEN1_COPYRIGHT, g);
+    g.drawString(Constants.MSG_INTRO_SCREEN1_COPYRIGHT, (int) ((screenWidth - boundsIntroScreen1Copyright.getWidth()) / 2), (int) ((screenHeight * 0.91)));
   }
 
   private void displayInstructions(Graphics2D g)
@@ -1783,26 +1830,82 @@ public class Asteroids extends GameEngine
     g.drawString(Constants.MSG_INSTRUCTIONS_THE_BOMB_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY);    
   }
 
+  private void setupIntroductionPowerupsScreen()
+  {
+    int bufferVerticalBetweenText = 48;
+    int imageOffset = -24;
+    int startingYPosition = 192;
+
+    int thrusterPowerupsUpperLeftCornerPositionX = 64;
+    int healthShieldPowerupsUpperLeftCornerPositionX = 336;
+    int weaponryPowerupsUpperLeftCornerPositionX = 556;
+    int thrusterImageWidth = ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST1).getWidth(imageObserver);
+    
+    /*
+     * Initialize the static text and images for the thruster upgrades    
+     */    
+    msgIntroductionPowerupScreenThrusterLabel = new StaticText(Constants.MSG_POWERUPS_THRUSTERS, thrusterPowerupsUpperLeftCornerPositionX, startingYPosition, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenThruster1 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_1), thrusterPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelThurster1 = new StaticText(Constants.MSG_POWERUPS_THURST1, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+    
+    imgIntroductionPowerupScreenThruster2 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), thrusterPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelThruster2 = new StaticText(Constants.MSG_POWERUPS_THURST2, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);;
+    startingYPosition += bufferVerticalBetweenText;
+    
+    imgIntroductionPowerupScreenThruster3 = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), thrusterPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelThruster3 = new StaticText(Constants.MSG_POWERUPS_THURST3, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);    
+    
+    /*
+     *  Initialize the static text and images for the health and shield power-ups 
+     */
+    startingYPosition = 192;
+    msgIntroductionPowerupScreenHealthAndShieldLabel = new StaticText(Constants.MSG_POWERUPS_HEALTH_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX - 32, startingYPosition, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+    
+    imgIntroductionPowerupScreenHealth = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelHealth = new StaticText(Constants.MSG_POWERUPS_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelShield = new StaticText(Constants.MSG_POWERUPS_SHIELDS, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenFullHealth = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_FULL_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelFullHealth = new StaticText(Constants.MSG_POWERUPS_FULL_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenFullShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelFullShield = new StaticText(Constants.MSG_POWERUPS_FULL_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenSuperShield = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelSuperShield = new StaticText(Constants.MSG_POWERUPS_SUPER_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+
+    
+    /*
+     * Initialize the static text and images for the armament power-ups 
+     */
+    startingYPosition = 192;
+    msgIntroductionPowerupScreenArmamentsLabel = new StaticText(Constants.MSG_POWERUPS_WEAPONS, weaponryPowerupsUpperLeftCornerPositionX, startingYPosition, Color.WHITE, Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+    
+    imgIntroductionPowerupScreenFirepower = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_GUN), weaponryPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelFirepower = new StaticText(Constants.MSG_POWERUPS_FIREPOWER, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+    startingYPosition += bufferVerticalBetweenText;
+
+    imgIntroductionPowerupScreenTheBomb = new StaticImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB), weaponryPowerupsUpperLeftCornerPositionX, startingYPosition + imageOffset, false, imageObserver);
+    msgIntroductionPowerupScreenLabelTheBomb = new StaticText(Constants.MSG_POWERUPS_THE_BOMB, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, startingYPosition, Color.ORANGE, Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL, screenWidth, screenHeight);
+  }
+  
   private void displayPowerups(Graphics2D g)
   {
     msgPowerupScreenTitle.draw(g);
 
     int regularBufferBetweenImages = 16;
-    int bufferVerticalBetweenText = 48;
-    int imageOffset = -24;
-
-    // Vars used for thruster power-up
-    int thrusterPowerupsUpperLeftCornerPositionX = 64;
-    int thrusterPowerupsUpperLeftCornerPositionY = 192; // Was 208
-    int thrusterImageWidth = ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST1).getWidth(imageObserver);
-
-    // Vars used in health and shield power-ups
-    int healthShieldPowerupsUpperLeftCornerPositionX = 336;
-    int healthShieldPowerupsUpperLeftCornerPositionY = 192; // Was 208
-
-    // Vars used in health and shield power-ups
-    int weaponryPowerupsUpperLeftCornerPositionX = 556;
-    int weaponryPowerupsUpperLeftCornerPositionY = 192; // Was 208
 
     // Vars for the point bonuses
     int pointBonusesPositionY = 496;
@@ -1814,76 +1917,46 @@ public class Asteroids extends GameEngine
     /*
      * Display the ship thruster power-ups
      */
-    g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR);
-    g.setColor(Color.WHITE);
-
-    //g.drawString(Constants.MSG_POWERUPS_THRUSTERS, thrusterPowerupsUpperLeftCornerPositionX, (int)(thrusterPowerupsUpperLeftCornerPositionY - bounds.getHeight()/2));
-    g.drawString(Constants.MSG_POWERUPS_THRUSTERS, thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY);
-    thrusterPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-
-    g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL);
-    g.setColor(Color.ORANGE);
-
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_1), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_THURST1, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, thrusterPowerupsUpperLeftCornerPositionY);
-    thrusterPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_THURST2, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, thrusterPowerupsUpperLeftCornerPositionY);
-    thrusterPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), thrusterPowerupsUpperLeftCornerPositionX, thrusterPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_THURST3, thrusterPowerupsUpperLeftCornerPositionX + thrusterImageWidth, thrusterPowerupsUpperLeftCornerPositionY);
+    msgIntroductionPowerupScreenThrusterLabel.draw(g);
+    imgIntroductionPowerupScreenThruster1.draw(g);
+    msgIntroductionPowerupScreenLabelThurster1.draw(g);
+    imgIntroductionPowerupScreenThruster2.draw(g);
+    msgIntroductionPowerupScreenLabelThruster2.draw(g);
+    imgIntroductionPowerupScreenThruster3.draw(g);
+    msgIntroductionPowerupScreenLabelThruster3.draw(g);
 
     /*
      * Display health and shield power-ups
-     */
-    g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR);
-    g.setColor(Color.WHITE);
-    g.drawString(Constants.MSG_POWERUPS_HEALTH_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX - 32, healthShieldPowerupsUpperLeftCornerPositionY);
-    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-    
-    g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL);
-    g.setColor(Color.ORANGE);
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
-    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
+     */    
+    msgIntroductionPowerupScreenHealthAndShieldLabel.draw(g);
+    imgIntroductionPowerupScreenHealth.draw(g);
+    imgIntroductionPowerupScreenHealth.draw(g);
+    msgIntroductionPowerupScreenLabelHealth.draw(g);
+    imgIntroductionPowerupScreenShield.draw(g);
+    msgIntroductionPowerupScreenLabelShield.draw(g);
+    imgIntroductionPowerupScreenFullHealth.draw(g);
+    msgIntroductionPowerupScreenLabelFullHealth.draw(g);
+    imgIntroductionPowerupScreenFullShield.draw(g);
+    msgIntroductionPowerupScreenLabelFullShield.draw(g);
+    imgIntroductionPowerupScreenSuperShield.draw(g);
+    msgIntroductionPowerupScreenLabelSuperShield.draw(g);
 
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_SHIELDS, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
-    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_FULL_HEALTH), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_FULL_HEALTH, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
-    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SHIELD_FULL_RESTORE), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_FULL_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
-    healthShieldPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_SUPER_SHIELD), healthShieldPowerupsUpperLeftCornerPositionX, healthShieldPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_SUPER_SHIELD, healthShieldPowerupsUpperLeftCornerPositionX + thrusterImageWidth, healthShieldPowerupsUpperLeftCornerPositionY);
-    
     /*
      * Display weapons
      */
-    g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_REGULAR);
-    g.setColor(Color.WHITE);
-    g.drawString(Constants.MSG_POWERUPS_WEAPONS, weaponryPowerupsUpperLeftCornerPositionX + 32, weaponryPowerupsUpperLeftCornerPositionY);
-    weaponryPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-    
-    g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_SMALL);
-    g.setColor(Color.ORANGE);
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_GUN), weaponryPowerupsUpperLeftCornerPositionX, weaponryPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_FIREPOWER, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, weaponryPowerupsUpperLeftCornerPositionY);
-    weaponryPowerupsUpperLeftCornerPositionY += bufferVerticalBetweenText;
-
-    g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_THE_BOMB), weaponryPowerupsUpperLeftCornerPositionX, weaponryPowerupsUpperLeftCornerPositionY + imageOffset, this.imageObserver);
-    g.drawString(Constants.MSG_POWERUPS_THE_BOMB, weaponryPowerupsUpperLeftCornerPositionX + thrusterImageWidth, weaponryPowerupsUpperLeftCornerPositionY);
+    msgIntroductionPowerupScreenArmamentsLabel.draw(g);    
+    imgIntroductionPowerupScreenFirepower.draw(g);
+    msgIntroductionPowerupScreenLabelFirepower.draw(g);
+    imgIntroductionPowerupScreenTheBomb.draw(g);
+    msgIntroductionPowerupScreenLabelTheBomb.draw(g);
 
     /*
      * Display point bonus power-ups at the bottom of the screen        
      */
+    // NOTE: Since the string bounds is used in these computations, the power-up images and text will not be replaced with static images and text since
+    //       the bounds cannot be known without the g object. Also note that there are other ways to compute the length of the text, but these approaches
+    //       do not produce accurate results according to some of the posts on various blogs. The bottom line, until this becomes a bottle neck, this code
+    //       below will probably remain this way.
     g.setFont(Constants.FONT_INTRO_POWERUPS_SCREEN_MEDIUM);
     Rectangle2D bounds = g.getFontMetrics().getStringBounds(Constants.MSG_POWERUPS_SCREEN_POINT_BONUSES, g);
     pointBonusTextLength = (int)bounds.getWidth();
@@ -2016,66 +2089,67 @@ public class Asteroids extends GameEngine
     int smallAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - smallAsteroidHeight)/2;
     int tinyAsteroidStartingPositionY = startingPositionYOfAsteroidListing + (bigAsteroidHeight - tinyAsteroidHeight)/2;
     
-    imgAsteroidLargeIntroductionScreen = new StaticImage(ImageManager.getImage(Constants.FILENAME_BIG_ASTEROID_1), largeAsteroidStartingPositionX, largeAsteroidStartingPositionY, false, imageObserver);
-    imgAsteroidMediumIntroductionScreen = new StaticImage(ImageManager.getImage(Constants.FILENAME_MEDIUM_ASTEROID_1), mediumAsteroidStartingPositionX, mediumAsteroidStartingPositionY, false, imageObserver);
-    imgAsteroidSmallIntroductionScreen = new StaticImage(ImageManager.getImage(Constants.FILENAME_SMALL_ASTEROID_1), smallAsteroidStartingPositionX, smallAsteroidStartingPositionY, false, imageObserver);
-    imgAsteroidTinyIntroductionScreen = new StaticImage(ImageManager.getImage(Constants.FILENAME_TINY_ASTEROID_1), tinyAsteroidStartingPositionX, tinyAsteroidStartingPositionY, false, imageObserver);
+    imgIntroductionEnemiesScreenAsteroidLarge = new StaticImage(ImageManager.getImage(Constants.FILENAME_BIG_ASTEROID_1), largeAsteroidStartingPositionX, largeAsteroidStartingPositionY, false, imageObserver);
+    imgIntroductionEnemiesScreenAsteroidMedium = new StaticImage(ImageManager.getImage(Constants.FILENAME_MEDIUM_ASTEROID_1), mediumAsteroidStartingPositionX, mediumAsteroidStartingPositionY, false, imageObserver);
+    imgIntroductionEnemiesScreenAsteroidSmall = new StaticImage(ImageManager.getImage(Constants.FILENAME_SMALL_ASTEROID_1), smallAsteroidStartingPositionX, smallAsteroidStartingPositionY, false, imageObserver);
+    imgIntroductionEnemiesScreenAsteroidTiny = new StaticImage(ImageManager.getImage(Constants.FILENAME_TINY_ASTEROID_1), tinyAsteroidStartingPositionX, tinyAsteroidStartingPositionY, false, imageObserver);
   }
 
   private void displayEnemiesScreen(Graphics2D g)
   {
+    int startingYPositionLabel = 328;
+    int startingYPositionScore = startingYPositionLabel + 16;
+    Rectangle2D bounds;
+
     // Draw screen titles
     msgEnemiesTitle.draw(g);
     msgEnemiesAsteroidLabel.draw(g);
 
     // Draw asteroid images
-    imgAsteroidLargeIntroductionScreen.draw(g);
-    imgAsteroidMediumIntroductionScreen.draw(g);
-    imgAsteroidSmallIntroductionScreen.draw(g);
-    imgAsteroidTinyIntroductionScreen.draw(g);
+    imgIntroductionEnemiesScreenAsteroidLarge.draw(g);
+    imgIntroductionEnemiesScreenAsteroidMedium.draw(g);
+    imgIntroductionEnemiesScreenAsteroidSmall.draw(g);
+    imgIntroductionEnemiesScreenAsteroidTiny.draw(g);
 
     // Draw the labels below each asteroid, both point value and 
     
     g.setColor(Color.WHITE);
 
-    // NOTE: These variables can be computed once and moved outside of this method after testing to reduce unnecessary computation
-    Rectangle2D bounds;
-
     // Display the respective asteroid labels
     g.setFont(Constants.FONT_INTRO_ENEMIES_SCREEN_SMALL);
     bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_LARGE_LABEL, g);
     int largeAsteroidTextPosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth - (int)bounds.getWidth())/2;
-    g.drawString(Constants.MSG_ENEMIES_ASTEROID_LARGE_LABEL, largeAsteroidTextPosition, 352);
+    g.drawString(Constants.MSG_ENEMIES_ASTEROID_LARGE_LABEL, largeAsteroidTextPosition, startingYPositionLabel);
 
     bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_MEDIUM_LABEL, g);
     int mediumAsteroidTextPosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
-    g.drawString(Constants.MSG_ENEMIES_ASTEROID_MEDIUM_LABEL, mediumAsteroidTextPosition, 352);
+    g.drawString(Constants.MSG_ENEMIES_ASTEROID_MEDIUM_LABEL, mediumAsteroidTextPosition, startingYPositionLabel);
 
     bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_SMALL_LABEL, g);
     int smallAsteroidTextPosition = startingPositionXOfAsteroidListing + 2*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
-    g.drawString(Constants.MSG_ENEMIES_ASTEROID_SMALL_LABEL, smallAsteroidTextPosition, 352);
+    g.drawString(Constants.MSG_ENEMIES_ASTEROID_SMALL_LABEL, smallAsteroidTextPosition, startingYPositionLabel);
 
     bounds = g.getFontMetrics().getStringBounds(Constants.MSG_ENEMIES_ASTEROID_TINY_LABEL, g);
     int tinyAsteroidTextPosition = startingPositionXOfAsteroidListing + 3*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
-    g.drawString(Constants.MSG_ENEMIES_ASTEROID_TINY_LABEL, tinyAsteroidTextPosition, 352);
+    g.drawString(Constants.MSG_ENEMIES_ASTEROID_TINY_LABEL, tinyAsteroidTextPosition, startingYPositionLabel);
 
     // Display the respective asteroid point values
     g.setFont(Constants.FONT_INTRO_ENEMIES_SCREEN_TINY);
     bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_BIG_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
     int largeAsteroidTextScorePosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth - (int)bounds.getWidth())/2;
-    g.drawString("(" + Constants.SCORE_BIG_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", largeAsteroidTextScorePosition, 368);
+    g.drawString("(" + Constants.SCORE_BIG_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", largeAsteroidTextScorePosition, startingYPositionScore);
 
     bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_MEDIUM_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
     int mediumAsteroidTextScorePosition = startingPositionXOfAsteroidListing + (bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
-    g.drawString("(" + Constants.SCORE_MEDIUM_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", mediumAsteroidTextScorePosition, 368);
+    g.drawString("(" + Constants.SCORE_MEDIUM_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", mediumAsteroidTextScorePosition, startingYPositionScore);
 
     bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_SMALL_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
     int smallAsteroidTextScorePosition = startingPositionXOfAsteroidListing + 2*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
-    g.drawString("(" + Constants.SCORE_SMALL_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", smallAsteroidTextScorePosition, 368);
+    g.drawString("(" + Constants.SCORE_SMALL_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", smallAsteroidTextScorePosition, startingYPositionScore);
 
     bounds = g.getFontMetrics().getStringBounds("(" + Constants.SCORE_TINY_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", g);
     int tinyAsteroidTextScorePosition = startingPositionXOfAsteroidListing + 3*(bigAsteroidWidth + bufferBetweenAsteroid) + (bigAsteroidWidth - (int)bounds.getWidth())/2;
-    g.drawString("(" + Constants.SCORE_TINY_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", tinyAsteroidTextScorePosition, 368);
+    g.drawString("(" + Constants.SCORE_TINY_ASTEROIDS + Constants.MSG_ENEMIES_POINTS + ")", tinyAsteroidTextScorePosition, startingYPositionScore);
   }
 
   private void displayIntroductionFooter(Graphics2D g)
@@ -2281,89 +2355,6 @@ public class Asteroids extends GameEngine
       line += 16;
     }
   }
-  
-//  private void menuFlowOneForIntroductionScreen(int keyCode)
-//  {
-//    switch(currentIntroductionScreen)
-//    {
-//      // From the power-ups screen, the player can view the details screen or return to the previous screen, which is the instructions screen.
-//      case POWERUPS:
-//
-//        if (keyCode == KeyEvent.VK_ESCAPE)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
-//        }
-//
-//        if (keyCode == KeyEvent.VK_D)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.POWERUP_DETAILS;
-//        }
-//        break;
-//      
-//      // From the power-ups detail screen, the player can return to the power-ups screen.
-//      case POWERUP_DETAILS:
-//
-//        if (keyCode == KeyEvent.VK_ESCAPE)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.POWERUPS;
-//        }
-//        break;
-//        
-//      // From the instructions screen, the player can view the power-ups screen, the enemies screen or return to the main introduction screen.
-//      case INSTRUCTIONS:
-//
-//        if (keyCode == KeyEvent.VK_P)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.POWERUPS;
-//        }
-//
-//        if (keyCode == KeyEvent.VK_E)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.ENEMIES;
-//        }
-//
-//        if (keyCode == KeyEvent.VK_ESCAPE)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
-//        }
-//        break;
-//        
-//      // From the main introduction screen, the player can view the credits or view the instruction screens.
-//      case MAIN:
-//        
-//        if (keyCode == KeyEvent.VK_I)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
-//        }
-//        
-//        if (keyCode == KeyEvent.VK_C)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.CREDITS;
-//        }
-//
-//        if (keyCode == KeyEvent.VK_ESCAPE)
-//        {
-//          // TODO: Add request here to exit game.
-//        }
-//
-//      case CREDITS:
-//        
-//        if (keyCode == KeyEvent.VK_ESCAPE)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.MAIN;
-//        }
-//        break;
-//
-//      case ENEMIES:
-//        if (keyCode == KeyEvent.VK_ESCAPE)
-//        {
-//          currentIntroductionScreen = Constants.IntroductionScreens.INSTRUCTIONS;
-//        }
-//        break;
-//        
-//      default:
-//    }
-//  }
   
   private void menuFlowTwoForIntroductionScreen(int keyCode)
   {
