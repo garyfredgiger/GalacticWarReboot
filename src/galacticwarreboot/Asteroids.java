@@ -96,9 +96,9 @@ public class Asteroids extends GameEngine
   /*
    * Bounding boxes used for messages displayed to the screen
    */
-  private Rectangle2D                   boundsIntroductionTitleMsg;
-  private Rectangle2D                   boundsIntroductionStateTitle;
-  private Rectangle2D                   boundsIntroductionPowerupsMsg;
+//  private Rectangle2D                   boundsIntroductionTitleMsg;
+//  private Rectangle2D                   boundsIntroductionStateTitle;
+//  private Rectangle2D                   boundsIntroductionPowerupsMsg;
 
   private StaticText                    msgGameStartScreen;
   private StaticText                    msgGameOverScreen;
@@ -1815,25 +1815,45 @@ private StaticText msgInstructionsGameObjective;
   // TODO: Finish this method.
   // Display for the introduction screen
   private void displayIntroductionMainScreen(Graphics2D g)
-  {
+  {    
+    Rectangle2D bounds;
+ 
+    g.setFont(Constants.FONT_INTRO_SCREEN_MEDIUM);
+    g.setColor(Color.YELLOW);
+    
+    bounds = g.getFontMetrics().getStringBounds(Constants.INTRO_SCREEN_BLURB_LINE_1, g);
+    int startingYPosition = 144;
+    g.drawString(Constants.INTRO_SCREEN_BLURB_LINE_1, (int) ((screenWidth - bounds.getWidth()) / 2), startingYPosition);
+    startingYPosition += 32;
+
+    bounds = g.getFontMetrics().getStringBounds(Constants.INTRO_SCREEN_BLURB_LINE_2, g);
+    g.drawString(Constants.INTRO_SCREEN_BLURB_LINE_2, (int) ((screenWidth - bounds.getWidth()) / 2), startingYPosition);
+    startingYPosition += 32;
+
+    bounds = g.getFontMetrics().getStringBounds(Constants.INTRO_SCREEN_BLURB_LINE_3, g);
+    g.drawString(Constants.INTRO_SCREEN_BLURB_LINE_3, (int) ((screenWidth - bounds.getWidth()) / 2), startingYPosition);
+    
     g.setColor(Color.WHITE);
     g.setFont(Constants.FONT_INTRO_SCREEN_MAIN_START);
+    
+    bounds = g.getFontMetrics().getStringBounds("Press 'Space' for Game Instructions", g);
+    startingYPosition = 288;
+    g.drawString("Press 'Space' for Game Instructions", (int) ((screenWidth - bounds.getWidth()) / 2), startingYPosition);
+    startingYPosition += 48;
 
-    boundsIntroductionStateTitle = g.getFontMetrics().getStringBounds("Press 'Space' for Game Instructions", g);
-    g.drawString("Press 'Space' for Game Instructions", (int) ((screenWidth - boundsIntroductionStateTitle.getWidth()) / 2), 320);
+    bounds = g.getFontMetrics().getStringBounds("Press 'C' for Game Credits", g);
+    g.drawString("Press 'C' for Game Credits", (int) ((screenWidth - bounds.getWidth()) / 2), startingYPosition);
+    startingYPosition += 48;
 
-    boundsIntroductionPowerupsMsg = g.getFontMetrics().getStringBounds("Press 'C' for Game Credits", g);
-    g.drawString("Press 'C' for Game Credits", (int) ((screenWidth - boundsIntroductionPowerupsMsg.getWidth()) / 2), 352);
-
-    boundsIntroductionStateTitle = g.getFontMetrics().getStringBounds("Press 'Enter' to begin game", g);
-    g.drawString("Press 'Enter' to begin game", (int) ((screenWidth - boundsIntroductionStateTitle.getWidth()) / 2), 384);
+    bounds = g.getFontMetrics().getStringBounds("Press 'Enter' to begin game", g);
+    g.drawString("Press 'Enter' to begin game", (int) ((screenWidth - bounds.getWidth()) / 2), startingYPosition);
 
     // Display the credits and copyright 
     g.setFont(Constants.FONT_INTRO_SCREEN1_CREDIT);
     g.setColor(Color.YELLOW);
 
-    Rectangle2D boundsIntroScreen1Credits = g.getFontMetrics().getStringBounds(Constants.MSG_INTRO_SCREEN1_CREDIT + " " + Constants.MSG_INTRO_SCREEN1_COPYRIGHT, g);
-    g.drawString(Constants.MSG_INTRO_SCREEN1_CREDIT + " " + Constants.MSG_INTRO_SCREEN1_COPYRIGHT, (int) ((screenWidth - boundsIntroScreen1Credits.getWidth()) / 2), 544);
+    bounds = g.getFontMetrics().getStringBounds(Constants.MSG_INTRO_SCREEN1_CREDIT + " " + Constants.MSG_INTRO_SCREEN1_COPYRIGHT, g);
+    g.drawString(Constants.MSG_INTRO_SCREEN1_CREDIT + " " + Constants.MSG_INTRO_SCREEN1_COPYRIGHT, (int) ((screenWidth - bounds.getWidth()) / 2), 544);
   }
 
   private void setupIntroductionInstructionsScreen()
@@ -1855,8 +1875,8 @@ private StaticText msgInstructionsGameObjective;
 
     msgInstructionsPlayerControls = new StaticText(Constants.MSG_INSTRUCTIONS_CONTROLS, -1, controlUpperLeftCornerPositionY, Color.WHITE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_MEDIUM, screenWidth, screenHeight);
     msgInstructionsPlayerControls.centerHorizontally();
-    controlUpperLeftCornerPositionY += 48;
-    
+
+    controlUpperLeftCornerPositionY += 32;
     msgInstructionsRotateControl = new StaticText(Constants.MSG_INSTRUCTIONS_ROTATE_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
     controlUpperLeftCornerPositionY += 24;
     msgInstructionsThrustControl = new StaticText(Constants.MSG_INSTRUCTIONS_THRUST_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
@@ -1869,7 +1889,7 @@ private StaticText msgInstructionsGameObjective;
     controlUpperLeftCornerPositionY += 24;
     msgInstructionsTheBombControl = new StaticText(Constants.MSG_INSTRUCTIONS_THE_BOMB_CONTROL, controlUpperLeftCornerPositionX, controlUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
 
-    commandUpperLeftCornerPositionY += 48;
+    commandUpperLeftCornerPositionY += 32;
     msgInstructionsRotateCommand = new StaticText(Constants.MSG_INSTRUCTIONS_ROTATE_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
     commandUpperLeftCornerPositionY += 24;
     msgInstructionsThrustCommand = new StaticText(Constants.MSG_INSTRUCTIONS_THRUST_COMMAND, commandUpperLeftCornerPositionX, commandUpperLeftCornerPositionY, Color.ORANGE, Constants.FONT_INTRO_INSTRUCTIONS_SCREEN_REGULAR, screenWidth, screenHeight);
@@ -2290,7 +2310,7 @@ private StaticText msgInstructionsGameObjective;
     // NOTE: These variables can be computed once and moved outside of this method after testing to reduce unnecessary computation
     int backMsgPositionX = 32;
     int backMsgPositionY = 576;
-    int nextMsgPositionX = 592;
+    int nextMsgPositionX = 544;
     int nextMsgPositionY = 576;
 
     g.setFont(Constants.FONT_INTRO_SCREEN_SMALL);

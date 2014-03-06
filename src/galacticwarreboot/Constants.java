@@ -183,6 +183,7 @@ public class Constants
   public static final Font   FONT_INTRO_SCREEN_MAIN_TITLE                     = new Font("Verdana", Font.BOLD, 36);
   public static final Font   FONT_INTRO_SCREEN_MAIN_CONTROLS                  = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 20);
   public static final Font   FONT_INTRO_SCREEN_MAIN_START                     = new Font("Ariel", Font.BOLD, 24);
+  public static final Font   FONT_INTRO_SCREEN_MEDIUM                         = new Font("Verdana", Font.ITALIC, 20);
   public static final Font   FONT_INTRO_SCREEN_SMALL                          = new Font("Verdana", Font.BOLD, 14);
 
   public static final Font   FONT_INTRO_SCREEN1_CREDIT                        = new Font("Courier", Font.BOLD, 18);
@@ -236,7 +237,11 @@ public class Constants
   public static final Font   FONT_INTRO_ENEMIES_SCREEN_LARGE                  = new Font("Verdana", Font.BOLD, 32);
 
   // String constants for Introduction screen
-  public static final String INTRO_SCREEN_MAIN_TITLE_MSG                      = "GALACTIC WAR REBOOT";
+  public static final String INTRO_SCREEN_MAIN_TITLE_MSG                      = "GALACTIC WAR REBOOT";  
+  public static final String INTRO_SCREEN_BLURB_LINE_1                        = "Adapted from the game Galactic War";
+  public static final String INTRO_SCREEN_BLURB_LINE_2                        = "from Jonathan S. Harbour's book";
+  public static final String INTRO_SCREEN_BLURB_LINE_3                        = "Beginning Java Game Programming (Second Edition)";
+
   public static final String MSG_INTRO_SCREEN1_CREDIT                         = "Written and Developed by Gary Giger";
   public static final String MSG_INTRO_SCREEN1_COPYRIGHT                      = "\u00a9 2014";
 
@@ -289,9 +294,8 @@ public class Constants
   public static final String MSG_GAME_DETAILS_THE_BOMB_USE                    = "Generates a shockwave that rips apart all Asteroids.";
   public static final String MSG_GAME_DETAILS_ION_THRUSTER                    = "The default thruster with which your ship is equipped.";
   public static final String MSG_GAME_DETAILS_THRUSTERS                       = "Advanced thrusters will become available in higher levels.";
+  public static final String MSG_GAME_DETAILS_UFOS                            = "As the game progesses, UFOs will appear in higher levels.";
 
-  public static final String MSG_GAME_DETAILS_UFOS                            = "As the game progesses, UFOs will appear up in higher levels.";
-  
   // Not displayed yet
   //public static final String MSG_GAME_DETAILS_UFOS                            = "When a UFO is destroyed, certain ship upgrades may be spawned.";
 
@@ -299,13 +303,11 @@ public class Constants
   public static final String MSG_CREDITS_SOUND_LIBRARY = "Sound Library provided by Paul Lamb";
   public static final String MSG_CREDITS_SOUND_LIBRARY_URL = "http://www.paulscode.com";
   public static final String MSG_CREDITS_SOUND_LIBRARY_URL_BREADCRUMB = "(Located under Forum > General > Paul's Projects > 3D Sound System)";
-
   public static final String MSG_CREDITS_SOUND_EFFECTS = "Sound Effects Generated using SFXR by Tomas Petterson";
   public static final String MSG_CREDITS_SOUND_EFFECTS_URL = "http://www.drpetter.se/";
   public static final String MSG_CREDITS_SOUND_EFFECTS_URL_BREADCRUMB = "(Located under Projects)";
-
-  public static final String MSG_INTRODUCTION_MSG_NEXT                        = "Press Space to Continue";
-  public static final String MSG_INTRODUCTION_MSG_BACK                        = "Press Esc to go Back";
+  public static final String MSG_INTRODUCTION_MSG_NEXT                        = "Press Space for Next Screen";
+  public static final String MSG_INTRODUCTION_MSG_BACK                        = "Press Esc for Previous Screen";
 
   // TODO: Mention shield and health capacity increases too in the power-ups details
 
