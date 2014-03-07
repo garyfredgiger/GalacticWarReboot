@@ -1,34 +1,47 @@
 GalacticWarReboot
 =================
 
-###Setting up the Project
+###About this Project
 
-My adaption of the Galactic War game from Jonathan S. Harbour's book Beginning Java Game Programming (Second Edition). This is my second game that I am creating using the game framework that I developed.
+This is my second 2D arcade game that uses the *[2D Game Framework](https://github.com/garyfredgiger/GameFramework.git)* that I have been developing and evolving since Sept 2013. This game is an adaption of the original Galactic War game from Jonathan S. Harbour's book Beginning Java Game Programming (Second Edition). Hopefully you will find it fun, entertaining and reminiscent of the old school arcade games from the 1980s. Enjoy! 
 
-This project was devloped and built using Eclipse Kepler Release with Java 1.6.
+###A Few Preliminary Notes
 
-When you clone this project, make sure you also clone the *[GameFramework](https://github.com/garyfredgiger/GameFramework.git)* project in this same repo. The GameFramework project is required for this game. Import both projects into Eclipse and before building the project, make sure you add the GameFramework project to this project under the menu options as described below.
+This game is a work in progress. I am continually updating it by adding new features, refactoring the code and attempting to improve the overall gameplay experience. Please check back often for updates.
 
-<ol>
-<li>Right click on the project and select the option Build Path -> Configure Build Path</li>
-<li>Click on the Projects tab and add the GameFramework project, then click the OK button.</li>
-</ol>
+###Setting up and Running the Project for use in Eclipse
+
+This project was devloped and built using Eclipse (Kepler Release Build id: 20130614-0229) with Java 1.6.
 
 Note: If you are new to Eclipse and need instructions on how to install and set it up, refer to this link *[here](http://wiki.eclipse.org/Eclipse/Installation)*.
 
-This folder contains source code only. Before running the game you will need to download the images for the game from my Dropbox account using the link below.
+####What You Need
 
-*[Image files for GalacticWar Reboot located in my Dropbox account](https://www.dropbox.com/sh/z3xzd2oqxmmk2nb/kBFzpMPkYg/GalacticWarReboot)*
+1) First, you need to clone this project. Open up a terminal window and in a local directory on your machine, clone this project using the command below.
 
-Simply download the folder named **images** from this link above and place the entire folder under the directory named **src** in this GitHub project folder after you clone it. Make sure you refresh this project in Eclipse so the folder shows up in the Eclispe IDE along with all of the images.
+    git clone https://github.com/garyfredgiger/GalacticWarReboot.git
 
-Also note that you may need to add the following line to the .classpath file in order for the project to recognize the 'images' folder as a source folder. Otherwise, the images may not load properly when you run the project.
+2) You will also need the 2D Game Framework *[here](https://github.com/garyfredgiger/GameFramework.git)*. Again, in your terminal window enter the command below.
 
-```xml
-<classpathentry kind="src" path="images"/>
-```
+    git clone git clone https://github.com/garyfredgiger/GameFramework.git
 
-To run the game from within Eclipse, right click on the project **GameFrameworkGalacticWarReboot** (the name of this project when imported into Eclispe) and select the opton Run As -> Java Application.
+At this point there should be two sub folders in your current directory as shown below.
+
+    drwxr--r-- 4 user user 4096 Mar  7 14:56 GalacticWarReboot
+    drwxr--r-- 4 user user 4096 Mar  7 15:06 GameFramework
+
+3) Open up Eclispe and import both projects (Right-click on Package Explorer and select Import, then select General -> Existing Projects into Workspace). After importing both projects you will notice there are build errors. To correct these errors we will need to perform a few actions, which I will cover below.
+
+4) First, before these errors can be corrected you will need to download three JAR files required by this game in order to play the sound effects. To add the required JAR sound libraries you will need to download them from my DropBox folder [here](https://www.dropbox.com/sh/z3xzd2oqxmmk2nb/jZBIXh47OD/GalacticWarReboot/ThirdPartyJars)., then place them in a directory that you can easily access (For instance, I created a sub folder in my project directory call 'Libs' and place these jar files here).
+
+5) Next, go back into Eclispe and right-click on the project GalacticWarReboot and select the option Build Path -> Configure Build Path and select the Libraries tab. Once the Libraries tab is selected, click on the button labeled Add External JARS and select add the three jar files in the Jar Selection dialog, then click on the **OK** button. This will take you back to the Libraries tab. But, before exiting this dialog you need to perform one more action. You need to add the *GameFramework* project to the *GalacticWarReboot* project. To do this select the Projects tab (to the right of the Libraries tab). Once you selected the Projects tab the list should be empty. To add the GameFramework project click on the button labeled **Add** and select the *GameFramework* project, the click on the button labeled **OK**, this will take you back to the Projects tab. Next you can click on the OK button to accept all changes. Now, when you build the project it should build without any errors.
+
+6) Before you can play the game you will need to download the images used in the game. But before retrieving the images you will need to create a source folder under the GalacticWarReboot folder. To do this right-click on the project GalacticWarReboot in Eclipse and select New -> Source Folder, which will display the New Source Folder dialog box. Enter the name 'images' in the Folder Name field and then click the Finish button. NOTE: The folder you create must be a Source folder and not a regular folder. If you creata a regular folder the applicaiton will not be able to find the images. After creating the source folder *images* download the images from my DropBox folder [here](https://www.dropbox.com/home/public/GalacticWarReboot/images) and place them in the *images* source folder.
+
+7) The last thing that needs to be done before running the game is to download the audio files for the sound effects. But before you do this we need to create a sound folder to place the audio files. First go into Eclipse and expand the GalacticWarReboot project, you will see the a folder labeled *src*. Right-click on this folder and select New -> Package, which will display the New Java Package dialog box. Enter the name *Sounds* in the Name field and click on Finish button. You will see the new folder *Sounds* under the *src* folder in the Eclipse Package Explorer. Now you can download the audio files from my DropBox folder [here](https://www.dropbox.com/home/public/GalacticWarReboot/sounds) and place them in the *Sounds* folder. Your probably wondering why the audio files need to reside in a folder under src? well, the third party sound library I am using to play sund effects requires them to be in this location by default and I have not yet figued out how to change the path.
+
+
+8) To run the game from within Eclipse, right click on the project *GalacticWarReboot* and select the opton Run As -> Java Application. Note, you may need to force a refresh first before running the game. To do this highlight the GalacticWarReboot project and press F5.
 
 ### Notes About the Game
 
@@ -60,87 +73,6 @@ There are a few minor glitches that occur from time to time, but they are not "s
 ##### Testing
 
 The game was only tested on my laptop running Ubuntu vesion 12.10 within Eclipse running it as a Java application. As I get more time for development and testing, my goal is to obviously test it on all platforms using the major browsers Chrome, IE, Firefox and Safari. Since this game is still in development, there is a debugging features that can be enabled. During game play press *SHIFT* + *~* (tilda) to display debugging information about the current game.
-
-##### Current Game Features
-
-The game has the current features during game play:
-
-<ul>
-
-  <li>
-    Players Ship
-    <ul>
-      <li><b>Thruster</b> - A single engine to propel your ship forward through space.</li>
-      <li><b>Phaser Cannon</b> - In its simplest form, it shoots a single blast straight ahead.</li>
-      <li><b>Shields</b> - Will take the damage instead of your ship's hull when engaged.</li>
-    </ul>
-  </li>
-  
-  <li>
-    Power-Ups
-    <ul>
-      <li><b>250 Point Reward</b></li>
-      <li><b>500 Point Reward</b></li>
-      <li><b>1000 Point Reward</b></li>
-      <li>
-        <b>Phaser Cannon Upgrades</b>
-        <ul>
-          <li><b>Double Shot</b> - Shots two shots covering an 8 degree angle.</li>
-          <li><b>Triple Shot</b> - Shoots three shots covering an 8 degree angle. </li>
-          <li><b>Quad Shot</b> - Shoots 4 shots covering a 20 degree angle</li>
-          <li><b>Hex Barrage</b> - Shoots 6 shots covering a 120 degree angle spread.</li>
-        </ul>
-      </li>
-      <li><b>Shield Health</b> - Restores 5 health points to the ship's hull.</li>
-      <li><b>Ship Health</b> - Restores 5 health points to the ship's shields.</li>
-      <li><b>Super Shield</b>  - When deployed, a wave of enegry will be released from your ship in a 360 degree ring protecting your from any nearby threats. Use it wisely since it only lasts for a brief period of time. Press <b>S</b> to use.</li>
-      <li><b>The Bomb</b>  - Sends out a destructive wave to reap havoc on all those who are the enemy. It's the Bomb! Press <b>D</b> to use.</li>
-      <li><b>Full Health</b> - Restores all health that was previously lost.</li>
-      <li><b>Full Shield</b> - Regenerates all depleted shields.</li>
-      <li><b>Increased Thrust</b> - Makes the player ship more maneuverable.</li>
-    </ul>
-  </li>
-
-  <li>
-    Enemies
-    <ul>
-      <li><b>Asteroids</b> - There are 4 different sizes</li>
-        <ul>
-          <li>Big - 50 Points</li>
-          <li>Medium - 30 Points</li>
-          <li>Small - 20 Points</li>
-          <li>Tiny - 10 Points</li>
-        </ul>
-      <li><b>UFO</b> - Makes random appearances throughout the game. A word of caution. The UFO will fire at your ship with deadly accuracy. Be sure to kill it quickly or have plenty of shield strength on reserve or you will receive a devistating blow.</li>
-
-    </ul>
-  </li>
-</ul>
-
-
-##### Future Additions
-
-For the most part this game is 90% or more completed. I still need to add a few more features in order to make it 100% completed. These features include:
-
-<ul>
-  <li>Sounds. There are currently no sounds in this game.</li>
-
-  <li>Explosion animations when entities are damaged/destroyed.</li>
-  
-  <li>Instructions screen a player can refer to that shows all of the game power-ups and controls.</li>
-
-  <li>Adding controls to pause the game. Note that the game framework has the pause functionality built into the game loop. I have not added logic to the input handlers that map to the game framework's pause capability.</li>
-  
-  <li>High Score leader board</li>
-  
-  <li>Possibly adding difficulty levels. Although given the current game play, it get tough pretty quickly in later levels.</li>
-
-  <li>Additional Power-ups. Even though there are several powerups including health, improved weaponry and point bonuses, I plan on adding additional powerups to better enhance the game play as my time permits. These features will include:</li>
-  <ul>
-    <li><b>Auto Shield</b>  - When equipped, it will automatically engage shields when obects coolide with your ship.</li>
-    <li><b>Ufonator</b> (Pronounced YOOF - O - NATOR) - Having problems with those peski UFO's that come out of nowhere? With the ufonator your UFO problems will be no more. This is a fire and forget weapon. However, make sure you use it carefully since it does has a limited range.</li>
-  </ul>
-</ul>
 
 ### If You Encounter Problems?
 
