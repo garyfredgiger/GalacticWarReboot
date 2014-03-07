@@ -88,7 +88,7 @@ There are a few minor glitches that occur from time to time, but they are not "s
 
 ## If You Encounter Problems?
 
-If you do encounter a bug please email me at garyfredgiger@gmail.com and include in the subject line GLACTIC WAR REBOOT BUG. In the email please provide a detailed description of the bug and the steps that you followed to arrive at the bug. If I am unable to reproduce the problem then I will not be able to fix it.
+If you do encounter a bug please email me at garyfredgiger@gmail.com and include in the subject line GALACTIC WAR REBOOT BUG. In the email please provide a detailed description of the bug and the steps that you followed to arrive at the bug. If I am unable to reproduce the problem then I will not be able to fix it.
 
 ## Additional Notes
 
