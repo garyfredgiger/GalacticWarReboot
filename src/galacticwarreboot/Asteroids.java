@@ -264,14 +264,33 @@ public class Asteroids extends GameEngine
           double playerX = getPlayer().getPositionX();
           double playerY = getPlayer().getPositionY();
 
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_COCKPIT), playerFaceAngle, playerX, playerY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_SIDE), playerFaceAngle, playerX, playerY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_SIDE), playerFaceAngle, playerX, playerY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_HULL), playerFaceAngle, playerX, playerY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_HULL), playerFaceAngle, playerX, playerY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_CENTER_HULL), playerFaceAngle, playerX, playerY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_ENGINE), playerFaceAngle, playerX, playerY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_ENGINE), playerFaceAngle, playerX, playerY));
+//          double centerX = getPlayer().getCenterX();
+//          double centerY = getPlayer().getCenterY();
+          
+          int cockpitOffsetX = 12;
+          int cockpitOffsetY = 2;
+          int leftSideOffsetX = 6;
+          int leftSideOffsetY = 9;
+          int rightSideOffsetX = 32;
+          int rightSideOffsetY = 9;
+          int leftHullOffsetX = 9;
+          int leftHullOffsetY = 16;
+          int rightHullOffsetX = 26;
+          int rightHullOffsetY = 16;
+          int centerHullOffsetX = 16;
+          int centerHullOffsetY = 16;
+          int leftEngineOffsetX = 11;
+          int leftEngineOffsetY = 30;
+          int rightEngineOffsetX = 21;
+          int rightEngineOffsetY = 30;
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_COCKPIT), playerFaceAngle, playerX+cockpitOffsetX, playerY+cockpitOffsetY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_SIDE), playerFaceAngle, playerX + leftSideOffsetX, playerY + leftSideOffsetY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_SIDE), playerFaceAngle, playerX + rightSideOffsetX, playerY + rightSideOffsetY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_HULL), playerFaceAngle, playerX+leftHullOffsetX, playerY+leftHullOffsetY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_HULL), playerFaceAngle, playerX+rightHullOffsetX, playerY+rightHullOffsetY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_CENTER_HULL), playerFaceAngle, playerX+centerHullOffsetX, playerY+centerHullOffsetY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_ENGINE), playerFaceAngle, playerX+leftEngineOffsetX, playerY+leftEngineOffsetY));
+          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_ENGINE), playerFaceAngle, playerX+rightEngineOffsetX, playerY+rightEngineOffsetY));
         }
 
         if (getEnemies().isEmpty())
@@ -355,27 +374,37 @@ public class Asteroids extends GameEngine
     }
   }
   
+  //public EntityImage createPlayerShipDebris(Image image, double playerFaceAngle, double playerX, double playerY, double centerX, double centerY)
   public EntityImage createPlayerShipDebris(Image image, double playerFaceAngle, double playerX, double playerY)
   {
     EntityImage piece = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.POWER_UP);
 
+//    double px = centerX;
+//    double py = centerY;
+//    double x1 = playerX;
+//    double y1 = playerY;
+//    
+//    double x2 = px + (x1-px) * Math.cos(playerFaceAngle*Math.PI/180.0)-(y1-py) * Math.sin(playerFaceAngle*Math.PI/180.0);
+//    double y2 = py + (x1-px) * Math.sin(playerFaceAngle*Math.PI/180.0)+(y1-py) * Math.cos(playerFaceAngle*Math.PI/180.0);
+    
     piece.setImage(image);
     piece.setPosition(playerX, playerY);
+//    piece.setPosition(x2, y2);
     piece.setFaceAngle(playerFaceAngle);
 
     // Set rotation and direction angles of asteroid
-
+    
     int moveAngle = GameUtility.random.nextInt((int) GameEngineConstants.DEGREES_IN_A_CIRCLE);    
     piece.setMoveAngle(moveAngle);
     
-    int rotationRate = GameUtility.random.nextInt(Constants.POWERUP_ROTAITON_RATE) + 25;
+    int rotationRate = GameUtility.random.nextInt(100) + 25;
     rotationRate = (GameUtility.random.nextBoolean() ? -rotationRate : rotationRate);
     piece.setRotationRate(rotationRate);
 
     // Set velocity based on movement direction
     double angle = piece.getMoveAngle() - 90;
     piece.setVelocity(GameUtility.calcAngleMoveX(angle), GameUtility.calcAngleMoveY(angle));
-    piece.getVelocity().scaleThisVector((GameUtility.random.nextInt(30) + 20));
+    piece.getVelocity().scaleThisVector((GameUtility.random.nextInt(50) + 25));
 
     // Set the lifespan
     piece.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * (GameUtility.random.nextInt(10) + 10)));
