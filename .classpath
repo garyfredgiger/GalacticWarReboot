@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src" />
-	<classpathentry kind="src" path="images" />
-	<classpathentry kind="con"
-		path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6" />
-	<classpathentry combineaccessrules="false" kind="src"
-		path="/GameFramework" />
-	<classpathentry kind="output" path="bin" />
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="images"/>
+	<classpathentry kind="src" path="sounds"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GameFramework"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pfaudio"/>
+	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambSoundLibrary_AnotherVersion/SoundSystem.jar"/>
+	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambCodecs/JavaSound/LibraryJavaSound.jar"/>
+	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambCodecs/CodecWav/CodecWav.jar"/>
+	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambCodecs/JOrbis/CodecJOrbis.jar"/>
+	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambCodecs/LWJGLOpenAL/LibraryLWJGLOpenAL.jar"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,31 +1,39 @@
 package galacticwarreboot.entities;
 
 import galacticwarreboot.Constants;
-import galacticwarreboot.ScoreManager;
+import galacticwarreboot.ImageManager;
 import galacticwarreboot.UFOEntityManager;
-import game.framework.entities.EntityImage;
-
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.ImageObserver;
 
 public class UFOStrongEntity extends UFOEntity
 {
-  private EntityImage[] ufoImages;
-  private int ufoStrength;
-  private long lastHitTime;
   private Image shieldImage;
-  private boolean ufoWentOffScreen;
-  
-  public UFOStrongEntity(ImageObserver observer, EntityImage[] ufoImages, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
+  private boolean ufoHullHit;
+
+  // TODO: Since there is an image manager, the parameter ufoImages may go away
+  public UFOStrongEntity(ImageObserver observer, UFOEntityManager manager, int upperHorizontalLimit, int lowerHorizontalLimit, int leftVerticalLimit, int rightVerticalLimit)
   {
-    super(observer, ufoImages[0].getImage(), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
-    this.ufoImages = ufoImages;
-    ufoStrength = 3;
-    this.shieldImage = ufoImages[ufoStrength].getImage();
+    super(observer, ImageManager.getImage(Constants.FILENAME_UFO), manager, upperHorizontalLimit, lowerHorizontalLimit, leftVerticalLimit, rightVerticalLimit);
+    setEnemyType(Constants.EnemyTypes.UFO_STRONG);
+
+    ufoHealth = 3;
+    shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_STRONG);
     lastHitTime = System.currentTimeMillis();
+    ufoHullHit = false;
+  }
+
+  public void ufoHullWasHit()
+  {
+    ufoHullHit = true;
   }
   
+  public boolean wasUfoHullHit()
+  {
+    return ufoHullHit;
+  }
+
   @Override
   public boolean shouldFireShot()
   {
@@ -39,36 +47,11 @@ public class UFOStrongEntity extends UFOEntity
   }
   
   @Override
-  public void updatePosition(double delta)
-  {
-    if (isAlive())
-    {
-      if (movingRight)
-      {
-        if (this.position.x > endingXPosition)
-        {
-          ufoWentOffScreen = true;
-        }
-      }
-
-      if (!movingRight)
-      {
-        // If the entity is moving left, check the case where it moves off the right side of the screen, when it does kill it off
-        if ((this.position.x + this.getWidth()) < endingXPosition)
-        {
-          ufoWentOffScreen = true;
-        }
-      }
-    }
-
-    super.updatePosition(delta);
-  }
-  
-  @Override
   public void kill()
   {
     if (ufoWentOffScreen)
     {
+      //System.out.println("UFOStrongEntity::kill() - UFO Went Off Screen.");
       super.kill();
     }
 
@@ -77,22 +60,27 @@ public class UFOStrongEntity extends UFOEntity
     {
       return;
     }
-    
-    ufoStrength--;  
+
+    // Each time the UFO gets hit
+    ufoHealth--;
     lastHitTime = System.currentTimeMillis();
-    switch(ufoStrength)
+    switch(ufoHealth)
     {
       // Choose the proper shield to draw
       case 3:
+        this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_STRONG);
+        break;
       case 2:
+        this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_OK);
+        break;
       case 1:
-        this.shieldImage = ufoImages[ufoStrength].getImage();
-        break;        
+        this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_WEAK);
+        break;
       // Shields gone, ufo gets hit one more time and it will be dead 
       case 0:
         this.shieldImage = null;
         break;
-        
+
       default:
         super.kill();
     }
@@ -106,7 +94,7 @@ public class UFOStrongEntity extends UFOEntity
     {
       if (this.shieldImage != null)
       {
-        // The transform was already applied to the call to the parent draw mwthod.
+        // The transform was already applied to the call to the parent draw method.
         //this.transform();
         g.drawImage(this.shieldImage, at, imageObserver);
       }

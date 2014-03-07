@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.ImageObserver;
 
 import galacticwarreboot.Constants;
+import galacticwarreboot.ImageManager;
 import galacticwarreboot.Constants.AttributeType;
 import galacticwarreboot.attributes.PlayerAttributes;
 import game.framework.entities.EntityImage;
@@ -19,23 +20,13 @@ public class PlayerEntity extends EntityImage
   private boolean          drawShield;
   private boolean          drawThrust;
 
-  private int              shieldCapacityLevel;
-  private int              healthCapacityLevel;
-
-  EntityImage[]            spaceshipImages;
-
   // TODO: Add the image array to the 
-  public PlayerEntity(ImageObserver imageObserver, EntityImage[] spaceshipImages)
+  public PlayerEntity(ImageObserver imageObserver)
   {
     super(imageObserver, GameEngineConstants.EntityTypes.PLAYER);
     homePosition = new Position2D();
 
     attributes = new PlayerAttributes();
-
-    shieldCapacityLevel = 0;
-    healthCapacityLevel = 0;
-
-    this.spaceshipImages = spaceshipImages;
   }
 
   public void defineHomePosition(double homePositionX, double homePositionY)
@@ -54,8 +45,6 @@ public class PlayerEntity extends EntityImage
   {
     attributes.initialize();
     moveToHomePosition();
-    shieldCapacityLevel = 0;
-    healthCapacityLevel = 0;
     super.reset();
   }
 
@@ -64,39 +53,21 @@ public class PlayerEntity extends EntityImage
     position.set(homePosition);
   }
 
-  public void setLimit(Constants.AttributeType powerupType, int value)
+  public void setLimit(Constants.AttributeType attributeType, int value)
   {
-    attributes.setLimit(powerupType, value);
+    attributes.setLimit(attributeType, value);
     //attributes.displayAttributes();
-
-    if (getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) == Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_20)
-    {
-      healthCapacityLevel = 1;
-    }
-    else if (getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH) == Constants.SHIP_HEALTH_CAPACITY_INCREASE_TO_40)
-    {
-      healthCapacityLevel = 2;
-    }
-
-    if (getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD) == Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_20)
-    {
-      shieldCapacityLevel = 1;
-    }
-    else if (getLimit(Constants.AttributeType.ATTRIBUTE_SHIELD) == Constants.SHIP_SHIELD_CAPACITY_INCREASE_TO_40)
-    {
-      shieldCapacityLevel = 2;
-    }
   }
 
-  public int getLimit(Constants.AttributeType powerupType)
+  public int getLimit(Constants.AttributeType attributeType)
   {
-    return attributes.getLimit(powerupType);
+    return attributes.getLimit(attributeType);
   }
 
   public void setValue(Constants.AttributeType powerupType, int value)
   {
     attributes.setValue(powerupType, value);
-    attributes.displayAttributes();
+    //attributes.displayAttributes();
   }
 
   public int getValue(Constants.AttributeType powerupType)
@@ -140,16 +111,6 @@ public class PlayerEntity extends EntityImage
     return getLimit(Constants.AttributeType.ATTRIBUTE_HEALTH);
   }
 
-  public int getShieldContainerIndex()
-  {
-    return shieldCapacityLevel;
-  }
-
-  public int getHealthContainerIndex()
-  {
-    return healthCapacityLevel;
-  }
-
   @Override
   public void kill()
   {
@@ -165,7 +126,7 @@ public class PlayerEntity extends EntityImage
 
   @Override
   public void draw(Graphics2D g)
-  {
+  {    
     // Draw the player ship
     super.draw(g);
 
@@ -176,7 +137,8 @@ public class PlayerEntity extends EntityImage
       {
         if (this.isEquipped(Constants.AttributeType.ATTRIBUTE_SHIELD))
         {
-          g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_SHIELD_INDEX].getImage(), at, imageObserver);
+          //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_SHIELD_INDEX].getImage(), at, imageObserver);
+          g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_SHIELD), at, imageObserver);
         }
       }
 
@@ -186,15 +148,18 @@ public class PlayerEntity extends EntityImage
         switch(this.getValue(AttributeType.ATTRIBUTE_THRUST))
         {
           case Constants.SHIP_INCREASED_ACCELERATION_2:
-            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST2_INDEX].getImage(), at, imageObserver);
+            //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST2_INDEX].getImage(), at, imageObserver);
+            g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST2), at, imageObserver);
             break;
             
           case Constants.SHIP_INCREASED_ACCELERATION_3:
-            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST3_INDEX].getImage(), at, imageObserver);
+            //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST3_INDEX].getImage(), at, imageObserver);
+            g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST3), at, imageObserver);
             break;
           
           default:
-            g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST1_INDEX].getImage(), at, imageObserver);
+            //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST1_INDEX].getImage(), at, imageObserver);
+            g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST1), at, imageObserver);
         }
       }
     }
