@@ -170,9 +170,9 @@ public class Constants
   public static final String FILENAME_SPACESHIP_PART_LEFT_SIDE                = "ship_piece_left_side.png";
   public static final String FILENAME_SPACESHIP_PART_RIGHT_SIDE               = "ship_piece_right_side.png";
   //public static final String FILENAME_SPACESHIP_PART_HULL                     = "ship_piece_hull.png";
-  public static final String FILENAME_SPACESHIP_PART_LEFT_HULL                     = "ship_piece_left_hull.png";
-  public static final String FILENAME_SPACESHIP_PART_RIGHT_HULL                     = "ship_piece_right_hull.png";
-  public static final String FILENAME_SPACESHIP_PART_CENTER_HULL                     = "ship_piece_center_hull.png";
+  public static final String FILENAME_SPACESHIP_PART_LEFT_HULL                = "ship_piece_left_hull.png";
+  public static final String FILENAME_SPACESHIP_PART_RIGHT_HULL               = "ship_piece_right_hull.png";
+  public static final String FILENAME_SPACESHIP_PART_CENTER_HULL              = "ship_piece_center_hull.png";
   public static final String FILENAME_SPACESHIP_PART_LEFT_ENGINE              = "ship_piece_left_engine.png";
   public static final String FILENAME_SPACESHIP_PART_RIGHT_ENGINE             = "ship_piece_right_engine.png";
 

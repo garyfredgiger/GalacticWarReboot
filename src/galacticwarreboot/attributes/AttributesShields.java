@@ -19,7 +19,7 @@ public class AttributesShields implements IAttribute
     setLimit(Constants.SHIP_INITIAL_SHIELD);
     setValue(Constants.SHIP_INITIAL_SHIELD);
   }
-  
+
   @Override
   public int getValue()
   {
@@ -33,12 +33,12 @@ public class AttributesShields implements IAttribute
     {
       value = shieldCapacity;
     }
-    
+
     if (value < 0)
     {
       value = 0;
     }
-    
+
     currentShield = value;
   }
 
@@ -49,9 +49,9 @@ public class AttributesShields implements IAttribute
     {
       return;
     }
-    
+
     currentShield += amount;
-    
+
     if (currentShield > shieldCapacity)
     {
       currentShield = shieldCapacity;
@@ -67,13 +67,13 @@ public class AttributesShields implements IAttribute
     }
 
     currentShield -= amount;
-    
+
     if (currentShield < 0)
     {
       currentShield = 0;
     }
   }
-  
+
   @Override
   public void toggleFlag()
   {
@@ -93,7 +93,7 @@ public class AttributesShields implements IAttribute
     {
       shieldCapacity = 0;
     }
-  
+
     shieldCapacity = limit;
   }
 

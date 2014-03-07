@@ -15,9 +15,9 @@ public class AttributeSuperShields implements IAttribute
   @Override
   public void initialize()
   {
-    setValue(Constants.SHIP_STARTING_SUPER_SHIELD);    
+    setValue(Constants.SHIP_STARTING_SUPER_SHIELD);
   }
-  
+
   @Override
   public int getValue()
   {
@@ -30,12 +30,12 @@ public class AttributeSuperShields implements IAttribute
    */
   @Override
   public void setValue(int value)
-  { 
+  {
     if (value < 0)
     {
       value = 0;
     }
-    
+
     superShield = value;
   }
 
@@ -59,7 +59,7 @@ public class AttributeSuperShields implements IAttribute
     {
       return;
     }
-    
+
     superShield -= amount;
   }
 
@@ -79,7 +79,7 @@ public class AttributeSuperShields implements IAttribute
   public void setLimit(int limit)
   {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override

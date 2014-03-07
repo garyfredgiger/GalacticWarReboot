@@ -14,7 +14,7 @@ import game.framework.utilities.GameUtility;
 public class ScreenManager
 {
   private ImageObserver imageObserver;
-  private int screenWidth, screenHeight;
+  private int           screenWidth, screenHeight;
 
   private StaticText    msgGameStartScreen;
   private StaticText    msgGameOverScreen;
@@ -37,7 +37,7 @@ public class ScreenManager
   private StaticText    msgEnemiesUFOLabel;
   private StaticText    msgGameTitle;
   private StaticText    msgPaused;
-  
+
   // Static text for the power-ups screen
   private StaticText    msgIntroductionPowerupScreenThrusterLabel;
   private StaticText    msgIntroductionPowerupScreenLabelThurster1;
@@ -121,25 +121,25 @@ public class ScreenManager
   private StaticImage   imgIntroductionEnemiesScreenUFO;
   private StaticImage   imgIntroductionEnemiesScreenUFOShorty;
 
-//  private StaticImage   imgIntroductionPowerupScreen250Bonus;
-//  private StaticImage   imgIntroductionPowerupScreen500Bonus;
-//  private StaticImage   imgIntroductionPowerupScreen1000Bonus;
+  //  private StaticImage   imgIntroductionPowerupScreen250Bonus;
+  //  private StaticImage   imgIntroductionPowerupScreen500Bonus;
+  //  private StaticImage   imgIntroductionPowerupScreen1000Bonus;
 
   // Variables used for creating the enemies screen in the game introduction
-  int                                   startingPositionXOfAsteroidListing;
-  int                                   startingPositionXOfUFOListing;
-  int                                   bigAsteroidWidth;
-  int                                   bufferBetweenAsteroid = 64;                      // Predefined number
-  
-  PlayerEntity playerReference = null;
-  
+  int                   startingPositionXOfAsteroidListing;
+  int                   startingPositionXOfUFOListing;
+  int                   bigAsteroidWidth;
+  int                   bufferBetweenAsteroid = 64;                      // Predefined number
+
+  PlayerEntity          playerReference       = null;
+
   public ScreenManager(ImageObserver io, int screenWidth, int screenHeight, PlayerEntity player)
   {
     this.imageObserver = io;
     this.playerReference = player;
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
-    
+
     msgGameStartScreen = new StaticText(Constants.MSG_GAME_START, Color.YELLOW, Constants.FONT_GAME_START_SCREEN, screenWidth, screenHeight);
     msgGameOverScreen = new StaticText(Constants.MSG_GAMEOVER_SCREEN_GAMEOVER, Color.YELLOW, Constants.FONT_GAME_OVER_SCREEN, screenWidth, screenHeight);
     msgNextLevelScreen = new StaticText("", Color.YELLOW, Constants.FONT_GAME_OVER_SCREEN, screenWidth, screenHeight);
@@ -152,10 +152,10 @@ public class ScreenManager
     msgHUDNumberOfTheBombs = new StaticText("", 50, 133, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
 
     msgPaused = new StaticText(Constants.MSG_GAME_PAUSED, Color.WHITE, Constants.FONT_PAUSED_SCREEN, screenWidth, screenHeight);
-    
+
     msgGameTitle = new StaticText(Constants.INTRO_SCREEN_MAIN_TITLE_MSG, -1, 64, Color.RED, Constants.FONT_INTRO_SCREEN_MAIN_TITLE, screenWidth, screenHeight);
     msgGameTitle.centerHorizontally();
-    
+
     // NOTE: We will center the score horizontally, this is why there is a -1 for the x value
     msgHUDScore = new StaticText(Constants.MSG_GAME_PLAYING_SCORE, -1, 40, Color.WHITE, Constants.FONT_GAME_PLAYING_HUD_MEDIUM, screenWidth, screenHeight);
     msgHUDScore.setAdditionalOffsetHorizontal(-40);
@@ -195,13 +195,13 @@ public class ScreenManager
     msgCreditSoundEffectsURL.centerHorizontally();
     msgCreditSoundEffectsBreadcrumb.centerHorizontally();
     msgCreditGoBack.centerHorizontally();
-    
+
     setupIntroductionEnemiesScreen();
     setupIntroductionPowerupsScreen();
     setupIntroductionInstructionsScreen();
     setupIntroductionGameDetailsScreen();
   }
-  
+
   // TODO: Finish this method.
   // Display for the introduction screen
   public void displayIntroductionMainScreen(Graphics2D g)
@@ -864,7 +864,7 @@ public class ScreenManager
   {
     msgGameTitle.draw(g);
   }
-  
+
   public void displayPausedScreen(Graphics2D g)
   {
     msgPaused.draw(g);

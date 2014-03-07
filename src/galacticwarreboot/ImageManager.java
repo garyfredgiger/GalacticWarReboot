@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class ImageManager
 {
-  private static ImageObserver imageObserver;
+  private static ImageObserver          imageObserver;
   private static HashMap<String, Image> imageStore = new HashMap<String, Image>(75);
 
   public static void loadAllImages(ImageObserver io)
@@ -80,18 +80,18 @@ public class ImageManager
     ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_LEFT_ENGINE);
     ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_ENGINE);
   }
-  
+
   /**
    * 
    * Used to retrieve a specific image given the images filename.
    * 
-   * If the image is already stored in the imageStore, it will be retrieved from there. If it does not already 
+   * If the image is already stored in the imageStore, it will be retrieved from there. If it does not already
    * exist in the imageStore, it will first be retrieved from its location (i.e., resource folder, disk, etc...),
-   * placed in the image store and then returned to the caller. 
+   * placed in the image store and then returned to the caller.
    * 
    * @param filename - The filename of the image to retrieve
-   *  
-   * @return The requested image 
+   * 
+   * @return The requested image
    */
   public static Image getImage(String filename)
   {
@@ -132,13 +132,13 @@ public class ImageManager
 
     return (image != null ? image.getHeight(imageObserver) : 0);
   }
-  
+
   public static Image getRandomBigAsteroidImage()
   {
     Image asteroidImage = null;
     int whichAsteroid = GameUtility.random.nextInt(Constants.NUMBER_OF_BIG_ASTEROID_IMAGES);
-    
-    switch(whichAsteroid)
+
+    switch (whichAsteroid)
     {
       case 0:
         asteroidImage = getImage(Constants.FILENAME_BIG_ASTEROID_1);
@@ -148,7 +148,7 @@ public class ImageManager
         break;
       case 2:
         asteroidImage = getImage(Constants.FILENAME_BIG_ASTEROID_3);
-        break;  
+        break;
       case 3:
         asteroidImage = getImage(Constants.FILENAME_BIG_ASTEROID_4);
         break;
@@ -158,13 +158,13 @@ public class ImageManager
 
     return asteroidImage;
   }
-  
+
   public static Image getRandomMediumAsteroidImage()
   {
     Image asteroidImage = null;
     int whichAsteroid = GameUtility.random.nextInt(Constants.NUMBER_OF_MEDIUM_ASTEROID_IMAGES);
-    
-    switch(whichAsteroid)
+
+    switch (whichAsteroid)
     {
       case 0:
         asteroidImage = getImage(Constants.FILENAME_MEDIUM_ASTEROID_1);
@@ -175,13 +175,13 @@ public class ImageManager
 
     return asteroidImage;
   }
-  
+
   public static Image getRandomSmallAsteroidImage()
   {
     Image asteroidImage = null;
     int whichAsteroid = GameUtility.random.nextInt(Constants.NUMBER_OF_SMALL_ASTEROID_IMAGES);
-    
-    switch(whichAsteroid)
+
+    switch (whichAsteroid)
     {
       case 0:
         asteroidImage = getImage(Constants.FILENAME_SMALL_ASTEROID_1);
@@ -195,13 +195,13 @@ public class ImageManager
 
     return asteroidImage;
   }
-  
+
   public static Image getRandomTinyAsteroidImage()
   {
     Image asteroidImage = null;
     int whichAsteroid = GameUtility.random.nextInt(Constants.NUMBER_OF_TINY_ASTEROID_IMAGES);
-    
-    switch(whichAsteroid)
+
+    switch (whichAsteroid)
     {
       case 0:
         asteroidImage = getImage(Constants.FILENAME_TINY_ASTEROID_1);
@@ -218,13 +218,13 @@ public class ImageManager
 
     return asteroidImage;
   }
-  
+
   private static void loadImage(String filename)
   {
     Toolkit tk = Toolkit.getDefaultToolkit();
 
     Image image = tk.getImage(getURL(filename));
-    
+
     if (image == null)
     {
       throw new NullPointerException("Image with filename ' + filename + ' could not be loaded.");
@@ -236,12 +236,12 @@ public class ImageManager
 
     imageStore.put(filename, image);
   }
-  
+
   private static URL getURL(String filename)
   {
     URL url = null;
     url = ImageManager.class.getClassLoader().getResource(filename);
-    
+
     if (url == null)
     {
       System.out.println("\tImageManager::getURL url is NULL");

@@ -7,12 +7,12 @@ public class AttributeHealth implements IAttribute
 {
   private int currentHealth;
   private int healthCapacity;
-  
+
   public AttributeHealth()
   {
     initialize();
   }
-  
+
   @Override
   public void initialize()
   {
@@ -33,12 +33,12 @@ public class AttributeHealth implements IAttribute
     {
       value = healthCapacity;
     }
-    
+
     if (value < 0)
     {
       value = 0;
     }
-    
+
     currentHealth = value;
   }
 
@@ -49,9 +49,9 @@ public class AttributeHealth implements IAttribute
     {
       return;
     }
-    
+
     currentHealth += amount;
-    
+
     if (currentHealth > healthCapacity)
     {
       currentHealth = healthCapacity;
@@ -65,9 +65,9 @@ public class AttributeHealth implements IAttribute
     {
       return;
     }
-    
+
     currentHealth -= amount;
-    
+
     if (currentHealth < 0)
     {
       currentHealth = 0;
@@ -93,7 +93,7 @@ public class AttributeHealth implements IAttribute
     {
       healthCapacity = 0;
     }
-    
+
     healthCapacity = limit;
   }
 

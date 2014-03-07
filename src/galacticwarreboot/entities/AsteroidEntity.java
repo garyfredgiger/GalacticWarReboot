@@ -12,7 +12,7 @@ public class AsteroidEntity extends EnemyEntity
   {
     super(observer);
   }
-  
+
   @Override
   public void kill()
   {

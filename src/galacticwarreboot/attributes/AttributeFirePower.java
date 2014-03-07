@@ -31,12 +31,12 @@ public class AttributeFirePower implements IAttribute
     {
       value = Constants.SHIP_STARTING_FIREPOWER;
     }
-    
+
     if (value < 0)
     {
       value = 0;
     }
-    
+
     firePower = value;
   }
 
@@ -47,9 +47,9 @@ public class AttributeFirePower implements IAttribute
     {
       return;
     }
-    
+
     firePower += amount;
-    
+
     if (firePower > Constants.SHIP_MAX_FIREPOWER)
     {
       firePower = Constants.SHIP_MAX_FIREPOWER;
@@ -65,7 +65,7 @@ public class AttributeFirePower implements IAttribute
     }
 
     firePower--;
-    
+
     if (firePower < Constants.SHIP_MIN_FIREPOWER)
     {
       firePower = Constants.SHIP_MIN_FIREPOWER;
@@ -87,8 +87,7 @@ public class AttributeFirePower implements IAttribute
 
   @Override
   public void setLimit(int limit)
-  { 
-  }
+  {}
 
   @Override
   public int getLimit()

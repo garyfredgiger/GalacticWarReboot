@@ -9,7 +9,7 @@ import java.awt.image.ImageObserver;
 
 public class UFOStrongEntity extends UFOEntity
 {
-  private Image shieldImage;
+  private Image   shieldImage;
   private boolean ufoHullHit;
 
   // TODO: Since there is an image manager, the parameter ufoImages may go away
@@ -28,7 +28,7 @@ public class UFOStrongEntity extends UFOEntity
   {
     ufoHullHit = true;
   }
-  
+
   public boolean wasUfoHullHit()
   {
     return ufoHullHit;
@@ -45,7 +45,7 @@ public class UFOStrongEntity extends UFOEntity
     lastShotTime = System.currentTimeMillis();
     return true;
   }
-  
+
   @Override
   public void kill()
   {
@@ -64,9 +64,9 @@ public class UFOStrongEntity extends UFOEntity
     // Each time the UFO gets hit
     ufoHealth--;
     lastHitTime = System.currentTimeMillis();
-    switch(ufoHealth)
+    switch (ufoHealth)
     {
-      // Choose the proper shield to draw
+    // Choose the proper shield to draw
       case 3:
         this.shieldImage = ImageManager.getImage(Constants.FILENAME_UFO_SHIELD_STRONG);
         break;

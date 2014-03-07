@@ -11,7 +11,7 @@ public class ScoreManager
 
   public static void incrementScore(int value)
   {
-    currentScore += value;    
+    currentScore += value;
   }
 
   public static int getScore()

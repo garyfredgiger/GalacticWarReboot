@@ -1,17 +1,17 @@
 package galacticwarreboot.interfaces;
 
 public interface IAttribute
-{  
+{
   // Initialize the attribute 
   public void initialize();
-  
+
   public int getValue();
-  
+
   public void setValue(int value);
 
   // Sets the limit of the attribute (e.g. health or shield capacity) 
   public void setLimit(int limit);
-  
+
   // Gets the limit of the attribute (e.g. health or shield capacity)
   public int getLimit();
 

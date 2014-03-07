@@ -38,12 +38,12 @@ public class PowerupManager
   {
     whichProbability = ((currentLevel >= Constants.LEVEL_TO_USE_SPAWN_PROBABILITY_FOR_HIGHER_LEVELS) ? Constants.POWERUP_SPAWN_PROBABILITY_FOR_HIGHER_LEVELS : Constants.POWERUP_SPAWN_PROBABILITY_FOR_LOWER_LEVELS);
   }
-  
+
   public int getProbability()
   {
     return whichProbability;
   }
-  
+
   // Create a random powerup at the supplied sprite location
   //private void spawnPowerup(double xPos, double yPos)
   public PowerupEntity spawnPowerup(Position2D position, PlayerEntity player, int currentLevel)
@@ -61,7 +61,7 @@ public class PowerupManager
 
     switch (randomPowerupType)
     {
-      // The cases in this switch statement will be the special cases where certian powerups are generate if certain conditions are true      
+    // The cases in this switch statement will be the special cases where certian powerups are generate if certain conditions are true      
 
       case POWERUP_FULL_HEALTH:
 
@@ -166,7 +166,7 @@ public class PowerupManager
 
         switch (player.getShieldCapacity())
         {
-          // If players current shield capacity is the initial value, increase to the next level. 
+        // If players current shield capacity is the initial value, increase to the next level. 
           case Constants.SHIP_INITIAL_SHIELD:
 
             if (ScoreManager.getScore() > Constants.SHIELD_CAPACITY_INCREASE_TO_20_SCORE_LIMIT)
@@ -305,7 +305,7 @@ public class PowerupManager
     int moveAngle = GameUtility.random.nextInt((int) GameEngineConstants.DEGREES_IN_A_CIRCLE);
     powerup.setFaceAngle(faceAngle);
     powerup.setMoveAngle(moveAngle);
-    
+
     // Set the rotation rate, but randomly select whether is it CQW or CCQ 
     powerup.setRotationRate((GameUtility.random.nextBoolean() ? -Constants.POWERUP_ROTAITON_RATE : Constants.POWERUP_ROTAITON_RATE));
 
@@ -314,8 +314,6 @@ public class PowerupManager
     powerup.setVelocity(GameUtility.calcAngleMoveX(angle), GameUtility.calcAngleMoveY(angle));
     powerup.getVelocity().scaleThisVector(Constants.POWERUP_SPEED);
 
-    
-    
     // Set the lifespan
     powerup.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * Constants.POWERUP_LIFE_SPAN_IN_SECS));
 

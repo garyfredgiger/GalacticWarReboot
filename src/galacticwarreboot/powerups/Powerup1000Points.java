@@ -15,7 +15,7 @@ public class Powerup1000Points extends PowerupEntity
     this.setPowerupType(Constants.PowerUpType.POWERUP_1000);
     this.setValue(Constants.POWERUP_1000_VALUE);
   }
-  
+
   @Override
   public void kill()
   {

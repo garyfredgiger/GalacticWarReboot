@@ -34,7 +34,7 @@ public class Main extends JApplet
 
   private Asteroids         galacticWarReboot;
   private GameScreen        gameScreen;
-  
+
   @Override
   public void init()
   {
@@ -49,7 +49,7 @@ public class Main extends JApplet
 
     galacticWarReboot = new Asteroids(gameScreen, this.gameScreen, GameEngineConstants.DEFAULT_CANVAS_WIDTH, GameEngineConstants.DEFAULT_CANVAS_HEIGHT);
     galacticWarReboot.gameInit();
-    
+
     try
     {
       // Use the event dispatch thread to build the UI for thread-safety.
@@ -74,7 +74,7 @@ public class Main extends JApplet
   {
     System.out.println("start() Called!");
   }
-  
+
   //  public static void main(String[] args)
   //  {
   //    // Use the event dispatch thread to build the UI for thread-safety.

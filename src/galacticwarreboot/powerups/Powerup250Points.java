@@ -9,6 +9,7 @@ import galacticwarreboot.entities.PowerupEntity;
 public class Powerup250Points extends PowerupEntity
 {
   private int i;
+
   public Powerup250Points(ImageObserver imageObserver)
   {
     super(imageObserver);
@@ -16,7 +17,7 @@ public class Powerup250Points extends PowerupEntity
     this.setPowerupType(Constants.PowerUpType.POWERUP_250);
     this.setValue(Constants.POWERUP_250_VALUE);
   }
-  
+
   @Override
   public void kill()
   {

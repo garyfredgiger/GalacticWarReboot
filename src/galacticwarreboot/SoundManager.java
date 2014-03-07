@@ -6,87 +6,84 @@ import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystemException;
 import paulscode.sound.codecs.CodecJOrbis;
 import paulscode.sound.libraries.LibraryJavaSound;
-import paulscode.sound.libraries.LibraryLWJGLOpenAL;
-import paulscode.sound.SoundBuffer;
-
-;
 
 public class SoundManager
 {
   // Resource names used to reference a source 
-  public static final String   SOUND_RESOURCE_PLAYER_1_SHOOTING          = "player_shot_1";
-  public static final String   SOUND_RESOURCE_PLAYER_2_SHOOTING          = "player_shot_2";
-  public static final String   SOUND_RESOURCE_PLAYER_3_SHOOTING          = "player_shot_3";
-  public static final String   SOUND_RESOURCE_PLAYER_4_SHOOTING          = "player_shot_4";
-  public static final String   SOUND_RESOURCE_PLAYER_5_SHOOTING          = "player_shot_5";
+  public static final String   SOUND_RESOURCE_PLAYER_1_SHOOTING             = "player_shot_1";
+  public static final String   SOUND_RESOURCE_PLAYER_2_SHOOTING             = "player_shot_2";
+  public static final String   SOUND_RESOURCE_PLAYER_3_SHOOTING             = "player_shot_3";
+  public static final String   SOUND_RESOURCE_PLAYER_4_SHOOTING             = "player_shot_4";
+  public static final String   SOUND_RESOURCE_PLAYER_5_SHOOTING             = "player_shot_5";
 
-  public static final String   SOUND_RESOURCE_PLAYER_THE_BOMB_EXPLOSION  = "the_bomb_explosion";
-  public static final String   SOUND_RESOURCE_PLAYER_BOMB_COUNTDOWN_3    = "bomb_coundown_3";
-  public static final String   SOUND_RESOURCE_PLAYER_BOMB_COUNTDOWN_2    = "bomb_coundown_2";
+  public static final String   SOUND_RESOURCE_PLAYER_THE_BOMB_EXPLOSION     = "the_bomb_explosion";
+  public static final String   SOUND_RESOURCE_PLAYER_BOMB_COUNTDOWN_3       = "bomb_coundown_3";
+  public static final String   SOUND_RESOURCE_PLAYER_BOMB_COUNTDOWN_2       = "bomb_coundown_2";
 
-  public static final String   SOUND_RESOURCE_PLAYER_HULL_HIT            = "player_hull_hit";
-  public static final String   SOUND_RESOURCE_PLAYER_SHIELDS_HIT         = "hit24.ogg";
+  public static final String   SOUND_RESOURCE_PLAYER_HULL_HIT               = "player_hull_hit";
+  public static final String   SOUND_RESOURCE_PLAYER_SHIELDS_HIT            = "hit24.ogg";
 
-  public static final String   SOUND_RESOURCE_ASTEROID_INITIAL_EXPLOSION = "asteroid_initial_explosion";
-  public static final String   SOUND_RESOURCE_ASTEROID_SMALLER_EXPLOSION = "asteroid_smaller_explosion";
-  public static final String   SOUND_RESOURCE_ASTEROID_TINY_EXPLOSION    = "asteroid_tiny_explosion";
+  public static final String   SOUND_RESOURCE_ASTEROID_INITIAL_EXPLOSION    = "asteroid_initial_explosion";
+  public static final String   SOUND_RESOURCE_ASTEROID_SMALLER_EXPLOSION    = "asteroid_smaller_explosion";
+  public static final String   SOUND_RESOURCE_ASTEROID_TINY_EXPLOSION       = "asteroid_tiny_explosion";
 
-  public static final String   SOUND_RESOURCE_UFO_SHIELDS_HIT            = "ufo_shields_hit";
-  public static final String   SOUND_RESOURCE_UFO_SHIELDS_FAIL           = "ufo_shields_fail";
-  public static final String   SOUND_RESOURCE_UFO_SHOOTING               = "ufo_shooting";
+  public static final String   SOUND_RESOURCE_UFO_SHIELDS_HIT               = "ufo_shields_hit";
+  public static final String   SOUND_RESOURCE_UFO_SHIELDS_FAIL              = "ufo_shields_fail";
+  public static final String   SOUND_RESOURCE_UFO_SHOOTING                  = "ufo_shooting";
 
-  public static final String   SOUND_RESOURCE_POWERUP_SUPER_SHIELDS      = "powerup_super_shields";
-  public static final String   SOUND_RESOURCE_POWERUP_ATTRIBUTE_PICKUP   = "powerup_attribute_pickup";
-  public static final String   SOUND_RESOURCE_POWERUP_POINT_BONUS        = "powerup_point_bonus";
-  public static final String   SOUND_RESOURCE_POWERUP_FULL_SHIELD        = "powerup_full_shield";
-  public static final String   SOUND_RESOURCE_POWERUP_FULL_HEALH         = "powerup_full_health";
+  public static final String   SOUND_RESOURCE_POWERUP_SUPER_SHIELDS         = "powerup_super_shields";
+  public static final String   SOUND_RESOURCE_POWERUP_ATTRIBUTE_PICKUP      = "powerup_attribute_pickup";
+  public static final String   SOUND_RESOURCE_POWERUP_POINT_BONUS           = "powerup_point_bonus";
+  public static final String   SOUND_RESOURCE_POWERUP_FULL_SHIELD           = "powerup_full_shield";
+  public static final String   SOUND_RESOURCE_POWERUP_FULL_HEALH            = "powerup_full_health";
 
-  public static final String   SOUND_RESOURCE_PLAYER_SHIP_EXPLOSION          = "player_ship_explosion";
-  public static final String   SOUND_RESOURCE_UFO_EXPLOSION                  = "ufo_explosion";
-  public static final String   SOUND_RESOURCE_PLAYER_SHIELDS_DEPLETED        = "player_shields_depleted";
-  public static final String   SOUND_RESOURCE_PLAYER_WEAPON_ATTRIBUTE_EMPTY  = "player_weapon_attribute_empty";
-  public static final String   SOUND_RESOURCE_NEXT_WAVE                      = "next_wave";
-  
+  public static final String   SOUND_RESOURCE_PLAYER_SHIP_EXPLOSION         = "player_ship_explosion";
+  public static final String   SOUND_RESOURCE_UFO_EXPLOSION                 = "ufo_explosion";
+  public static final String   SOUND_RESOURCE_PLAYER_SHIELDS_DEPLETED       = "player_shields_depleted";
+  public static final String   SOUND_RESOURCE_PLAYER_WEAPON_ATTRIBUTE_EMPTY = "player_weapon_attribute_empty";
+  public static final String   SOUND_RESOURCE_NEXT_WAVE                     = "next_wave";
+
   /*
    * Sounds that will be created a sources  
    */
-  public static final String   SOUND_FILE_PLAYER_1_SHOT                  = "shoot13.ogg";                  // Final sound added to code
-  public static final String   SOUND_FILE_PLAYER_2_SHOT                  = "shoot36.ogg";                  // Final sound added to code         
-  public static final String   SOUND_FILE_PLAYER_3_SHOT                  = "shoot11.ogg";                  // Final sound added to code
-  public static final String   SOUND_FILE_PLAYER_4_SHOT                  = "shoot41.ogg";                  // Final sound added to code     
-  public static final String   SOUND_FILE_PLAYER_5_SHOT                  = "shoot51.ogg";                  // Final sound added to code
+  public static final String   SOUND_FILE_PLAYER_1_SHOT                     = "shoot13.ogg";                  // Final sound added to code
+  public static final String   SOUND_FILE_PLAYER_2_SHOT                     = "shoot36.ogg";                  // Final sound added to code         
+  public static final String   SOUND_FILE_PLAYER_3_SHOT                     = "shoot11.ogg";                  // Final sound added to code
+  public static final String   SOUND_FILE_PLAYER_4_SHOT                     = "shoot41.ogg";                  // Final sound added to code     
+  public static final String   SOUND_FILE_PLAYER_5_SHOT                     = "shoot51.ogg";                  // Final sound added to code
 
-  public static final String   SOUND_FILE_PLAYER_THE_BOMB_EXPLOSION      = "explosion59andexplosion57.ogg"; // Final sound added to code
-  public static final String   SOUND_FILE_PLAYER_BOMB_COUNTDOWN_3        = "blip01.ogg";                   // Final sound added to code
-  public static final String   SOUND_FILE_PLAYER_BOMB_COUNTDOWN_2        = "blip02.ogg";                   // Final sound added to code
+  public static final String   SOUND_FILE_PLAYER_THE_BOMB_EXPLOSION         = "explosion59andexplosion57.ogg"; // Final sound added to code
+  public static final String   SOUND_FILE_PLAYER_BOMB_COUNTDOWN_3           = "blip01.ogg";                   // Final sound added to code
+  public static final String   SOUND_FILE_PLAYER_BOMB_COUNTDOWN_2           = "blip02.ogg";                   // Final sound added to code
+
+  public static final String   SOUND_FILE_PLAYER_HULL_HIT                   = "hit26.ogg";
+  public static final String   SOUND_FILE_PLAYER_SHIELDS_HIT                = "hit24.ogg";                    // Final sound added to code // TODO: May need to be made into a source if too many asteroid hit this 
+
+  public static final String   SOUND_FILE_ASTEROID_INITIAL_EXPLOSION        = "explosion53.ogg";              // Final sound added to code // Played when the initial asteroid is shot/hit and breaks apart
+  public static final String   SOUND_FILE_ASTEROID_SMALLER_EXPLOSION        = "explosion61.ogg";              // Final sound added to code // Played when the smaller pieces are shot/hit and break apart
   
-  public static final String   SOUND_FILE_PLAYER_HULL_HIT                = "hit26.ogg";
-  public static final String   SOUND_FILE_PLAYER_SHIELDS_HIT             = "hit24.ogg";                    // Final sound added to code // TODO: May need to be made into a source if too many asteroid hit this 
-  
-  public static final String   SOUND_FILE_ASTEROID_INITIAL_EXPLOSION     = "explosion53.ogg";              // Final sound added to code // Played when the initial asteroid is shot/hit and breaks apart
-  public static final String   SOUND_FILE_ASTEROID_SMALLER_EXPLOSION     = "explosion61.ogg";              // Final sound added to code // Played when the smaller pieces are shot/hit and break apart  
-  public static final String   SOUND_FILE_ASTEROID_TINY_EXPLOSION        = "explosion63modified3.ogg";//"explosion63.ogg";              // Final sound added to code // Played when the tiniest asteroid piece is hit
+  public static final String   SOUND_FILE_ASTEROID_TINY_EXPLOSION           = "explosion63modified3.ogg";      //"explosion63.ogg";              // Final sound added to code // Played when the tiniest asteroid piece is hit
 
-  public static final String   SOUND_FILE_UFO_SHIELDS_HIT                = "misc87.ogg";                   // Final sound added to code
-  public static final String   SOUND_FILE_UFO_SHIELDS_FAIL               = "misc25.ogg";                   // Final sound added to code
-  public static final String   SOUND_FILE_UFO_SHOOTING                   = "shoot30.ogg";
+  public static final String   SOUND_FILE_UFO_SHIELDS_HIT                   = "misc87.ogg";                   // Final sound added to code
+  public static final String   SOUND_FILE_UFO_SHIELDS_FAIL                  = "misc25.ogg";                   // Final sound added to code
+  public static final String   SOUND_FILE_UFO_SHOOTING                      = "shoot30.ogg";
 
-  public static final String   SOUND_FILE_POWERUP_SUPER_SHIELDS          = "misc6.ogg";
-  public static final String   SOUND_FILE_POWERUP_ATTRIBUTE_PICKUP       = "powerup35.ogg";                // Final sound added to code // Generic sound for powerup pickups  
-  public static final String   SOUND_FILE_POWERUP_POINT_BONUS            = "pickup25.ogg";                 // Final sound added to code 
-  public static final String   SOUND_FILE_POWERUP_FULL_SHIELD            = "misc53.ogg";                   // Final sound added to code
-  public static final String   SOUND_FILE_POWERUP_FULL_HEALH             = "powerup37.ogg";                // Final sound added to code
+  public static final String   SOUND_FILE_POWERUP_SUPER_SHIELDS             = "misc6.ogg";
+  public static final String   SOUND_FILE_POWERUP_ATTRIBUTE_PICKUP          = "powerup35.ogg";                // Final sound added to code // Generic sound for powerup pickups  
+  public static final String   SOUND_FILE_POWERUP_POINT_BONUS               = "pickup25.ogg";                 // Final sound added to code 
+  public static final String   SOUND_FILE_POWERUP_FULL_SHIELD               = "misc53.ogg";                   // Final sound added to code
+  public static final String   SOUND_FILE_POWERUP_FULL_HEALH                = "powerup37.ogg";                // Final sound added to code
 
-  public static final String   SOUND_FILE_PLAYER_SHIP_EXPLOSION          = "explosion2.ogg";               // // Final sound added to code
-  public static final String   SOUND_FILE_UFO_EXPLOSION                  = "explosion12.ogg";              // Final sound added to code
-  public static final String   SOUND_FILE_PLAYER_SHIELDS_DEPLETED        = "misc31.ogg";                   // Final sound added to code
-  public static final String   SOUND_FILE_PLAYER_WEAPON_ATTRIBUTE_EMPTY  = "misc92.ogg";                   // Sound added to code but could have a better sound
-  public static final String   SOUND_FILE_NEXT_WAVE                      = "misc17Modified.ogg";           // Sound added to code, but may need to be changed
+  public static final String   SOUND_FILE_PLAYER_SHIP_EXPLOSION             = "explosion2.ogg";               // // Final sound added to code
+  public static final String   SOUND_FILE_UFO_EXPLOSION                     = "explosion12.ogg";              // Final sound added to code
+  public static final String   SOUND_FILE_PLAYER_SHIELDS_DEPLETED           = "misc31.ogg";                   // Final sound added to code
+  public static final String   SOUND_FILE_PLAYER_WEAPON_ATTRIBUTE_EMPTY     = "misc92.ogg";                   // Sound added to code but could have a better sound
+  public static final String   SOUND_FILE_NEXT_WAVE                         = "misc17Modified.ogg";           // Sound added to code, but may need to be changed
 
   /*
    *  Sounds that will be played using quick play
    */
-  
+
   //////
   // TODO: Add sound for player ship's hull getting hit
   // TODO: Add sound for player picking up health/shield increase
@@ -95,8 +92,8 @@ public class SoundManager
   // Sound filenames for UFOs
   //public static final String   SOUND_FILE_UFO_HULL_BEING_HIT             = "hit7.ogg";  // TODO: May not need this sound. Can play UFO explosion instead  
 
-  public static final String   BACKGROUND_MUSIC                          = "background";
-  public static final String   BACKGROUND_MUSIC_OGG_FILE                 = "beats.ogg";
+  public static final String   BACKGROUND_MUSIC                             = "background";
+  public static final String   BACKGROUND_MUSIC_OGG_FILE                    = "beats.ogg";
 
   private SoundSystem          mySoundSystem;
 
@@ -108,12 +105,12 @@ public class SoundManager
   //public static final String   SOUND_FILE_PLAYER_HULL_HIT                = "hit18.ogg";
 
   // Default Settings for Quick Play
-  private static final boolean NO_PRIORITY                               = false;
-  private static final boolean PRIORITY                                  = true;
-  private static final boolean DO_NOT_LOOP                           = false;
+  private static final boolean NO_PRIORITY                                  = false;
+  private static final boolean PRIORITY                                     = true;
+  private static final boolean DO_NOT_LOOP                                  = false;
 
-  float previousPitch;
-  
+  float                        previousPitch;
+
   public SoundManager()
   {
     boolean jSCompatible = SoundSystem.libraryCompatible(LibraryJavaSound.class);
@@ -142,12 +139,12 @@ public class SoundManager
       mySoundSystem = new SoundSystem(libraryType);
 
       System.out.print("Initializing Sound Library...");
-      while(!mySoundSystem.initialized())
+      while (!mySoundSystem.initialized())
       {
-        
+
       }
       System.out.println("Done!");
-      
+
       // TODO: Load these sounds when the game begins. Possibly make it as part of the game reset method
 
       // Not sure if this is needed, but i
@@ -178,7 +175,7 @@ public class SoundManager
       mySoundSystem.loadSound(SOUND_FILE_POWERUP_POINT_BONUS);
       mySoundSystem.loadSound(SOUND_FILE_POWERUP_FULL_SHIELD);
       mySoundSystem.loadSound(SOUND_FILE_POWERUP_FULL_HEALH);
-      
+
       mySoundSystem.loadSound(SOUND_FILE_PLAYER_SHIP_EXPLOSION);
       mySoundSystem.loadSound(SOUND_FILE_UFO_EXPLOSION);
       mySoundSystem.loadSound(SOUND_FILE_PLAYER_SHIELDS_DEPLETED);
@@ -204,20 +201,20 @@ public class SoundManager
 
       createNewSource(PRIORITY, SOUND_RESOURCE_UFO_SHIELDS_HIT, SOUND_FILE_UFO_SHIELDS_HIT, DO_NOT_LOOP);
       createNewSource(PRIORITY, SOUND_RESOURCE_UFO_SHIELDS_FAIL, SOUND_FILE_UFO_SHIELDS_FAIL, DO_NOT_LOOP);
-      createNewSource(PRIORITY, SOUND_RESOURCE_UFO_SHOOTING, SOUND_FILE_UFO_SHOOTING, DO_NOT_LOOP);      
+      createNewSource(PRIORITY, SOUND_RESOURCE_UFO_SHOOTING, SOUND_FILE_UFO_SHOOTING, DO_NOT_LOOP);
 
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_POWERUP_SUPER_SHIELDS, SOUND_FILE_POWERUP_SUPER_SHIELDS, DO_NOT_LOOP);
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_POWERUP_ATTRIBUTE_PICKUP, SOUND_FILE_POWERUP_ATTRIBUTE_PICKUP, DO_NOT_LOOP);
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_POWERUP_POINT_BONUS, SOUND_FILE_POWERUP_POINT_BONUS, DO_NOT_LOOP);
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_POWERUP_FULL_SHIELD, SOUND_FILE_POWERUP_FULL_SHIELD, DO_NOT_LOOP);
       createNewSource(NO_PRIORITY, SOUND_RESOURCE_POWERUP_FULL_HEALH, SOUND_FILE_POWERUP_FULL_HEALH, DO_NOT_LOOP);
-      
+
       createNewSource(PRIORITY, SOUND_RESOURCE_PLAYER_SHIP_EXPLOSION, SOUND_FILE_PLAYER_SHIP_EXPLOSION, DO_NOT_LOOP);
       createNewSource(PRIORITY, SOUND_RESOURCE_UFO_EXPLOSION, SOUND_FILE_UFO_EXPLOSION, DO_NOT_LOOP);
       createNewSource(PRIORITY, SOUND_RESOURCE_PLAYER_SHIELDS_DEPLETED, SOUND_FILE_PLAYER_SHIELDS_DEPLETED, DO_NOT_LOOP);
       createNewSource(PRIORITY, SOUND_RESOURCE_PLAYER_WEAPON_ATTRIBUTE_EMPTY, SOUND_FILE_PLAYER_WEAPON_ATTRIBUTE_EMPTY, DO_NOT_LOOP);
       createNewSource(PRIORITY, SOUND_RESOURCE_NEXT_WAVE, SOUND_FILE_NEXT_WAVE, DO_NOT_LOOP);
-      
+
     }
     catch (SoundSystemException e)
     {
@@ -248,19 +245,19 @@ public class SoundManager
 
   }
 
-//  public void quickPlay(String soundFilename)
-//  {
-//    //mySoundSystem.quickPlay(NO_PRIORITY, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
-//    
-//    // TODO: Turned off for now
-//    quickPlay(soundFilename, NO_PRIORITY);
-//  }
-//
-//  public void quickPlay(String soundFilename, boolean priority)
-//  {
-//    // TODO: Turned off for now
-//    mySoundSystem.quickPlay(priority, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
-//  }
+  //  public void quickPlay(String soundFilename)
+  //  {
+  //    //mySoundSystem.quickPlay(NO_PRIORITY, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
+  //    
+  //    // TODO: Turned off for now
+  //    quickPlay(soundFilename, NO_PRIORITY);
+  //  }
+  //
+  //  public void quickPlay(String soundFilename, boolean priority)
+  //  {
+  //    // TODO: Turned off for now
+  //    mySoundSystem.quickPlay(priority, soundFilename, DO_NOT_LOOP, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());
+  //  }
 
   public void playSound(String sourceName)
   {
@@ -280,23 +277,23 @@ public class SoundManager
   }
 
   // Pitch does not seem to be working
-//  public void playSound(String sourceName, float pitch)
-//  { 
-//    if (!mySoundSystem.playing(sourceName))
-//    {
-//      previousPitch = mySoundSystem.getPitch(sourceName);
-//      mySoundSystem.setPitch(sourceName, pitch);
-//      mySoundSystem.play(sourceName);
-//      mySoundSystem.rewind(sourceName); // NOTE: If this is not called then the sound only plays once
-//      //mySoundSystem.setPitch(sourceName, previousPitch);
-//    }
-//  }
-  
+  //  public void playSound(String sourceName, float pitch)
+  //  { 
+  //    if (!mySoundSystem.playing(sourceName))
+  //    {
+  //      previousPitch = mySoundSystem.getPitch(sourceName);
+  //      mySoundSystem.setPitch(sourceName, pitch);
+  //      mySoundSystem.play(sourceName);
+  //      mySoundSystem.rewind(sourceName); // NOTE: If this is not called then the sound only plays once
+  //      //mySoundSystem.setPitch(sourceName, previousPitch);
+  //    }
+  //  }
+
   public void cleanup()
   {
     mySoundSystem.cleanup();
   }
-  
+
   private void createNewSource(boolean priority, String resourceName, String sounfFilename, boolean shouldLoop)
   {
     mySoundSystem.newSource(priority, resourceName, sounfFilename, shouldLoop, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, SoundSystemConfig.getDefaultRolloff());

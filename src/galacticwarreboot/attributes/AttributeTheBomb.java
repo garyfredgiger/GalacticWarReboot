@@ -6,7 +6,7 @@ import galacticwarreboot.interfaces.IAttribute;
 public class AttributeTheBomb implements IAttribute
 {
   private int theBomb;
-  
+
   public AttributeTheBomb()
   {
     initialize();
@@ -26,12 +26,12 @@ public class AttributeTheBomb implements IAttribute
 
   @Override
   public void setValue(int value)
-  {    
+  {
     if (value < 0)
     {
       value = 0;
     }
-    
+
     theBomb = value;
   }
 
@@ -42,7 +42,7 @@ public class AttributeTheBomb implements IAttribute
     {
       return;
     }
-    
+
     // NOTE: there is no upper limit on the number of bombs that the player can hold
     theBomb++;
   }
@@ -56,7 +56,7 @@ public class AttributeTheBomb implements IAttribute
     }
 
     theBomb--;
-    
+
     if (theBomb < 0)
     {
       //theBomb = Constants.SHIP_STARTING_THE_BOMBS;
@@ -80,7 +80,7 @@ public class AttributeTheBomb implements IAttribute
   public void setLimit(int limit)
   {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override

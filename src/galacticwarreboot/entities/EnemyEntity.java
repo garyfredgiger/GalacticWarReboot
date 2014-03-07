@@ -9,7 +9,7 @@ import game.framework.utilities.GameEngineConstants.EntityTypes;
 
 public class EnemyEntity extends EntityImage
 {
-  private int pointValue;
+  private int        pointValue;
   private EnemyTypes enemyType;
 
   public EnemyEntity(ImageObserver observer)

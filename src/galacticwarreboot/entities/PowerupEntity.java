@@ -10,12 +10,12 @@ import game.framework.utilities.GameEngineConstants.EntityTypes;
 
 public class PowerupEntity extends EntityImage
 {
-  private int value;
-  private Constants.PowerUpType powerupType;
+  private int                     value;
+  private Constants.PowerUpType   powerupType;
   private Constants.AttributeType correspondingAttributeMapping;
-  
+
   // TODO: In addition to the type, this needs to have a value as well
-  
+
   public PowerupEntity(ImageObserver imageObserver)
   {
     super(imageObserver, EntityTypes.POWER_UP);
@@ -28,22 +28,22 @@ public class PowerupEntity extends EntityImage
   {
     return correspondingAttributeMapping;
   }
-  
+
   public Constants.PowerUpType getPowerupType()
   {
     return powerupType;
   }
-  
+
   public int getValue()
   {
     return this.value;
   }
-  
+
   protected void setAttributeType(Constants.AttributeType type)
   {
     correspondingAttributeMapping = type;
   }
-  
+
   protected void setPowerupType(Constants.PowerUpType type)
   {
     powerupType = type;

@@ -126,7 +126,7 @@ public class PlayerEntity extends EntityImage
 
   @Override
   public void draw(Graphics2D g)
-  {    
+  {
     // Draw the player ship
     super.draw(g);
 
@@ -145,18 +145,18 @@ public class PlayerEntity extends EntityImage
       // If the player is applying thrust, draw the respective thrust image 
       if (drawThrust)
       {
-        switch(this.getValue(AttributeType.ATTRIBUTE_THRUST))
+        switch (this.getValue(AttributeType.ATTRIBUTE_THRUST))
         {
           case Constants.SHIP_INCREASED_ACCELERATION_2:
             //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST2_INDEX].getImage(), at, imageObserver);
             g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST2), at, imageObserver);
             break;
-            
+
           case Constants.SHIP_INCREASED_ACCELERATION_3:
             //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST3_INDEX].getImage(), at, imageObserver);
             g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST3), at, imageObserver);
             break;
-          
+
           default:
             //g.drawImage(spaceshipImages[Constants.IMAGE_SPACESHIP_THRUST1_INDEX].getImage(), at, imageObserver);
             g.drawImage(ImageManager.getImage(Constants.FILENAME_SPACESHIP_THRUST1), at, imageObserver);
