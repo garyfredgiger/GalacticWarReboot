@@ -1,19 +1,41 @@
 GalacticWarReboot
 =================
 
-###About this Project
+##About this Project
 
-This is my second 2D arcade game that uses the *[2D Game Framework](https://github.com/garyfredgiger/GameFramework.git)* that I have been developing and evolving since Sept 2013. This game is an adaption of the original Galactic War game from Jonathan S. Harbour's book Beginning Java Game Programming (Second Edition). Hopefully you will find it fun, entertaining and reminiscent of the old school arcade games from the 1980s. Enjoy! 
+This is my second 2D arcade game that uses the *[2D Game Framework](https://github.com/garyfredgiger/GameFramework.git)* that I have been developing and evolving since Sept 2013. This game is an adaption of the original Galactic War game from Jonathan S. Harbour's book Beginning Java Game Programming (Second Edition). I created this game for several reasons.
 
-###A Few Preliminary Notes
+1. While looking for another job I needed a way to keep my current skillset sharp.
+2. I always wanted to create video games and never found the time before. Since getting laid off in Sept 2013 I thought I would take advantage of the time off to pursue this personal interest of mine.
+3. I wrote it as another project to add to my persoal portfolio.
+4. To server a tutorial for other on how to create classic arcade games.
+5. Another resume builder so I can now say I am a contributor to at least one open source project.
+
+Hopefully you will find it fun, entertaining and reminiscent of the old school arcade games from the 1980s. Enjoy!
+
+##A Few Preliminary Notes
 
 This game is a work in progress. I am continually updating it by adding new features, refactoring the code and attempting to improve the overall gameplay experience. Please check back often for updates.
 
-###Setting up and Running the Project for use in Eclipse
+Note that even though my intention it to release this game and corresponding framework as an Open Source project, I have yet to choose a specific open source license under which to release it.
+
+###Goal for this Game
+
+My goal it to release this game so that it can be played within a browser (e.g., as an Applet/JApplet or using Java Web Start). Currently the only way to play this game is by cloning this project, downloading other dependencies (image and audio files), building it and running it on your local machine as a Java Application. Below in a later section there are detailed instructions on how to setup this project on your local machine.
+
+###Become a Contributor
+
+This game was only tested on my laptop with Ubuntu vesion 12.10 within the Eclipse IDE running it as a Java application. If you have expereince with deploying Java applicaitons as Applet/JApplets, using Java Web Start and/or simply want to become a tester and you are looking for something to do in your free time, become a contributor. What is in it for you? Pride, a resume builder and you can brag to your circle of friends that you are involevd with yet another open source project.
+
+###Debugging
+
+Since this game is still in development, there is a debugging features that can be enabled. During game play press *SHIFT* + *~* (tilda) to display debugging information about the current game. Also, pressing the 'a' key during game play will increase your firepower and pressing 'b' will decrease it.
+
+##Setting up and Running the Project for use in Eclipse
 
 This project was devloped and built using Eclipse (Kepler Release Build id: 20130614-0229) with Java 1.6. Note: If you are new to Eclipse and need instructions on how to install and set it up, refer to this link *[here](http://wiki.eclipse.org/Eclipse/Installation)*.
 
-####What You Need
+###What You Need
 
 1) First, you need to clone this project. Open up a terminal window and in a local directory on your machine, clone this project using the command below.
 
@@ -59,26 +81,15 @@ There are a few minor glitches that occur from time to time, but they are not "s
     <li>
     When a new level begins, sometimes one of the large asteroids is already broken up into three smaller ones before the player even shoots it.
     </li>
-
-    <li>
-    Sometime when you shoot a small asteroid, it completly disappaers without spawning three tiny asteroids.
-    </li>
-
   </ul>
   
 </li>
 </ul>
 
-##### Testing
-
-The game was only tested on my laptop running Ubuntu vesion 12.10 within Eclipse running it as a Java application. As I get more time for development and testing, my goal is to obviously test it on all platforms using the major browsers Chrome, IE, Firefox and Safari. Since this game is still in development, there is a debugging features that can be enabled. During game play press *SHIFT* + *~* (tilda) to display debugging information about the current game.
-
-### If You Encounter Problems?
+## If You Encounter Problems?
 
 If you do encounter a bug please email me at garyfredgiger@gmail.com and include in the subject line GLACTIC WAR REBOOT BUG. In the email please provide a detailed description of the bug and the steps that you followed to arrive at the bug. If I am unable to reproduce the problem then I will not be able to fix it.
 
-### Additional Notes
+## Additional Notes
 
-I included the eclipse project files (.project and .classpath) in this project so you can simply import this project without having to create a new project from your cloned copy of the code. Some suggest it is not a good idea to include project specific files, but I thought I would be a rebel and do it anyway.
-
-This game was developed using Eclipse Kepler Release (Build id: 20130614-0229) with Java 1.6. 
+I included the eclipse project file .project in this repository so you can simply import this project without having to create a new project from your cloned copy of the code. Some suggest it is not a good idea to include project specific files, but I thought I would be a rebel and do it anyway.
