@@ -8,8 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/pfaudio"/>
 	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambSoundLibrary_AnotherVersion/SoundSystem.jar"/>
 	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambCodecs/JavaSound/LibraryJavaSound.jar"/>
-	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambCodecs/CodecWav/CodecWav.jar"/>
 	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambCodecs/JOrbis/CodecJOrbis.jar"/>
-	<classpathentry kind="lib" path="/home/ggiger/Projects/sources/PaulLambCodecs/LWJGLOpenAL/LibraryLWJGLOpenAL.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
