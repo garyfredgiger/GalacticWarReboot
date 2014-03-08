@@ -135,8 +135,12 @@ There are a few minor glitches that occur from time to time, but they are not "s
 
 ## If You Encounter Problems?
 
-If you do encounter a bug please email me at garyfredgiger@gmail.com and include in the subject line GALACTIC WAR REBOOT BUG. In the email please provide a detailed description of the bug and the steps that you followed to arrive at the bug. If I am unable to reproduce the problem then I will not be able to fix it.
+If you do find a bug you can submit a new issue under this repo.
+
+...OR...
+
+If you are unable to sumbit a new issue for some unknown reason please email me at garyfredgiger@gmail.com and include in the subject line GALACTIC WAR REBOOT BUG. In the email please provide a detailed description of the bug and the steps that you followed to arrive at the bug. If I am unable to reproduce the problem then I will not be able to fix it.
 
 ## Additional Notes
 
-I included the eclipse project file .project in this repository so you can simply import this project without having to create a new project from your cloned copy of the code. Some suggest it is not a good idea to include project specific files, but I thought I would be a rebel and do it anyway.
+I included the eclipse project file .project in this repository so you can simply import this project without having to create a new project from your cloned copy of the code.
