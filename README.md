@@ -56,23 +56,49 @@ At this point there should be two sub folders in your current directory as shown
 
 ###Step 3: Importing both Projects
 
-Open up Eclispe and import both projects (Right-click on Package Explorer and select Import, then select General -> Existing Projects into Workspace). After importing both projects you will notice there are build errors. To correct these errors we will need to perform a few actions, which I will cover next.
+After both projects are cloned, they need to be imported into the Eclipse workspace. To do this, follow the steps below:
+
+1. Right-click on *Package Explorer* and select *Import*, then select *General -> Existing Projects into Workspace* and click on Next. The Import dialog will then appear.
+2. Click on the Browse button and locate the directories of each project (Note: only one project can be added at a time).
+3. Once you select one of the projects click on the OK button, it will then appear in the Projects text area in the Import dialog. Click on the Finish button and it will appear in the Package Explorer.
+4. Perform the same steps to import the other project.
+
+After importing both projects you will notice build errors. To correct these errors we will need to perform a few actions, which will be covered next.
 
 ###Step 4: The Sound Library JAR Files
 
-First, before these errors can be corrected you will need to download three JAR files required by this game in order to play the sound effects. To add the required JAR sound libraries you will need to download them from my DropBox folder [here](https://dl.dropboxusercontent.com/u/103427211/GalacticWarReboot/GalacticWarRebootSoundLibraryJARS.zip), then place them in a directory that you can easily access (For instance, I created a sub folder in my project directory call 'Libs' and place these jar files here).
+First, before these errors can be corrected you will need to download three JAR files required by this game in order to play the sound effects. To add the required JAR sound libraries you will need to download the zip archive from my DropBox folder [here](https://dl.dropboxusercontent.com/u/103427211/GalacticWarReboot/GalacticWarRebootSoundLibraryJARS.zip). Once downloaded, unzip the archive and place them in a directory that you can easily access (For instance, I created a sub folder in my project directory call 'Libs' and place these jar files here).
 
 ###Step 5: Adding the Sound Library JAR Files and the GameFramework Project to GalacticWarReboot
 
-Next, go back into Eclispe and right-click on the project *GalacticWarReboot* and select the option *Build Path -> Configure Build Path* and select the *Libraries* tab. Once the *Libraries* tab is selected, click on the button labeled *Add External JARS* and select add the three jar files in the Jar Selection dialog, then click on the OK button. This will take you back to the *Libraries* tab. But, before exiting this dialog you need to perform one more action. You need to add the *GameFramework* project to the *GalacticWarReboot* project. To do this select the *Projects* tab (to the right of the *Libraries* tab). Once you selected the *Projects* tab the list should be empty. To add the *GameFramework* project click on the Add button and select the *GameFramework* project, the click on the OK button, this will take you back to the *Projects* tab. Next you can click on the OK button to accept all changes. Now, when you build the project it should build without any errors.
+Both the Sound Library JAR files and the GameFramework project will need to be added to the GalacticWarReboot project. To do this, follow the steps below:
+
+1. Go back into Eclispe and right-click on the project *GalacticWarReboot* and select the option *Build Path -> Configure Build Path*. This will bring up the Properties dialog with the Java Build Path highlighted on the left.
+2. On the right side of the dialog there are four tabs, select the *Libraries* tab.
+3. Once the *Libraries* tab is selected, click on the Add External JARS button. This will bring up the JAR Selection dialog.
+4. Find the directory where you unzipped the three Sound Library JAR files and highlight them in the Jar Selection dialog, then click on the OK button. This will take you back to the *Libraries* tab where the three JAR files will be listed.
+5. Next the *GameFramework* project will need to be added to this Project. Select the *Projects* tab to the right of the *Libraries* tab and click on the Add button, this will bring up the Required Project Selection dialog.
+6. Select the *GameFramework* project from the list then click on the OK button, this will take you back to the *Projects* tab where the GamrFramework project now exists under the *Projects* tab.
+7. Last, click on the OK button to accept all changes. Now, when you build the project it should build without any errors since all of the required dependecies have been added to the *GalacticWarReboot* project.
 
 ###Step 6: The Image Files
 
-Before you can play the game you will need to download the image files used in the game. However, before retrieving the image files you will need to create a source folder under the GalacticWarReboot project. To do this right-click on the project *GalacticWarReboot* in Eclipse and select New -> Source Folder, which will display the New Source Folder dialog box. Enter the name *images* in the Folder Name field and then click the Finish button. NOTE: The folder you create must be a Source folder and not a regular folder. If you creata a regular folder the applicaiton will not be able to find the images. After creating the source folder *images* download the image files from my DropBox folder [here](https://dl.dropboxusercontent.com/u/103427211/GalacticWarReboot/GalacticWarRebootImages.zip) and place them in the *images* source folder.
+Before you can play the game you will need to download the image files used in the game. However, before retrieving the image files you will need to create a source folder under the GalacticWarReboot project. To do this follow steps below:
+
+1. Right-click on the project *GalacticWarReboot* in Eclipse and select New -> Source Folder, which will display the New Source Folder dialog box.
+2. Enter the name *images* in the Folder Name field and then click the Finish button. NOTE: The folder you create must be a Source folder and not a regular folder. If you creata a regular folder the applicaiton will not be able to find the images.
+3. After creating the source folder *images* download the ZIP archive containin image files from my DropBox folder [here](https://dl.dropboxusercontent.com/u/103427211/GalacticWarReboot/GalacticWarRebootImages.zip) and place them in the *images* source folder.
 
 ###Step 7: The Audio Files
 
-The last thing that needs to be done before running the game is to download the audio files for the sound effects. Before you do this we need to create a sound folderin which to place the audio files. First go into Eclipse and expand the *GalacticWarReboot* project, you will see the a folder labeled *src*. Right-click on this folder and select New -> Package, which will display the New Java Package dialog box. Enter the name *Sounds* in the Name field and click on Finish button. You will see the new folder *Sounds* under the *src* folder in the Eclipse Package Explorer. Now you can download the audio files from my DropBox folder [here](https://dl.dropboxusercontent.com/u/103427211/GalacticWarReboot/GalacticWarRebootAudioFiles.zip) and place them in the *Sounds* folder. Your probably wondering why the audio files need to reside in a folder under src? Well, the third party sound library I am using to play sound effects requires them to be in this location by default and I have not yet figued out how to change the path.
+The last thing that needs to be done before running the game is to download the audio files for the sound effects. Before you do this we need to create a sound folderin which to place the audio files.
+
+1. First go into Eclipse and expand the *GalacticWarReboot* project, you will see the a folder labeled *src*.
+2. Right-click on this folder and select *New -> Package*, which will display the New Java Package dialog box.
+3. Enter the name *Sounds* in the Name field and click on Finish button. You will see the new folder *Sounds* under the *src* folder in the Eclipse Package Explorer.
+4. Now you can download the ZIP archive of the audio files from my DropBox folder [here](https://dl.dropboxusercontent.com/u/103427211/GalacticWarReboot/GalacticWarRebootAudioFiles.zip) and place them in the *Sounds* folder.
+
+Your probably wondering why the audio files need to reside in a folder under src? Well, the third party sound library I am using to play sound effects requires them to be in this location by default and I have not yet figued out how to change the path.
 
 ###Step 8: Running the Game
 
