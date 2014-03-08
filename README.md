@@ -67,9 +67,9 @@ After importing both projects you will notice build errors. To correct these err
 
 ###Step 4: The Sound Library JAR Files
 
-First, before these errors can be corrected you will need to download three JAR files required by this game in order to play the sound effects. To add the required JAR sound libraries you will need to download the zip archive from my DropBox folder [here](https://dl.dropboxusercontent.com/u/103427211/GalacticWarReboot/GalacticWarRebootSoundLibraryJARS.zip). Once downloaded, unzip the archive and place them in a directory that you can easily access (For instance, I created a sub folder in my project directory call 'Libs' and place these jar files here).
+First, before these errors can be corrected you will need to download three JAR files required by this game in order to play the sound effects. To add the required JAR sound libraries you will need to download the ZIP archive from my DropBox folder [here](https://dl.dropboxusercontent.com/u/103427211/GalacticWarReboot/GalacticWarRebootSoundLibraryJARS.zip). Once downloaded, unzip the archive and place them in a directory that you can easily access (For instance, I created a sub folder in my project directory call 'Libs' and place these jar files here).
 
-###Step 5: Adding the Sound Library JAR Files and the GameFramework Project to GalacticWarReboot
+###Step 5: Adding the Sound Library JAR Files and the GameFramework Project
 
 Both the Sound Library JAR files and the GameFramework project will need to be added to the GalacticWarReboot project. To do this, follow the steps below:
 
@@ -102,7 +102,14 @@ Your probably wondering why the audio files need to reside in a folder under src
 
 ###Step 8: Running the Game
 
-To run the game from within Eclipse, right click on the project *GalacticWarReboot* and select the opton Run As -> Java Application. Note, you may need to force a refresh first before running the game so all the image and audio files are loaded into the IDE. To do this highlight the *GalacticWarReboot* project and press F5.
+Note, you may need to force a refresh first before running the game so all the image and audio files are loaded into the IDE. To do this highlight the *GalacticWarReboot* project and press F5. To run the game from within Eclipse, follow the steps below:
+
+1. Expand the *GalacticWarReboot* project directory structure and locate the file Main.java (located under src -> galacticwarreboot)
+2. Right-click on the file Main.java and select the option *Run As -> Run Configurations...*. This will bring up the Run Configurations dialog box.
+3. Select the parameters tab and add 800 for the width and 600 for the height.
+4. Click on the run button at the bottom of the dialog, this will launch the game.
+
+Note that the next time you want to run the game you can simply click on the "play" icon button in the Eclispe IDE. The steps above need to be done the first time to tell eclipse where the entry point is in order to run the application.
 
 ### Notes About the Game
 
