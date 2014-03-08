@@ -45,7 +45,7 @@ Note that when you clone this project it will only pull the master branch, which
 
 2) You will also need the 2D Game Framework *[here](https://github.com/garyfredgiger/GameFramework.git)*. Again, in your terminal window enter the command below.
 
-    git clone git clone https://github.com/garyfredgiger/GameFramework.git
+    git clone https://github.com/garyfredgiger/GameFramework.git
 
 At this point there should be two sub folders in your current directory as shown below.
 
