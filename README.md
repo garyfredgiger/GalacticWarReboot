@@ -8,7 +8,7 @@ This is my second 2D arcade game that uses the *[2D Game Framework](https://gith
 1. While looking for another job I needed a way to keep my current skillset sharp.
 2. I always wanted to create video games and never found the time before. Since getting laid off in Sept 2013 I thought I would take advantage of the time off to pursue this personal interest of mine.
 3. I wrote it as another project to add to my persoal portfolio.
-4. To server a tutorial for other on how to create classic arcade games.
+4. To serve as a tutorial for others on how to create classic arcade games.
 5. Another resume builder so I can now say I am a contributor to at least one open source project.
 
 Hopefully you will find it fun, entertaining and reminiscent of the old school arcade games from the 1980s. Enjoy!
@@ -29,7 +29,7 @@ This game was only tested on my laptop with Ubuntu vesion 12.10 within the Eclip
 
 ###Debugging
 
-Since this game is still in development, there is a debugging features that can be enabled. During game play press *SHIFT* + *~* (tilda) to display debugging information about the current game. Also, pressing the 'a' key during game play will increase your firepower and pressing 'b' will decrease it.
+Since this game is still in development, there is a debugging features that can be enabled. During game play press *SHIFT* + *~* (tilda) to display debugging information about the current game. Also, pressing the 'a' key during game play will increase your firepower and pressing 'b' will decrease it. I left it in so I could get to higher levels faster to test out some of the advanced powerups in the game.
 
 ##Setting up and Running the Project for use in Eclipse
 
