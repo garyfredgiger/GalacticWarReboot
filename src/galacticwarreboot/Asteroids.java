@@ -100,6 +100,8 @@ public class Asteroids extends GameEngine
   PowerupManager                        powerupManager;
   ScreenManager                         screenManager;
 
+  LinkedList<Entity2D>                  otherEntities        = new LinkedList<Entity2D>();
+
   /*
    * The code
    */
@@ -157,6 +159,7 @@ public class Asteroids extends GameEngine
     this.removeDeadEnemiesFromEntityList();
     this.removeDeadPowerupsFromEntityList();
     this.removeDeadEnemyShotsFromEntityList();
+    this.removeDeadMiscEntitiesFromEntityList();
 
     this.state = GameEngineConstants.GameState.INTRODUCTION;
     requestGameStart = false;
@@ -264,9 +267,14 @@ public class Asteroids extends GameEngine
           double playerX = getPlayer().getPositionX();
           double playerY = getPlayer().getPositionY();
 
-          //          double centerX = getPlayer().getCenterX();
-          //          double centerY = getPlayer().getCenterY();
+          int playerDestroyedRotationRateLowerLimit = 50;
+          int playerDestroyedRotationRateUpperLimit = 100;
+          int playerDestroyedVelocityLowerLimit = 50;
+          int playerDestroyedVelocityUpperLimit = 100;
+          int playerDestroyedLifespanLowerLimit = 5;
+          int playerDestroyedLifespanUpperLimit = 10;
 
+          // TODO: Add this to a method
           int cockpitOffsetX = 12;
           int cockpitOffsetY = 2;
           int leftSideOffsetX = 6;
@@ -283,14 +291,14 @@ public class Asteroids extends GameEngine
           int leftEngineOffsetY = 30;
           int rightEngineOffsetX = 21;
           int rightEngineOffsetY = 30;
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_COCKPIT), playerFaceAngle, playerX + cockpitOffsetX, playerY + cockpitOffsetY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_SIDE), playerFaceAngle, playerX + leftSideOffsetX, playerY + leftSideOffsetY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_SIDE), playerFaceAngle, playerX + rightSideOffsetX, playerY + rightSideOffsetY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_HULL), playerFaceAngle, playerX + leftHullOffsetX, playerY + leftHullOffsetY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_HULL), playerFaceAngle, playerX + rightHullOffsetX, playerY + rightHullOffsetY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_CENTER_HULL), playerFaceAngle, playerX + centerHullOffsetX, playerY + centerHullOffsetY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_ENGINE), playerFaceAngle, playerX + leftEngineOffsetX, playerY + leftEngineOffsetY));
-          this.addPowerup(createPlayerShipDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_ENGINE), playerFaceAngle, playerX + rightEngineOffsetX, playerY + rightEngineOffsetY));
+          this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_COCKPIT), playerFaceAngle, playerX + cockpitOffsetX, playerY + cockpitOffsetY, playerDestroyedRotationRateLowerLimit, playerDestroyedRotationRateUpperLimit, playerDestroyedVelocityLowerLimit, playerDestroyedVelocityUpperLimit, playerDestroyedLifespanLowerLimit, playerDestroyedLifespanUpperLimit));
+          this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_SIDE), playerFaceAngle, playerX + leftSideOffsetX, playerY + leftSideOffsetY, playerDestroyedRotationRateLowerLimit, playerDestroyedRotationRateUpperLimit, playerDestroyedVelocityLowerLimit, playerDestroyedVelocityUpperLimit, playerDestroyedLifespanLowerLimit, playerDestroyedLifespanUpperLimit));
+          this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_SIDE), playerFaceAngle, playerX + rightSideOffsetX, playerY + rightSideOffsetY, playerDestroyedRotationRateLowerLimit, playerDestroyedRotationRateUpperLimit, playerDestroyedVelocityLowerLimit, playerDestroyedVelocityUpperLimit, playerDestroyedLifespanLowerLimit, playerDestroyedLifespanUpperLimit));
+          this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_HULL), playerFaceAngle, playerX + leftHullOffsetX, playerY + leftHullOffsetY, playerDestroyedRotationRateLowerLimit, playerDestroyedRotationRateUpperLimit, playerDestroyedVelocityLowerLimit, playerDestroyedVelocityUpperLimit, playerDestroyedLifespanLowerLimit, playerDestroyedLifespanUpperLimit));
+          this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_HULL), playerFaceAngle, playerX + rightHullOffsetX, playerY + rightHullOffsetY, playerDestroyedRotationRateLowerLimit, playerDestroyedRotationRateUpperLimit, playerDestroyedVelocityLowerLimit, playerDestroyedVelocityUpperLimit, playerDestroyedLifespanLowerLimit, playerDestroyedLifespanUpperLimit));
+          this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_CENTER_HULL), playerFaceAngle, playerX + centerHullOffsetX, playerY + centerHullOffsetY, playerDestroyedRotationRateLowerLimit, playerDestroyedRotationRateUpperLimit, playerDestroyedVelocityLowerLimit, playerDestroyedVelocityUpperLimit, playerDestroyedLifespanLowerLimit, playerDestroyedLifespanUpperLimit));
+          this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_LEFT_ENGINE), playerFaceAngle, playerX + leftEngineOffsetX, playerY + leftEngineOffsetY, playerDestroyedRotationRateLowerLimit, playerDestroyedRotationRateUpperLimit, playerDestroyedVelocityLowerLimit, playerDestroyedVelocityUpperLimit, playerDestroyedLifespanLowerLimit, playerDestroyedLifespanUpperLimit));
+          this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_ENGINE), playerFaceAngle, playerX + rightEngineOffsetX, playerY + rightEngineOffsetY, playerDestroyedRotationRateLowerLimit, playerDestroyedRotationRateUpperLimit, playerDestroyedVelocityLowerLimit, playerDestroyedVelocityUpperLimit, playerDestroyedLifespanLowerLimit, playerDestroyedLifespanUpperLimit));
         }
 
         if (getEnemies().isEmpty())
@@ -374,8 +382,120 @@ public class Asteroids extends GameEngine
     }
   }
 
+  public void destroyShortyUFO(Entity2D ufoShorty)
+  {
+    // TODO: Add code here to break UFO into pieces 
+    double ufoFaceAngle = ufoShorty.getFaceAngle();
+    double ufoX = ufoShorty.getPositionX();
+    double ufoY = ufoShorty.getPositionY();
+
+    int ufoDestroyedRotationRateLowerLimit = 100;
+    int ufoDestroyedRotationRateUpperLimit = 400;
+    int ufoDestroyedVelocityLowerLimit = 100;
+    int ufoDestroyedVelocityUpperLimit = 200;
+    int ufoDestroyedLifespanLowerLimit = 1;
+    int ufoDestroyedLifespanUpperLimit = 2;
+
+    int shortyPieceHullBottomLeftX = 3;
+    int shortyPieceHullBottomLeftY = 13;
+
+    int shortyPieceHullBottomRightX = 11;
+    int shortyPieceHullBottomRightY = 13;
+
+    int shortyPieceHullLeftX = 2;
+    int shortyPieceHullLeftY = 9;
+
+    int shortyPieceHullRightX = 11;
+    int shortyPieceHullRightY = 9;
+
+    int shortyPieceHullTopLeftX = 2;
+    int shortyPieceHullTopLeftY = 5;
+
+    int shortyPieceHullTopRightX = 11;
+    int shortyPieceHullTopRightY = 4;
+
+    int shortyPieceBottomLeftX = 5;
+    int shortyPieceBottomLeftY = 17;
+
+    int shortyPieceBottomRightX = 13;
+    int shortyPieceBottomRightY = 17;
+
+    int shortyPieceTopLeftX = 5;
+    int shortyPieceTopLeftY = 2;
+
+    int shortyPieceTopRightX = 12;
+    int shortyPieceTopRightY = 2;
+
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_HULL_BOTTOM_LEFT), ufoFaceAngle, ufoX + shortyPieceHullBottomLeftX, ufoY + shortyPieceHullBottomLeftY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_HULL_BOTTOM_RIGHT), ufoFaceAngle, ufoX + shortyPieceHullBottomRightX, ufoY + shortyPieceHullBottomRightY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_HULL_LEFT), ufoFaceAngle, ufoX + shortyPieceHullLeftX, ufoY + shortyPieceHullLeftY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_HULL_RIGHT), ufoFaceAngle, ufoX + shortyPieceHullRightX, ufoY + shortyPieceHullRightY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_HULL_TOP_LEFT), ufoFaceAngle, ufoX + shortyPieceHullTopLeftX, ufoY + shortyPieceHullTopLeftY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_HULL_TOP_RIGHT), ufoFaceAngle, ufoX + shortyPieceHullTopRightX, ufoY + shortyPieceHullTopRightY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_BOTTOM_LEFT), ufoFaceAngle, ufoX + shortyPieceBottomLeftX, ufoY + shortyPieceBottomLeftY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_BOTTOM_RIGHT), ufoFaceAngle, ufoX + shortyPieceBottomRightX, ufoY + shortyPieceBottomRightY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_TOP_LEFT), ufoFaceAngle, ufoX + shortyPieceTopLeftX, ufoY + shortyPieceTopLeftY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_SHORTY_PART_TOP_RIGHT), ufoFaceAngle, ufoX + shortyPieceTopRightX, ufoY + shortyPieceTopRightY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+  }
+
+  public void destroyRegularUFO(Entity2D ufo)
+  {
+    // TODO: Add code here to break UFO into pieces 
+    double ufoFaceAngle = ufo.getFaceAngle();
+    double ufoX = ufo.getPositionX();
+    double ufoY = ufo.getPositionY();
+
+    int ufoDestroyedRotationRateLowerLimit = 100;
+    int ufoDestroyedRotationRateUpperLimit = 400;
+    int ufoDestroyedVelocityLowerLimit = 100;
+    int ufoDestroyedVelocityUpperLimit = 200;
+    int ufoDestroyedLifespanLowerLimit = 1;
+    int ufoDestroyedLifespanUpperLimit = 2;
+
+    int ufoPieceTopLeftX = 10;
+    int ufoPieceTopLeftY = 4;
+    int ufoPieceTopRightX = 25;
+    int ufoPieceTopRightY = 4;
+    int ufoPieceTopX = 8;
+    int ufoPieceTopY = 7;
+    int ufoPieceBottomX = 8;
+    int ufoPieceBottomY = 30;
+    int ufoPieceTopLeftHullX = 5;
+    int ufoPieceTopLeftHullY = 12;
+    int ufoPieceLeftHullX = 4;
+    int ufoPieceLeftHullY = 17;
+    int ufoPieceTopRightHullX = 21;
+    int ufoPieceTopRightHullY = 12;
+    int ufoPieceCenterHullX = 18;
+    int ufoPieceCenterHullY = 17;
+    int ufoPieceRightHullX = 24;
+    int ufoPieceRightHullY = 17;
+    int ufoPieceBottomLeftHullX = 5;
+    int ufoPieceBottomLeftHullY = 25;
+    int ufoPieceBottomRightHullX = 21;
+    int ufoPieceBottomRightHullY = 25;
+    int ufoPieceBottomLeftX = 10;
+    int ufoPieceBottomLeftY = 34;
+    int ufoPieceBottomRightX = 25;
+    int ufoPieceBottomRightY = 34;
+
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_BOTTOM_LEFT_HULL), ufoFaceAngle, ufoX + ufoPieceBottomLeftHullX, ufoY + ufoPieceBottomLeftHullY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_BOTTOM_LEFT), ufoFaceAngle, ufoX + ufoPieceBottomLeftX, ufoY + ufoPieceBottomLeftY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_BOTTOM), ufoFaceAngle, ufoX + ufoPieceBottomX, ufoY + ufoPieceBottomY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_BOTTOM_RIGHT_HULL), ufoFaceAngle, ufoX + ufoPieceBottomRightHullX, ufoY + ufoPieceBottomRightHullY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_BOTTOM_RIGHT), ufoFaceAngle, ufoX + ufoPieceBottomRightX, ufoY + ufoPieceBottomRightY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_CENTER_HULL), ufoFaceAngle, ufoX + ufoPieceCenterHullX, ufoY + ufoPieceCenterHullY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_LEFT_HULL), ufoFaceAngle, ufoX + ufoPieceLeftHullX, ufoY + ufoPieceLeftHullY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_RIGHT_HULL), ufoFaceAngle, ufoX + ufoPieceRightHullX, ufoY + ufoPieceRightHullY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_TOP_LEFT_HULL), ufoFaceAngle, ufoX + ufoPieceTopLeftHullX, ufoY + ufoPieceTopLeftHullY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_TOP_LEFT), ufoFaceAngle, ufoX + ufoPieceTopLeftX, ufoY + ufoPieceTopLeftY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_TOP), ufoFaceAngle, ufoX + ufoPieceTopX, ufoY + ufoPieceTopY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_TOP_RIGHT_HULL), ufoFaceAngle, ufoX + ufoPieceTopRightHullX, ufoY + ufoPieceTopRightHullY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+    this.addMiscEntity(createDebris(ImageManager.getImage(Constants.FILENAME_UFO_PART_TOP_RIGHT), ufoFaceAngle, ufoX + ufoPieceTopRightX, ufoY + ufoPieceTopRightY, ufoDestroyedRotationRateLowerLimit, ufoDestroyedRotationRateUpperLimit, ufoDestroyedVelocityLowerLimit, ufoDestroyedVelocityUpperLimit, ufoDestroyedLifespanLowerLimit, ufoDestroyedLifespanUpperLimit));
+  }
+
   //public EntityImage createPlayerShipDebris(Image image, double playerFaceAngle, double playerX, double playerY, double centerX, double centerY)
-  public EntityImage createPlayerShipDebris(Image image, double playerFaceAngle, double playerX, double playerY)
+  public EntityImage createDebris(Image image, double playerFaceAngle, double playerX, double playerY, int rotationRateLowerLimit, int rotationRateUpperLimit, int velocityLowerLimit, int velocityUpperLimit, int lifespanLowerLimit, int lifespanUpperLimit)
   {
     EntityImage piece = new EntityImage(this.imageObserver, GameEngineConstants.EntityTypes.POWER_UP);
 
@@ -387,9 +507,10 @@ public class Asteroids extends GameEngine
     //    double x2 = px + (x1-px) * Math.cos(playerFaceAngle*Math.PI/180.0)-(y1-py) * Math.sin(playerFaceAngle*Math.PI/180.0);
     //    double y2 = py + (x1-px) * Math.sin(playerFaceAngle*Math.PI/180.0)+(y1-py) * Math.cos(playerFaceAngle*Math.PI/180.0);
 
+    // Min + (Math.random() * (Max - Min))
+
     piece.setImage(image);
     piece.setPosition(playerX, playerY);
-    //    piece.setPosition(x2, y2);
     piece.setFaceAngle(playerFaceAngle);
 
     // Set rotation and direction angles of asteroid
@@ -397,17 +518,20 @@ public class Asteroids extends GameEngine
     int moveAngle = GameUtility.random.nextInt((int) GameEngineConstants.DEGREES_IN_A_CIRCLE);
     piece.setMoveAngle(moveAngle);
 
-    int rotationRate = GameUtility.random.nextInt(100) + 25;
+    //int rotationRate = GameUtility.random.nextInt(100) + 25;
+    int rotationRate = rotationRateLowerLimit + GameUtility.random.nextInt(rotationRateUpperLimit - rotationRateLowerLimit) + 1;
     rotationRate = (GameUtility.random.nextBoolean() ? -rotationRate : rotationRate);
     piece.setRotationRate(rotationRate);
 
     // Set velocity based on movement direction
     double angle = piece.getMoveAngle() - 90;
     piece.setVelocity(GameUtility.calcAngleMoveX(angle), GameUtility.calcAngleMoveY(angle));
-    piece.getVelocity().scaleThisVector((GameUtility.random.nextInt(50) + 25));
+    int velocity = velocityLowerLimit + GameUtility.random.nextInt(velocityUpperLimit - velocityLowerLimit) + 1;
+    piece.getVelocity().scaleThisVector(velocity);
 
     // Set the lifespan
-    piece.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * (GameUtility.random.nextInt(10) + 10)));
+    int lifespan = lifespanLowerLimit + GameUtility.random.nextInt(lifespanUpperLimit - lifespanLowerLimit) + 1;
+    piece.setLifespan((int) (GameEngineConstants.DEFAULT_UPDATE_RATE * lifespan));
 
     return piece;
   }
@@ -451,6 +575,7 @@ public class Asteroids extends GameEngine
     GameUtility.warp(entity, screenWidth, screenHeight);
   }
 
+  // TODO: This method needs to be reviewed to see if it can be refactored
   @Override
   public void userHandleEntityCollision(Entity2D entity1, Entity2D entity2)
   {
@@ -568,6 +693,24 @@ public class Asteroids extends GameEngine
 
         // Only kill off the entity if it is either a UFO or ASTEROID, hence why it is in this condition body
         entity2.kill();
+
+        // This code is needed to handle the UFO explosion when it collides with the player ship
+        if (!entity2.isAlive())
+        {
+          switch (((EnemyEntity) entity2).getEnemyType())
+          {
+            case UFO_SHORTY:
+              destroyShortyUFO(entity2);
+              break;
+
+            case UFO_STRONG:
+            case UFO:
+              destroyRegularUFO(entity2);
+              break;
+
+            default:
+          }
+        }
       }
 
       /*
@@ -665,17 +808,25 @@ public class Asteroids extends GameEngine
                 soundManager.playSound(SoundManager.SOUND_RESOURCE_UFO_SHIELDS_FAIL);
                 ((UFOStrongEntity) entity2).ufoHullWasHit();
               }
-              // TODO: Possibly play a sound here
             }
 
-          case UFO_SHORTY:
           case UFO:
-            //System.out.println(" UFO of type " + ((EnemyEntity) entity2).getEnemyType());
 
             if (!entity2.isAlive())
             {
               //soundManager.quickPlay(SoundManager.SOUND_FILE_UFO_EXPLOSION, true);
               soundManager.playSound(SoundManager.SOUND_RESOURCE_UFO_EXPLOSION);
+              destroyRegularUFO(entity2);
+            }
+            break;
+
+          case UFO_SHORTY:
+
+            if (!entity2.isAlive())
+            {
+              //soundManager.quickPlay(SoundManager.SOUND_FILE_UFO_EXPLOSION, true);
+              soundManager.playSound(SoundManager.SOUND_RESOURCE_UFO_EXPLOSION);
+              destroyShortyUFO(entity2);
             }
             break;
 

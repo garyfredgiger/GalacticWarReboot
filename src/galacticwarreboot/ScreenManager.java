@@ -815,14 +815,18 @@ public class ScreenManager
     switch (playerReference.getValue(AttributeType.ATTRIBUTE_THRUST))
     {
       case 2:
-        g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), 20, 185, this.imageObserver);
+        //g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_2), 20, 153, this.imageObserver); // Y coordinate Was 185
+        g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_ENGINE_2), 20, 145, this.imageObserver); // Y coordinate Was 185
         break;
 
       case 3:
-        g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), 20, 185, this.imageObserver);
+        //g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_3), 20, 153, this.imageObserver);
+        g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_ENGINE_3), 20, 145, this.imageObserver); // Y coordinate Was 185
         break;
 
       default:
+        //g.drawImage(ImageManager.getImage(Constants.FILENAME_POWERUP_ENGINE_1), 20, 153, this.imageObserver);
+        g.drawImage(ImageManager.getImage(Constants.FILENAME_HUD_ENGINE_1), 20, 145, this.imageObserver); // Y coordinate Was 185
     }
 
     //    // TODO: This might go into a separate method since it might not be part of the HUD 

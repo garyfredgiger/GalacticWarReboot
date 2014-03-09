@@ -59,6 +59,7 @@ public class ImageManager
     ImageManager.loadImage(Constants.FILENAME_POWERUP_GUN_5);
     ImageManager.loadImage(Constants.FILENAME_BAR_HEALTH);
     ImageManager.loadImage(Constants.FILENAME_BAR_SHIELD);
+    ImageManager.loadImage(Constants.FILENAME_POWERUP_ENGINE_1);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_ENGINE_2);
     ImageManager.loadImage(Constants.FILENAME_POWERUP_ENGINE_3);
     ImageManager.loadImage(Constants.FILENAME_UFO_SHIELD_WEAK);
@@ -79,6 +80,34 @@ public class ImageManager
     ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_CENTER_HULL);
     ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_LEFT_ENGINE);
     ImageManager.loadImage(Constants.FILENAME_SPACESHIP_PART_RIGHT_ENGINE);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_BOTTOM_LEFT_HULL);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_BOTTOM_LEFT);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_BOTTOM);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_BOTTOM_RIGHT_HULL);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_BOTTOM_RIGHT);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_CENTER_HULL);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_LEFT_HULL);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_RIGHT_HULL);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_TOP_LEFT_HULL);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_TOP_LEFT);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_TOP);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_TOP_RIGHT_HULL);
+    ImageManager.loadImage(Constants.FILENAME_UFO_PART_TOP_RIGHT);
+
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_HULL_BOTTOM_LEFT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_HULL_BOTTOM_RIGHT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_HULL_LEFT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_HULL_RIGHT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_HULL_TOP_LEFT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_HULL_TOP_RIGHT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_BOTTOM_LEFT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_BOTTOM_RIGHT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_TOP_LEFT);
+    ImageManager.loadImage(Constants.FILENAME_SHORTY_PART_TOP_RIGHT);
+
+    ImageManager.loadImage(Constants.FILENAME_HUD_ENGINE_1);
+    ImageManager.loadImage(Constants.FILENAME_HUD_ENGINE_2);
+    ImageManager.loadImage(Constants.FILENAME_HUD_ENGINE_3);
   }
 
   /**
