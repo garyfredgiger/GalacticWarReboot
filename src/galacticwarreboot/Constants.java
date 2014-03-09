@@ -156,6 +156,10 @@ public class Constants
   public static final String FILENAME_POWERUP_ENGINE_2                        = "thrust2.png";
   public static final String FILENAME_POWERUP_ENGINE_3                        = "thrust3.png";
 
+  public static final String FILENAME_HUD_ENGINE_1                            = "hud_thrust1.png";
+  public static final String FILENAME_HUD_ENGINE_2                            = "hud_thrust2.png";
+  public static final String FILENAME_HUD_ENGINE_3                            = "hud_thrust3.png";
+
   public static final String FILENAME_SUPER_SHIELD                            = "supershield.png";
 
   public static final String FILENAME_POWERUP_INCREASE_HEALTH_CAPACITY_20     = "powerup_health_capacity_20.png";
@@ -175,6 +179,31 @@ public class Constants
   public static final String FILENAME_SPACESHIP_PART_CENTER_HULL              = "ship_piece_center_hull.png";
   public static final String FILENAME_SPACESHIP_PART_LEFT_ENGINE              = "ship_piece_left_engine.png";
   public static final String FILENAME_SPACESHIP_PART_RIGHT_ENGINE             = "ship_piece_right_engine.png";
+
+  public static final String FILENAME_UFO_PART_BOTTOM_LEFT_HULL               = "ufo_piece_bottom_left_hull.png";
+  public static final String FILENAME_UFO_PART_BOTTOM_LEFT                    = "ufo_piece_bottom_left.png";
+  public static final String FILENAME_UFO_PART_BOTTOM                         = "ufo_piece_bottom.png";
+  public static final String FILENAME_UFO_PART_BOTTOM_RIGHT_HULL              = "ufo_piece_bottom_right_hull.png";
+  public static final String FILENAME_UFO_PART_BOTTOM_RIGHT                   = "ufo_piece_bottom_right.png";
+  public static final String FILENAME_UFO_PART_CENTER_HULL                    = "ufo_piece_center_hull.png";
+  public static final String FILENAME_UFO_PART_LEFT_HULL                      = "ufo_piece_left_hull.png";
+  public static final String FILENAME_UFO_PART_RIGHT_HULL                     = "ufo_piece_right_hull.png";
+  public static final String FILENAME_UFO_PART_TOP_LEFT_HULL                  = "ufo_piece_top_left_hull.png";
+  public static final String FILENAME_UFO_PART_TOP_LEFT                       = "ufo_piece_top_left.png";
+  public static final String FILENAME_UFO_PART_TOP                            = "ufo_piece_top.png";
+  public static final String FILENAME_UFO_PART_TOP_RIGHT_HULL                 = "ufo_piece_top_right_hull.png";
+  public static final String FILENAME_UFO_PART_TOP_RIGHT                      = "ufo_piece_top_right.png";
+
+  public static final String FILENAME_SHORTY_PART_HULL_BOTTOM_LEFT            = "shorty_hull_bottom_left.png";
+  public static final String FILENAME_SHORTY_PART_HULL_BOTTOM_RIGHT           = "shorty_hull_bottom_right.png";
+  public static final String FILENAME_SHORTY_PART_HULL_LEFT                   = "shorty_hull_left.png";
+  public static final String FILENAME_SHORTY_PART_HULL_RIGHT                  = "shorty_hull_right.png";
+  public static final String FILENAME_SHORTY_PART_HULL_TOP_LEFT               = "shorty_hull_top_left.png";
+  public static final String FILENAME_SHORTY_PART_HULL_TOP_RIGHT              = "shorty_hull_top_right.png";
+  public static final String FILENAME_SHORTY_PART_BOTTOM_LEFT                 = "shorty_part_bottom_left.png";
+  public static final String FILENAME_SHORTY_PART_BOTTOM_RIGHT                = "shorty_part_bottom_right.png";
+  public static final String FILENAME_SHORTY_PART_TOP_LEFT                    = "shorty_part_top_left.png";
+  public static final String FILENAME_SHORTY_PART_TOP_RIGHT                   = "shorty_part_top_right.png";
 
   public static final String FILENAME_SPACESHIP_THRUST1                       = "spaceship_thrust1.png";
   public static final String FILENAME_SPACESHIP_THRUST2                       = "spaceship_thrust2.png";
